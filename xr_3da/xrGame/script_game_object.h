@@ -459,3 +459,5 @@ public:
 add_to_type_list(CScriptGameObject)
 #undef script_type_list
 #define script_type_list save_type_list(CScriptGameObject)
+
+#include "script_game_object_impl.h"
