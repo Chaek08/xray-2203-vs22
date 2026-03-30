@@ -659,10 +659,10 @@ public:
 			  Console->Hide		();
 			  string_path		fn;
 			  u32		loops	=	0;
-			  LPSTR		comma	=	strchr(args,',');
+			  LPCSTR		comma	=	strchr(args,',');
 			  if (comma)	{
 				  loops			=	atoi	(comma+1);
-				  *comma		=	0;	//. :)
+				  comma		=	0;	//. :)
 			  }
 			  strconcat			(fn,args,".xrdemo");
 			  g_pGameLevel->Cameras.AddEffector(xr_new<CDemoPlay> (fn,1.0f,loops));

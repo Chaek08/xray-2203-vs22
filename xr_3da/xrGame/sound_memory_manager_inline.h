@@ -28,7 +28,7 @@ IC	void CSoundMemoryManager::priority			(const ESoundTypes &sound_type, u32 prio
 {
 	PRIORITIES::const_iterator	I = m_priorities.find(sound_type);
 	VERIFY						(m_priorities.end() == I);
-	m_priorities.insert			(std::make_pair(sound_type,priority));
+	m_priorities.emplace		(std::make_pair(sound_type,priority));
 }
 
 IC	const MemorySpace::CSoundObject *CSoundMemoryManager::sound		() const

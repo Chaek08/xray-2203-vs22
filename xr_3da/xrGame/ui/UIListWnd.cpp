@@ -124,7 +124,8 @@ void CUIListWnd::RemoveItem(int index)
 
 	//выбрать нужный элемент
 	it = m_ItemList.begin();
-	for(int i=0; i<index;++i, ++it);
+	int i = 0;
+	for(; i<index;++i, ++it);
 
 	R_ASSERT(m_ItemList.end() != it);
 	
@@ -231,7 +232,7 @@ void CUIListWnd::UpdateList()
 	   
 
 	//показать текущий список
-	for(i=m_iFirstShownIndex; 
+	for(int i=m_iFirstShownIndex;
 			i<_min(m_ItemList.size(),m_iFirstShownIndex + m_iRowNum+1);
 			++i, ++it)
 	{

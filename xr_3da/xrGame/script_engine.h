@@ -11,14 +11,12 @@
 #include "script_storage.h"
 #include "script_export_space.h"
 #include "script_space_forward.h"
-#include <lua.h>
-
+extern "C" {
+	#include <lua.h>
+}
 //#define DBG_DISABLE_SCRIPTS
 
-namespace ScriptEngine {
-	enum EScriptProcessors;
-};
-
+#include "script_engine_space.h"
 class CScriptProcess;
 class CScriptThread;
 struct lua_State;

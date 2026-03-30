@@ -233,7 +233,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CallingConvention>StdCall</CallingConvention>
-      <AdditionalIncludeDirectories>scripting\;$(SolutionDir)SDK\dxSDK\Include;$(SolutionDir)xrCore;$(SolutionDir)xrLUA_JIT\src;$(SolutionDir)SDK\luabind\luabind\luabind;$(SolutionDir)SDK\luabind\luabind;$(SolutionDir)SDK\boost_1_30_0;$(SolutionDir)SDK\Xiph\Include;$(SolutionDir)xrODE\include;$(SolutionDir)SDK\loki;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>scripting\;$(SolutionDir)SDK\dxSDK\Include;$(SolutionDir)xrCore;$(SolutionDir)xrLUA\src;$(SolutionDir)SDK\luabind\luabind\luabind;$(SolutionDir)SDK\luabind\luabind;$(SolutionDir)SDK\boost_1_30_0;$(SolutionDir)SDK\Xiph\Include;$(SolutionDir)xrODE\include;$(SolutionDir)SDK\loki;$(SolutionDir)\xrLUA\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ModuleOutputFile>$(SolutionDir)$(Configuration)\intermediate\$(ProjectName)\</ModuleOutputFile>
       <ModuleDependenciesFile>$(SolutionDir)$(Configuration)\intermediate\$(ProjectName)\</ModuleDependenciesFile>
       <XMLDocumentationFileName>$(SolutionDir)$(Configuration)\intermediate\$(ProjectName)\</XMLDocumentationFileName>
@@ -241,17 +241,19 @@
     </ClCompile>
     <Link>
       <AdditionalOptions>/MACHINE:I386  %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>odbc32.lib;odbccp32.lib;x:\xr_3da.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;xr_3da.lib;lua50.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)$(TargetName).pdb</ProgramDatabaseFile>
       <GenerateMapFile>false</GenerateMapFile>
-      <MapFileName>x:\xrGame.map</MapFileName>
+      <MapFileName>
+      </MapFileName>
       <SubSystem>NotSet</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <ImportLibrary>x:\xrGame.lib</ImportLibrary>
+      <ImportLibrary>$(SolutionDir)$(Configuration)\lib\$(TargetName).lib</ImportLibrary>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration)\lib;$(SolutionDir)SDK\dxSDK\Lib;$(SolutionDir)SDK\Xiph\Libs;$(SolutionDir)SDK\OpenAL\libs;$(SolutionDir)Release\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
