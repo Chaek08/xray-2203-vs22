@@ -101,10 +101,12 @@ namespace CDB
 	{
 		Fvector			verts	[3];
 		union	{
-			u32			dummy;			
+			u32			dummy;				// 4b
 			struct {
-				u16		material;		
-				u16		sector;			
+				u32		material:14;		// 
+				u32		suppress_shadows:1;	// 
+				u32		suppress_wm:1;		// 
+				u32		sector:16;			// 
 			};
 		};
 		int				id;
@@ -149,6 +151,7 @@ namespace CDB
 		void			r_free			()	;
 		ICF int			r_count			()	{	return rd.size();			};
 		ICF void		r_clear			()	{	rd.clear_not_free();		};
+		ICF void		r_clear_compact	()	{	rd.clear_and_free();		};
 	};
 
 	//

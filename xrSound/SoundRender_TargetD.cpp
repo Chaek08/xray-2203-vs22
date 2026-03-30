@@ -102,8 +102,7 @@ void	CSoundRender_TargetD::stop			()
 {
 	if (rendering){
 		R_CHK		(pBuffer->Stop());
-		R_CHK		(pControl->SetMode(DS3DMODE_HEADRELATIVE,DS3D_DEFERRED));
-//		R_CHK		(pControl->SetMode(DS3DMODE_DISABLE,DS3D_DEFERRED));
+		R_CHK		(pControl->SetMode(DS3DMODE_DISABLE,DS3D_DEFERRED));
 	}
     inherited::stop	();
 }

@@ -48,7 +48,7 @@ void CPsyAuraController::on_deactivate()
 void CPsyAuraController::schedule_update()
 {
 	inherited::schedule_update();
-	if (m_actor && is_active() && !m_sound.feedback) m_sound.play_at_pos(m_actor,m_actor->Position(), sm_2D);
+	if (m_actor && is_active() && !m_sound._feedback()) m_sound.play_at_pos(m_actor,m_actor->Position(), sm_2D);
 	
 	// Падение энергии у игрока
 	if (m_actor && is_active()) {

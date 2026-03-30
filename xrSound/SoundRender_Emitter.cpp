@@ -18,7 +18,7 @@ CSoundRender_Emitter::CSoundRender_Emitter(void)
 #endif
 	target				= NULL;
 	source				= NULL;
-	owner				= NULL;
+	owner_data			= NULL;
 	smooth_volume		= 1.f;
 	occluder_volume		= 1.f;
 	fade_volume			= 1.f;
@@ -29,6 +29,8 @@ CSoundRender_Emitter::CSoundRender_Emitter(void)
 	position			= 0;
 	bMoved				= TRUE;
 	b2D					= FALSE;
+	bStopping			= FALSE;
+	bRewind				= FALSE;
 	dwTimeStarted		= 0;
 	dwTimeToStop		= 0;
 	dwTimeToPropagade	= 0;
@@ -46,35 +48,37 @@ CSoundRender_Emitter::~CSoundRender_Emitter(void)
 //////////////////////////////////////////////////////////////////////
 void CSoundRender_Emitter::Event_ReleaseOwner()
 {
-	if	(0==owner)		return;
+	if	(!(owner_data))			return;
 
 	for (u32 it=0; it<SoundRender->s_events.size(); it++){
-		if (owner == SoundRender->s_events[it].first){
+		if (owner_data == SoundRender->s_events[it].first){
 			SoundRender->s_events.erase(SoundRender->s_events.begin()+it);
 			it	--;
 		}
 	}
 }
+
 void CSoundRender_Emitter::Event_Propagade	()
 {
 	dwTimeToPropagade			+= ::Random.randI	(sdef_event_pulse-30,sdef_event_pulse+30);
-	if (0==owner)				return;
-	if (0==owner->g_type)		return;
+	if (!(owner_data))			return;
+	if (0==owner_data->g_type)	return;
+	if (0==owner_data->g_object)return;
 	if (0==SoundRender->Handler)return;
 
+	VERIFY						(_valid(p_source.volume));
 	// Calculate range
 	float	clip				= p_source.max_ai_distance*p_source.volume;
 	float	range				= _min(p_source.max_ai_distance,clip);
 	if (range<0.1f)				return;
 
 	// Inform objects
-	SoundRender->s_events.push_back	(mk_pair(owner,range));
+	SoundRender->s_events.push_back	(mk_pair(owner_data,range));
 }
 
 void CSoundRender_Emitter::switch_to_2D()
 {
  	b2D 						= TRUE;	
-    set_position				(SoundRender->listener_position()); 
 	set_priority				(100.f);
 }
 

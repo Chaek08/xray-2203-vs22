@@ -33,22 +33,25 @@ IC	u32	CSoundPlayer::active_sound_count(bool only_playing) const
 	xr_vector<CSoundSingle>::const_iterator	E = m_playing_sounds.end();
 	if (!only_playing) {
 		for ( ; I != E; ++I)
-			if ((*I).m_sound->feedback || ((*I).m_start_time <= Device.dwTimeGlobal))
+			if ((*I).m_sound->_feedback() || ((*I).m_start_time <= Device.dwTimeGlobal))
 				++count;
 	}
 	else {
 		for ( ; I != E; ++I)
-			if ((*I).m_sound->feedback)
+			if ((*I).m_sound->_feedback())
 				++count;
 	}
 	return								(count);
 }
 
-IC	ref_sound *CSoundPlayer::add			(ESoundTypes type, LPCSTR name, CSound_UserDataPtr data) const
+IC ref_sound* CSoundPlayer::add(ESoundTypes type, LPCSTR name, CSound_UserDataPtr data) const
 {
-	ref_sound			*temp = xr_new<ref_sound>();
-	temp->create		(TRUE,name,type);
-	temp->g_object		= m_object;
-	temp->g_userdata	= data;
-	return				(temp);
+    ref_sound* temp = xr_new<ref_sound>();
+
+    temp->create(TRUE, name, type);
+
+    temp->_p->g_object   = m_object;
+    temp->_p->g_userdata = data;
+
+    return temp;
 }

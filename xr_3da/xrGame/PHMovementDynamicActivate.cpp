@@ -53,7 +53,7 @@ float 	STestFootCallbackPars::callback_erp_factor						=	1.f		;
 float	STestFootCallbackPars::decrement_depth							=	0.00f	;
 float	STestFootCallbackPars::max_real_depth							=	0.01f	;
 template<class Pars>
-void __stdcall TTestDepthCallback (bool& do_colide,dContact& c,SGameMtl* material_1,SGameMtl* material_2)
+void TTestDepthCallback (bool& do_colide,dContact& c,SGameMtl* material_1,SGameMtl* material_2)
 {
 	if(saved_callback)saved_callback(do_colide,c,material_1,material_2);
 

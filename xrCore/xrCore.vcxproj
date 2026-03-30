@@ -153,7 +153,7 @@
       <BrowseInformation />
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <CallingConvention>StdCall</CallingConvention>
+      <CallingConvention>Cdecl</CallingConvention>
       <AdditionalIncludeDirectories>$(SolutionDir)SDK\dxSDK\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(SolutionDir)$(Configuration)\intermediate\$(ProjectName)\</AssemblerListingLocation>
       <ModuleOutputFile>$(SolutionDir)$(Configuration)\intermediate\$(ProjectName)\</ModuleOutputFile>

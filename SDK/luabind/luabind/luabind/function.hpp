@@ -271,7 +271,7 @@ namespace luabind
 					// this is just a magic number to identify functions that luabind created
 					lua_pushlightuserdata(L, (void*)0x1337);
 
-					lua_pushcclosure(L, reinterpret_cast<lua_CFunction>(&free_functions::function_dispatcher), 2);
+					lua_pushcclosure(L, &free_functions::function_dispatcher, 2);
 					lua_settable(L, -3);
 				}
 

@@ -49,6 +49,11 @@ void CSoundRender_CoreA::_initialize	(u64 window)
 
 	pDeviceList					= xr_new<ALDeviceList>();
 
+	if (0==pDeviceList->GetNumDevices()){ 
+		Log						("OpenAL: Can't create sound device.");
+		xr_delete				(pDeviceList);
+		return;
+	}
 	int majorVersion, minorVersion;
 	int defaultIdx					= pDeviceList->GetDefaultDevice();
 	int deviceIdx					= defaultIdx;
@@ -57,16 +62,15 @@ void CSoundRender_CoreA::_initialize	(u64 window)
 	Log("SOUND: OpenAL: All available devices:");
 	for (int i = 0; i < pDeviceList->GetNumDevices(); i++){
 		pDeviceList->GetDeviceVersion(i, &majorVersion, &minorVersion);
-		Msg						("%d. %s, Spec Version %d.%d (%s)", i + 1,	
+		Msg						("%d. %s, Spec Version %d.%d %s", i + 1,	
 								pDeviceList->GetDeviceName(i), majorVersion, minorVersion,
-								(defaultIdx==i)?"default":"");
+								(defaultIdx==i)?"(default)":"");
 	}
-	Msg				        	("SOUND: OpenAL: Required device: %s",	deviceDesc.name.c_str());
 
     // OpenAL device
     pDevice						= alcOpenDevice		(deviceDesc.name.c_str());
 	if (pDevice == NULL){
-		Log						("SOUND: OpenAL: Failed to create device");
+		Log						("SOUND: OpenAL: Failed to create device.");
 		bPresent				= FALSE;
 		return;
 	}
@@ -74,7 +78,7 @@ void CSoundRender_CoreA::_initialize	(u64 window)
     // Get the device specifier.
     const ALCchar*		        deviceSpecifier;
     deviceSpecifier         	= alcGetString		(pDevice, ALC_DEVICE_SPECIFIER);
-	Msg				        	("SOUND: OpenAL: Created device: %s", deviceSpecifier);
+	Msg				        	("SOUND: OpenAL: Required device: %s. Created device: %s.", deviceDesc.name.c_str(), deviceSpecifier);
 
     // Create context
     pContext					= alcCreateContext	(pDevice,NULL);
@@ -101,9 +105,9 @@ void CSoundRender_CoreA::_initialize	(u64 window)
 
     // Check for EAX extension
     bEAX 				        = deviceDesc.eax && !deviceDesc.eax_unwanted;
-    eaxSet 				        = (EAXSet)alGetProcAddress	((const ALchar*)"EAXSet");
+    eaxSet 				        = (EAXSet*)alGetProcAddress	((const ALchar*)"EAXSet");
     if (eaxSet==NULL) bEAX 		= false;
-    eaxGet 				        = (EAXGet)alGetProcAddress	((const ALchar*)"EAXGet");
+    eaxGet 				        = (EAXGet*)alGetProcAddress	((const ALchar*)"EAXGet");
     if (eaxGet==NULL) bEAX 		= false;
 
     if (bEAX){

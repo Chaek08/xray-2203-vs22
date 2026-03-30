@@ -67,7 +67,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <_ProjectFileVersion>17.0.36915.8</_ProjectFileVersion>
+    <_ProjectFileVersion>17.0.36804.4</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>x:\</OutDir>
@@ -114,9 +114,9 @@
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <CallingConvention>StdCall</CallingConvention>
     </ClCompile>
     <Link>
+      <AdditionalDependencies>vorbisfile_static_d.lib;ogg_static_d.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)xrSound.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -142,8 +142,6 @@
       <ExceptionHandling />
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
-      <FunctionLevelLinking>false</FunctionLevelLinking>
-      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <AssemblerOutput />
@@ -152,16 +150,16 @@
       <BrowseInformation />
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <CallingConvention>StdCall</CallingConvention>
-      <PrecompiledHeaderOutputFile>$(SolutionDir)$(Configuration)\intermediate\$(ProjectName)\$(TargetName).pch</PrecompiledHeaderOutputFile>
       <ModuleOutputFile>$(SolutionDir)$(Configuration)\intermediate\$(ProjectName)\</ModuleOutputFile>
       <ModuleDependenciesFile>$(SolutionDir)$(Configuration)\intermediate\$(ProjectName)\</ModuleDependenciesFile>
       <ObjectFileName>$(SolutionDir)$(Configuration)\intermediate\$(ProjectName)\</ObjectFileName>
       <XMLDocumentationFileName>$(SolutionDir)$(Configuration)\intermediate\$(ProjectName)\</XMLDocumentationFileName>
       <SourceDependenciesFile>$(SolutionDir)$(Configuration)\intermediate\$(ProjectName)\</SourceDependenciesFile>
+      <PrecompiledHeaderOutputFile>$(SolutionDir)$(Configuration)\intermediate\$(ProjectName)\$(TargetName).pch</PrecompiledHeaderOutputFile>
       <AdditionalIncludeDirectories>$(SolutionDir)\SDK\dxSDK\Include;$(SolutionDir)\xrCore;$(SolutionDir)\SDK\Xiph\Include;$(SolutionDir)\SDK\eax\Include;$(SolutionDir)\SDK\OpenAL\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
+      <AdditionalDependencies>vorbisfile_static.lib;ogg_static.lib;OpenAL32.lib;legacy_stdio_definitions.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)$(TargetName).pdb</ProgramDatabaseFile>
@@ -172,7 +170,9 @@
       <ImportLibrary>$(SolutionDir)$(Configuration)\lib\$(TargetName).lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
       <AdditionalLibraryDirectories>$(SolutionDir)\SDK\dxSDK\Lib;$(SolutionDir)\SDK\Xiph\Libs;$(SolutionDir)\SDK\OpenAL\libs;$(SolutionDir)\SDK\eax;$(SolutionDir)$(Configuration)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>vorbisfile_static.lib;ogg_static.lib;OpenAL32.lib;legacy_stdio_definitions.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IncrementalLinkDatabaseFile>$(SolutionDir)$(Configuration)\intermediate\$(ProjectName)\$(TargetName).ilk</IncrementalLinkDatabaseFile>
+      <ProfileGuidedDatabase>$(SolutionDir)$(Configuration)\intermediate\$(ProjectName)\$(TargetName).pgd</ProfileGuidedDatabase>
+      <LinkTimeCodeGenerationObjectFile>$(SolutionDir)$(Configuration)\intermediate\$(ProjectName)\$(TargetName).pgd</LinkTimeCodeGenerationObjectFile>
     </Link>
     <BuildLog>
       <Path>$(SolutionDir)$(Configuration)\intermediate\$(ProjectName)\$(MSBuildProjectName).log</Path>
@@ -188,11 +188,9 @@
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
       <PreprocessorDefinitions>MIXED;WIN32;NDEBUG;_WINDOWS;_USRDLL;XRSOUND_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
-      <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <FunctionLevelLinking>false</FunctionLevelLinking>
-      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
@@ -203,15 +201,13 @@
       <BrowseInformation />
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <CallingConvention>StdCall</CallingConvention>
     </ClCompile>
     <Link>
+      <AdditionalDependencies>vorbisfile_static.lib;ogg_static.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)xrSound.dll</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)$(TargetName).pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
-      <OptimizeReferences />
-      <EnableCOMDATFolding />
       <ImportLibrary>$(OutDir)xrSound.lib</ImportLibrary>
       <TargetMachine>NotSet</TargetMachine>
     </Link>

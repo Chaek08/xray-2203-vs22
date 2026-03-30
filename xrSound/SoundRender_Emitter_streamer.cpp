@@ -4,12 +4,13 @@
 #include "SoundRender_Core.h"
 #include "SoundRender_Source.h"
 #include "SoundRender_Emitter.h"
+#include "SoundRender_Target.h"
 
 void	CSoundRender_Emitter::fill_data		(u8* _dest, u32 offset, u32 size)
 {
 /*
 	Msg				("stream: %10s - %d",*source->fname,size);
-	Memory.mem_copy	(_dest,&source->m_buffer.front()+offset,size);
+	CopyMemory	(_dest,&source->m_buffer.front()+offset,size);
 	return;
 //*/
 /*
@@ -51,13 +52,13 @@ void	CSoundRender_Emitter::fill_data		(u8* _dest, u32 offset, u32 size)
 	{
 		// cache access
 		if (SoundRender->cache.request(source->CAT,line))		{
-			source->decompress	(line);
+			source->decompress	(line,target->get_data());
 		}
                                                 
 		// fill block
 		u32		blk_size	= _min(size,line_amount);
 		u8*		ptr			= (u8*)SoundRender->cache.get_dataptr(source->CAT,line);
-		Memory.mem_copy		(_dest,ptr+line_offs,blk_size);
+		CopyMemory		(_dest,ptr+line_offs,blk_size);
 		
 		// advance
 		line		++	;
@@ -69,7 +70,7 @@ void	CSoundRender_Emitter::fill_data		(u8* _dest, u32 offset, u32 size)
 	}
 //*/
 	//  --- previously it was something like this
-	//	Memory.mem_copy		(ptr,wave+offset,size);
+	//	CopyMemory		(ptr,wave+offset,size);
 }
 
 void	CSoundRender_Emitter::fill_block	(void* ptr, u32 size)

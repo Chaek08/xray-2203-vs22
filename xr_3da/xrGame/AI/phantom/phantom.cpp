@@ -118,7 +118,7 @@ void CPhantom::net_Destroy	()
 
 //---------------------------------------------------------------------
 // Animation Callbacks
-void __stdcall CPhantom::animation_end_callback(CBlend* B)
+void  CPhantom::animation_end_callback(CBlend* B)
 {
 	CPhantom *phantom				= (CPhantom*)B->CallbackParam;
 	switch (phantom->m_State){
@@ -222,7 +222,7 @@ void CPhantom::UpdateFlyMedia()
 		m_fly_particles->UpdateParent(xform,vel);
 	}
 	// update sound
-	if (m_state_data[stFly].sound.feedback) m_state_data[stFly].sound.set_position(xform.c);
+	if (m_state_data[stFly].sound._feedback()) m_state_data[stFly].sound.set_position(xform.c);
 }
 //---------------------------------------------------------------------
 

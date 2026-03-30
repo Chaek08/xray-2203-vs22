@@ -9,13 +9,17 @@
 
 class CSoundRender_Core					: public CSound_manager_interface
 {
+    volatile BOOL						bLocked;
+protected:
+	virtual void						_create_data			( ref_sound_data& S, BOOL _3D,	LPCSTR fName,	int		type=st_SourceType); 
+	virtual void						_destroy_data			( ref_sound_data& S);
 protected:
     BOOL								bListenerMoved;
 
 	CSoundRender_Environment			e_current;
 	CSoundRender_Environment			e_target;
 public:
-	typedef	std::pair<ref_sound*,float>	event;
+	typedef	std::pair<ref_sound_data_ptr,float>	event;                                               
 	xr_vector<event>					s_events;
 public:
 	BOOL								bPresent;
@@ -26,6 +30,7 @@ public:
 
     WAVEFORMATEX						wfm;
 	CTimer								Timer;
+	u32									Timer_Value;
 	sound_event*						Handler;
 protected:
 	// Collider
@@ -53,8 +58,8 @@ protected:
 	virtual void						i_eax_set				(const GUID* guid, u32 prop, void* val, u32 sz)=0;
 	virtual void						i_eax_get				(const GUID* guid, u32 prop, void* val, u32 sz)=0;
 public:
-	CSoundRender_Core					();
-	~CSoundRender_Core					();
+										CSoundRender_Core		();
+	virtual								~CSoundRender_Core		();
 
 	// General
 	virtual void  						_initialize				( u64 window )=0;
@@ -64,11 +69,13 @@ public:
 	// Sound interface
 			void						verify_refsound			( ref_sound& S);
 	virtual void						create					( ref_sound& S, BOOL _3D,	LPCSTR fName,	int		type=0);
+	virtual void						clone					( ref_sound& S, const ref_sound& from,		int		type=0);
 	virtual void						destroy					( ref_sound& S);
+	virtual void						stop_emitters			( );
+
 	virtual void						play					( ref_sound& S, CObject* O,								u32 flags=0, float delay=0.f);
-	virtual void						play_unlimited			( ref_sound& S, CObject* O,								u32 flags=0, float delay=0.f);
 	virtual void						play_at_pos				( ref_sound& S, CObject* O,		const Fvector &pos,		u32 flags=0, float delay=0.f);
-	virtual void						play_at_pos_unlimited	( ref_sound& S, CObject* O,		const Fvector &pos,		u32 flags=0, float delay=0.f);
+	virtual void						play_no_feedback		( ref_sound& S, CObject* O,	u32 flags=0, float delay=0.f, Fvector* pos=0, float* vol=0, float* freq=0, Fvector2* range=0);
 	virtual void						set_volume				( float			f )=0;
 	virtual void						set_geometry_env		( IReader*		I );
 	virtual void						set_geometry_som		( IReader*		I );
@@ -103,6 +110,9 @@ public:
 	void								i_stop					( CSoundRender_Emitter* E	);
 	void								i_rewind				( CSoundRender_Emitter* E	);
 	BOOL								i_allow_play			( CSoundRender_Emitter* E	);
+    virtual BOOL						i_locked 				(){return bLocked;}
+
+	virtual void						object_relcase			( CObject* obj );
 
 	virtual float						get_occlusion_to		( const Fvector& hear_pt, const Fvector& snd_pt, float dispersion=0.2f );
 	float								get_occlusion			( Fvector& P, float R, Fvector* occ );

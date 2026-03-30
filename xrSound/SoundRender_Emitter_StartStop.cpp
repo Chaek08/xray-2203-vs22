@@ -8,8 +8,10 @@
 void CSoundRender_Emitter::start(ref_sound* _owner, BOOL _loop, float delay)
 {
 	starting_delay			= delay;
-	source					= (CSoundRender_Source*)_owner->handle;
-	owner					= _owner;
+
+    VERIFY					(_owner);
+	owner_data				= _owner->_p;			VERIFY(owner_data);
+	source					= (CSoundRender_Source*)owner_data->handle;
 	p_source.position.set	(0,0,0);
 	p_source.min_distance	= source->m_fMinDist;	// DS3D_DEFAULTMINDISTANCE;
 	p_source.max_distance	= source->m_fMaxDist;	// 300.f;
@@ -22,23 +24,35 @@ void CSoundRender_Emitter::start(ref_sound* _owner, BOOL _loop, float delay)
 		state				= _loop?stStartingLooped:stStarting;
     }else{
 		state				= _loop?stStartingLoopedDelayed:stStartingDelayed;
-    }
+		dwTimeToPropagade	= SoundRender->Timer.GetElapsed_ms();
+	}
+	bStopping				=	FALSE;
+	bRewind					=	FALSE;
 }
 
-void CSoundRender_Emitter::stop	()
+void CSoundRender_Emitter::i_stop()
 {
+	bRewind					=	FALSE;
 	if (target)	SoundRender->i_stop		(this);
-	if (owner)	
-	{
-		Event_ReleaseOwner		();
-		owner->feedback			= NULL;
-		owner					= NULL;
+	if (owner_data){
+		Event_ReleaseOwner		(); 
+		VERIFY(this==owner_data->feedback);
+		owner_data->feedback	= NULL;
+		owner_data				= NULL;
 	}
 	state = stStopped;
 }
 
+void CSoundRender_Emitter::stop	(BOOL bDeffered)
+{
+	if (bDeffered)			bStopping=TRUE;
+	else					i_stop();
+}
+
 void CSoundRender_Emitter::rewind()
 {
+	bStopping					=	FALSE;
+
 	u32 dwTime					=	SoundRender->Timer.GetElapsed_ms();
 	u32 dwDiff					=	dwTime-dwTimeStarted;
 	dwTimeStarted				+=	dwDiff;
@@ -46,7 +60,7 @@ void CSoundRender_Emitter::rewind()
 	dwTimeToPropagade			=	dwTime;
 
 	position					=	0;
-	if (target)	SoundRender->i_rewind	(this);
+	bRewind						=	TRUE;
 }
 
 void CSoundRender_Emitter::cancel()

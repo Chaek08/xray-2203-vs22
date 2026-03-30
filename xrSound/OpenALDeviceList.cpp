@@ -165,7 +165,7 @@ void ALDeviceList::ResetFilters()
 int ALDeviceList::GetFirstFilteredDevice()
 {
 	int i = 0;
-	for (; i < GetNumDevices(); i++) {
+	for (int i = 0; i < GetNumDevices(); i++) {
 		if (m_devices[i].selected == true)
 			break;
 	}

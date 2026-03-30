@@ -28,7 +28,7 @@
 //	params;			// user defined abstract data
 //	Device.Statistic.TEST0.End();
 //return TRUE-продолжить трассировку / FALSE-закончить трассировку
-BOOL __stdcall CBulletManager::firetrace_callback(collide::rq_result& result, LPVOID params)
+BOOL  CBulletManager::firetrace_callback(collide::rq_result& result, LPVOID params)
 {
 	SBullet* bullet = (SBullet*)params;
 
@@ -159,7 +159,7 @@ void CBulletManager::FireShotmark (const SBullet* bullet, const Fvector& vDir, c
 	if(pSound && ShowMark)
 	{
 		CObject* O = Level().Objects.net_Find(bullet->parent_id );
-		pSound->play_at_pos_unlimited(O, vEnd, false);
+		pSound->play_at_pos(O, vEnd, false);
 	}
 
 	LPCSTR ps_name = (!mtl_pair || mtl_pair->CollideParticles.empty())?

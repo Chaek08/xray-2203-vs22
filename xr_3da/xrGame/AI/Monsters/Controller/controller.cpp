@@ -197,7 +197,7 @@ void CController::play_control_sound_start()
 	Fvector pos = pA->Position();
 	pos.y += 1.5f;
 
-	if (control_start_sound.feedback) control_start_sound.stop();
+	if (control_start_sound._feedback()) control_start_sound.stop();
 	control_start_sound.play_at_pos(pA,pos);
 }
 
@@ -209,7 +209,7 @@ void CController::play_control_sound_hit()
 	Fvector pos = pA->Position();
 	pos.y += 1.5f;
 	
-	if (control_hit_sound.feedback) control_hit_sound.stop();
+	if (control_hit_sound._feedback()) control_hit_sound.stop();
 	control_hit_sound.play_at_pos(pA,pos);
 }
 

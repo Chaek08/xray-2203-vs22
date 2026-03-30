@@ -9,7 +9,15 @@ XRSOUND_API extern float			psSoundCull				;
 
 void CSoundRender_Emitter::update	(float dt)
 {
-	u32	dwTime			= SoundRender->Timer.GetElapsed_ms();
+	u32	dwTime			= SoundRender->Timer_Value;
+
+	VERIFY2(!!(owner_data) || (!(owner_data)&&(state==stStopped)),"owner");
+	VERIFY2(owner_data?(int)owner_data->feedback:1,"owner");
+
+	if (bRewind){
+		if (target)		SoundRender->i_rewind	(this);
+		bRewind			= FALSE;
+	}
 
 	switch (state)	
 	{
@@ -26,7 +34,7 @@ void CSoundRender_Emitter::update	(float dt)
 		dwTimeToPropagade	= dwTime;
 		fade_volume			= 1.f;
 		occluder_volume		= SoundRender->get_occlusion	(p_source.position,.2f,occluder);
-		smooth_volume		= p_source.base_volume*p_source.volume*psSoundVEffects*occluder_volume;
+		smooth_volume		= p_source.base_volume*p_source.volume*psSoundVEffects*psSoundVFactor*(b2D?1.f:occluder_volume);
 		e_current = e_target= *SoundRender->get_environment	(p_source.position);
 		if (update_culling(dt))	
 		{
@@ -47,7 +55,7 @@ void CSoundRender_Emitter::update	(float dt)
 		dwTimeToPropagade	= dwTime;
 		fade_volume			= 1.f;
 		occluder_volume		= SoundRender->get_occlusion	(p_source.position,.2f,occluder);
-		smooth_volume		= p_source.base_volume*p_source.volume*psSoundVEffects*occluder_volume;
+		smooth_volume		= p_source.base_volume*p_source.volume*psSoundVEffects*psSoundVFactor*(b2D?1.f:occluder_volume);
 		e_current = e_target= *SoundRender->get_environment	(p_source.position);
 		if (update_culling(dt)){
 			state		  	=	stPlayingLooped;
@@ -101,16 +109,26 @@ void CSoundRender_Emitter::update	(float dt)
 			state					=	stPlayingLooped;	// switch state
 			position				= (((dwTime-dwTimeStarted)%source->dwTimeTotal)*source->dwBytesPerMS);
 //			position				= (((dwTime-dwTimeStarted)%source->dwTimeTotal)*source->dwBytesPerSec)/1000;
-			SoundRender->i_start		(this);
+			SoundRender->i_start	(this);
 		}
 		break;
 	}
+
+	// if deffered stop active and volume==0 -> physically stop sound
+	if (bStopping&&fis_zero(fade_volume)) i_stop();
+
+	VERIFY2(!!(owner_data) || (!(owner_data)&&(state==stStopped)),"owner");
+	VERIFY2(owner_data?(int)owner_data->feedback:1,"owner");
 
 	// footer
 	bMoved				= FALSE;
 	if (state != stStopped){
 		if (dwTime	>=	dwTimeToPropagade)		Event_Propagade();
-	} else if (owner)	{ owner->feedback = 0; owner	= 0; }
+	} else if (owner_data)	{ 
+		VERIFY(this==owner_data->feedback);
+		owner_data->feedback= 0; 
+		owner_data			= 0; 
+	}
 }
 
 IC void	volume_lerp		(float& c, float t, float s, float dt)
@@ -125,25 +143,27 @@ IC void	volume_lerp		(float& c, float t, float s, float dt)
 
 BOOL	CSoundRender_Emitter::update_culling	(float dt)
 {
-	// Check range
-	float	dist		= SoundRender->listener_position().distance_to	(p_source.position);
-	if (dist>p_source.max_distance)										{ smooth_volume = 0; return FALSE; }
+	if (b2D){
+		occluder_volume		= 1.f;
+		fade_volume			+= dt*1.f*(bStopping?-1.f:1.f);
+	}else{
+		// Check range
+		float	dist		= SoundRender->listener_position().distance_to	(p_source.position);
+		if (dist>p_source.max_distance)										{ smooth_volume = 0; return FALSE; }
 
-	// Calc attenuated volume
-	float att			= p_source.min_distance/(psSoundRolloff*dist);	clamp(att,0.f,1.f);
-	float fade_scale	= (att*p_source.base_volume*p_source.volume*psSoundVEffects<psSoundCull)?-1.f:1.f;
-	fade_volume			+=	dt*1.f*fade_scale;
+		// Calc attenuated volume
+		float att			= p_source.min_distance/(psSoundRolloff*dist);	clamp(att,0.f,1.f);
+		float fade_scale	= bStopping||(att*p_source.base_volume*p_source.volume*psSoundVEffects*psSoundVFactor<psSoundCull)?-1.f:1.f;
+		fade_volume			+=	dt*1.f*fade_scale;
+
+		// Update occlusion
+		volume_lerp			(occluder_volume,SoundRender->get_occlusion	(p_source.position,.2f,occluder),1.f,dt);
+		clamp				(occluder_volume,0.f,1.f);
+	}
 	clamp				(fade_volume,0.f,1.f);
-
-	// Update occlusion
-	volume_lerp			(occluder_volume,SoundRender->get_occlusion	(p_source.position,.2f,occluder),1.f,dt);
-	clamp				(occluder_volume,0.f,1.f);
-
 	// Update smoothing
-	smooth_volume		= .9f*smooth_volume + .1f*(p_source.base_volume*p_source.volume*psSoundVEffects*occluder_volume*fade_volume);
-
+	smooth_volume		= .9f*smooth_volume + .1f*(p_source.base_volume*p_source.volume*psSoundVEffects*psSoundVFactor*occluder_volume*fade_volume);
 	if (smooth_volume<psSoundCull)							return FALSE;	// allow volume to go up
-
 	// Here we has enought "PRIORITY" to be soundable
 	// If we are playing already, return OK
 	// --- else check availability of resources

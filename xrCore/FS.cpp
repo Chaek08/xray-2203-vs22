@@ -53,7 +53,7 @@ typedef char MARK[9];
 IC void mk_mark(MARK& M, const char* S)
 {	strncpy(M,S,8); }
 
-void __stdcall FileCompress	(const char *fn, const char* sign, void* data, u32 size)
+void FileCompress	(const char *fn, const char* sign, void* data, u32 size)
 {
 	MARK M; mk_mark(M,sign);
 
@@ -64,7 +64,7 @@ void __stdcall FileCompress	(const char *fn, const char* sign, void* data, u32 s
 	_close	(H);
 }
 
-void* __stdcall FileDecompress	(const char *fn, const char* sign, u32* size)
+void* FileDecompress	(const char *fn, const char* sign, u32* size)
 {
 	MARK M,F; mk_mark(M,sign);
 

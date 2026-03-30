@@ -233,8 +233,8 @@
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <CallingConvention>StdCall</CallingConvention>
-      <AdditionalIncludeDirectories>scripting\;$(SolutionDir)SDK\dxSDK\Include;$(SolutionDir)xrCore;$(SolutionDir)xrLUA\src;$(SolutionDir)SDK\luabind\luabind\luabind;$(SolutionDir)SDK\luabind\luabind;$(SolutionDir)SDK\boost_1_30_0;$(SolutionDir)SDK\Xiph\Include;$(SolutionDir)xrODE\include;$(SolutionDir)SDK\loki;$(SolutionDir)\xrLUA\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CallingConvention>Cdecl</CallingConvention>
+      <AdditionalIncludeDirectories>scripting\;$(SolutionDir)SDK\dxSDK\Include;$(SolutionDir)xrCore;$(SolutionDir)xrLUA_JIT\src;$(SolutionDir)SDK\luabind\luabind\luabind;$(SolutionDir)SDK\luabind\luabind;$(SolutionDir)SDK\boost_1_30_0;$(SolutionDir)SDK\Xiph\Include;$(SolutionDir)xrODE\include;$(SolutionDir)SDK\loki;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ModuleOutputFile>$(SolutionDir)$(Configuration)\intermediate\$(ProjectName)\</ModuleOutputFile>
       <ModuleDependenciesFile>$(SolutionDir)$(Configuration)\intermediate\$(ProjectName)\</ModuleDependenciesFile>
       <XMLDocumentationFileName>$(SolutionDir)$(Configuration)\intermediate\$(ProjectName)\</XMLDocumentationFileName>
@@ -242,7 +242,7 @@
     </ClCompile>
     <Link>
       <AdditionalOptions>/MACHINE:I386  %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>odbc32.lib;odbccp32.lib;xr_3da.lib;lua50.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;xr_3da.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>

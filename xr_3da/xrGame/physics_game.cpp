@@ -75,7 +75,7 @@ public:
 
 
 template<class Pars>
-void __stdcall TContactShotMark(CDB::TRI* T,dContactGeom* c)
+void  TContactShotMark(CDB::TRI* T,dContactGeom* c)
 {
 	dBodyID b=dGeomGetBody(c->g1);
 	dxGeomUserData* data;
@@ -121,7 +121,7 @@ void __stdcall TContactShotMark(CDB::TRI* T,dContactGeom* c)
 						{
 							ref_sound& sound= SELECT_RANDOM1(mtl_pair->CollideSounds);
 							float volume=collide_volume_min+vel_cret*(collide_volume_max-collide_volume_min)/(_sqrt(mass_limit)*default_l_limit-Pars::vel_cret_sound);
-							::Sound->play_at_pos_unlimited(
+							::Sound->play_at_pos(
 								sound,0,*((Fvector*)c->pos)
 								);
 							sound.set_volume(volume);

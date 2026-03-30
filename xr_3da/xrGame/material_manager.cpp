@@ -90,7 +90,7 @@ void CMaterialManager::update		(float time_delta, float volume, float step_time,
 
 
 	for(int i=0; i<4; i++)
-		if (m_step_sound[i].feedback)		{
+		if (m_step_sound[i]._feedback())		{
 			m_step_sound[i].set_position	(position    );
 			m_step_sound[i].set_volume		(1.f * volume);
 		}

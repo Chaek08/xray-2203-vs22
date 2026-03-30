@@ -9,8 +9,9 @@
 
 CSoundRender_Emitter*	CSoundRender_Core::i_play(ref_sound* S, BOOL _loop, float delay)
 {
+	VERIFY					(S->_p->feedback==0);
 	CSoundRender_Emitter* E	=	xr_new<CSoundRender_Emitter>();
-	S->feedback				=	E;
+	S->_p->feedback			=	E;
 	E->start				(S,_loop,delay);
 	s_emitters.push_back	(E);
 	return E;
@@ -21,8 +22,10 @@ void CSoundRender_Core::update	( const Fvector& P, const Fvector& D, const Fvect
 	u32 it;
 
 	if (0==bReady)				return;
+    bLocked						= TRUE;
+	Timer_Value					= Timer.GetElapsed_ms();
 
-	s_emitters_u	++;
+	s_emitters_u	++	;
 
 	// Firstly update emitters, which are now being rendered
 	//Msg	("! update: r-emitters");
@@ -115,16 +118,20 @@ void CSoundRender_Core::update	( const Fvector& P, const Fvector& D, const Fvect
 
 	// Events
 	update_events					();
+
+    bLocked							= FALSE;
 }
 
+static	u32	g_saved_event_count		= 0;
 void	CSoundRender_Core::update_events		()
 {
+	g_saved_event_count				= s_events.size();
 	for (u32 it=0; it<s_events.size(); it++)
 	{
 		event&	E	= s_events[it];
 		Handler		(E.first,E.second);
 	}
-	s_events.clear();
+	s_events.clear_not_free	();
 }
 
 void	CSoundRender_Core::statistic			(CSound_stats&  dest)
@@ -137,6 +144,7 @@ void	CSoundRender_Core::statistic			(CSound_stats&  dest)
 	dest._simulated		= s_emitters.size();
 	dest._cache_hits	= cache._stat_hit;
 	dest._cache_misses	= cache._stat_miss;
+	dest._events		= g_saved_event_count;
 	cache.stats_clear	();
 }
 
