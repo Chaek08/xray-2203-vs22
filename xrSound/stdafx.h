@@ -25,8 +25,7 @@
 #include <mmreg.h>
 
 #include <vorbis/codec.h>
-#include <vorbis/vorbisfile.h>
-#include <eax.h>             
+#include <vorbis/vorbisfile.h>           
 
 #include "xrCDB.h"
 #include "sound.h"

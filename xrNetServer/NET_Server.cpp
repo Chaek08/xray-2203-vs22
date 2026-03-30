@@ -149,7 +149,7 @@ BOOL IPureServer::Connect(LPCSTR options)
 	if (strchr(options,'/'))		strcpy(session_options, strchr(options,'/')+1);
 	if (strstr(options, "psw="))
 	{
-		char* PSW = strstr(options, "psw=") + 4;
+		const char* PSW = strstr(options, "psw=") + 4;
 		if (strchr(PSW, '/')) 
 			strncpy(password_str, PSW, strchr(PSW, '/') - PSW);
 		else
@@ -552,7 +552,8 @@ bool			IPureServer::DisconnectAddress	(char* Address)
 	IClient* PlayersToDisconnect[256];
 	u32 NumPlayers = 0;
 	IBannedClient	tmpBanCl(Address, 0);
-	for (u32 it = 0; it<net_Players.size(); it++)
+	u32 it = 0;
+	for (; it<net_Players.size(); it++)
 	{
 		char ClAddress[4];
 		GetClientAddress(net_Players[it]->ID, ClAddress);

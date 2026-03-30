@@ -10,18 +10,13 @@
 #ifdef __BORLANDC__
 #	pragma comment(lib,	"eaxB.lib"			)
 #	pragma comment(lib,	"oggB.lib"			)
-#	pragma comment(lib,	"vorbisfileB.lib"	)
 #	pragma comment(lib,	"xrCoreB.lib"		)
 #	pragma comment(lib,	"EToolsB.lib"		)
-#	pragma comment(lib,	"wrap_oalB.lib"		)
 #	pragma comment(lib,	"dsoundb.lib" 		)
 #else
-#	pragma comment(lib,	"x:\\eax.lib"		)
-#	pragma comment(lib,	"x:\\vorbis.lib"	)
-#	pragma comment(lib,	"x:\\vorbisfile.lib")
-#	pragma comment(lib,	"x:\\xrCore"		)
-#	pragma comment(lib,	"x:\\xrCDB"			)
-#	pragma comment(lib,	"x:\\wrap_oal.lib"	)
+#	pragma comment(lib,	"eax"		)
+#	pragma comment(lib,	"xrCore"		)
+#	pragma comment(lib,	"xrCDB"			)
 #	pragma comment(lib,	"dsound.lib" 		)
 #endif
 

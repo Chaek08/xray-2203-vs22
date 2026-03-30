@@ -3,6 +3,7 @@
 
 #include "soundrender.h"
 #include "soundrender_environment.h"
+#include <eax.h>
 
 CSoundRender_Environment::CSoundRender_Environment(void)
 {

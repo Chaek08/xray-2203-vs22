@@ -14,13 +14,16 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx</Extensions>
     </Filter>
     <Filter Include="XRay">
-      <UniqueIdentifier>{a917f86d-efc3-40c3-84e9-314f20d6aa7a}</UniqueIdentifier>
+      <UniqueIdentifier>{d6f6abd3-f9aa-486b-9d1a-db22afdf5f1a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Kernel">
-      <UniqueIdentifier>{6cc3a9d8-6173-4e2f-bf29-bac1d0df1a27}</UniqueIdentifier>
+      <UniqueIdentifier>{0d92363e-83aa-4a6f-8032-18af6b01dd2f}</UniqueIdentifier>
     </Filter>
     <Filter Include="luabind">
-      <UniqueIdentifier>{e46d7c9c-167e-41ca-b2f8-290c5d88cdf5}</UniqueIdentifier>
+      <UniqueIdentifier>{5c65f423-2205-49e1-80b9-7cd8892be49e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{a9b048fe-8fa2-4edc-a871-80404aaea6fc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -241,6 +244,15 @@
     </ClInclude>
     <ClInclude Include="StdAfx.h">
       <Filter>Kernel</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lauxlib.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lua.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lualib.h">
+      <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

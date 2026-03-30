@@ -2,28 +2,28 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Kernel">
-      <UniqueIdentifier>{ce3d6c1e-cd73-4181-86e0-e44b8c68a88f}</UniqueIdentifier>
+      <UniqueIdentifier>{60319cd3-e986-4d02-8aa9-3c3c576ae06f}</UniqueIdentifier>
     </Filter>
     <Filter Include="Core">
-      <UniqueIdentifier>{9d05e4c8-e06f-473d-857e-7a273e9ed56a}</UniqueIdentifier>
+      <UniqueIdentifier>{8f662c9e-fc5e-417b-8370-21c47193990f}</UniqueIdentifier>
     </Filter>
     <Filter Include="Emitter">
-      <UniqueIdentifier>{6f3a2565-9ea3-4f19-b804-1fe94ce4b4b6}</UniqueIdentifier>
+      <UniqueIdentifier>{4d5d9a99-c015-4600-95dc-09623da2a24e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source">
-      <UniqueIdentifier>{4dd989cd-23c2-42fd-9483-f3f9ca58c21f}</UniqueIdentifier>
+      <UniqueIdentifier>{157774d5-7db9-4561-be6a-a03165724fab}</UniqueIdentifier>
     </Filter>
     <Filter Include="Target">
-      <UniqueIdentifier>{913271bc-dc12-414a-b38b-9615d07b4b61}</UniqueIdentifier>
+      <UniqueIdentifier>{84e90ba4-9725-4204-b74f-5353284da9c2}</UniqueIdentifier>
     </Filter>
     <Filter Include="Environment">
-      <UniqueIdentifier>{3d97425b-4ecc-408b-8e8a-0329d828a128}</UniqueIdentifier>
+      <UniqueIdentifier>{e032e4d7-eb64-4747-b4c0-76567a4483a0}</UniqueIdentifier>
     </Filter>
     <Filter Include="Misc %28or old%29">
-      <UniqueIdentifier>{91dc0fb2-56b5-486d-8a21-90003a7d6836}</UniqueIdentifier>
+      <UniqueIdentifier>{cea8eda6-77be-4896-82e3-a7a624b230cb}</UniqueIdentifier>
     </Filter>
     <Filter Include="Cache">
-      <UniqueIdentifier>{71ec9268-4585-455c-9ef5-bfaab987c40e}</UniqueIdentifier>
+      <UniqueIdentifier>{b54a7014-64eb-4f7d-8592-9d10b9957c89}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -83,6 +83,9 @@
     </ClInclude>
     <ClInclude Include="SoundRender_Cache.h">
       <Filter>Cache</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenALDeviceList.h">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -154,6 +157,9 @@
     </ClCompile>
     <ClCompile Include="SoundRender_Cache.cpp">
       <Filter>Cache</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenALDeviceList.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
