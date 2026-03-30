@@ -163,7 +163,7 @@ void CEffect_Thunderbolt::Bolt(float period, float lt)
 	    SoundDeqIt it		= std::lower_bound(sound_times.begin(),sound_times.end(),val,sound_pred);
     	sound_times.insert	(it,SoundDesc(val,pos));
 */
-		current->snd.play_at_pos(0,pos,FALSE,dist/300.f);
+		current->snd.play_at_pos_unlimited(0,pos,FALSE,dist/300.f);
 		current->snd.set_range	(dist/2,dist*2.f);
     }
 	current_direction.invert	();	// for env-sun

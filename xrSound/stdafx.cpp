@@ -8,17 +8,17 @@
 // and not in this file
 
 #ifdef __BORLANDC__
-#	pragma comment(lib,	"eaxB.lib"			)
-#	pragma comment(lib,	"oggB.lib"			)
-#	pragma comment(lib,	"xrCoreB.lib"		)
-#	pragma comment(lib,	"EToolsB.lib"		)
-#	pragma comment(lib,	"dsoundb.lib" 		)
+#	pragma comment(lib,	"eaxB"			)
+#	pragma comment(lib,	"oggB"			)
+#	pragma comment(lib,	"xrCoreB"		)
+#	pragma comment(lib,	"EToolsB"		)
+#	pragma comment(lib,	"dsoundb" 		)
 #else
 #	pragma comment(lib,	"eax"		)
 #	pragma comment(lib,	"xrCore"		)
 #	pragma comment(lib,	"xrCDB"			)
-#	pragma comment(lib,	"dsound.lib" 		)
+#	pragma comment(lib,	"dsound" 		)
 #endif
 
-#pragma comment(lib,	"msacm32.lib"		)
+#pragma comment(lib,	"msacm32"		)
 
