@@ -2,34 +2,34 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Kernel">
-      <UniqueIdentifier>{97a765e5-e52b-41ba-b8b4-f584596788b4}</UniqueIdentifier>
+      <UniqueIdentifier>{7e6c0ab2-4b61-4faa-830e-be5c780e461f}</UniqueIdentifier>
     </Filter>
     <Filter Include="Core">
-      <UniqueIdentifier>{84ef0ae2-786d-49fd-93df-9c18aeb7cfd8}</UniqueIdentifier>
+      <UniqueIdentifier>{7e699495-0e1e-4d27-8b33-d92bbf54635d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Core\OpenAL">
-      <UniqueIdentifier>{d7103a6a-0ac6-4229-8605-e258181b6593}</UniqueIdentifier>
+      <UniqueIdentifier>{cbb82494-d262-4dd0-a48f-61456063ac00}</UniqueIdentifier>
     </Filter>
     <Filter Include="Core\DSound">
-      <UniqueIdentifier>{53e3b953-4c2b-4620-ac0f-c2e365efd2ff}</UniqueIdentifier>
+      <UniqueIdentifier>{482cd5c0-236a-48d5-89f1-addbc29d7484}</UniqueIdentifier>
     </Filter>
     <Filter Include="Emitter">
-      <UniqueIdentifier>{b3be4a17-3b1f-4e2f-9dfd-2c1faa9d1ca6}</UniqueIdentifier>
+      <UniqueIdentifier>{fd60373b-78f4-4b98-8c0b-8908c7c622d9}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source">
-      <UniqueIdentifier>{68c6287f-9dcc-4b49-af29-ea7637e34fc1}</UniqueIdentifier>
+      <UniqueIdentifier>{3a300c7a-33ae-4674-8365-e5e34be4e4aa}</UniqueIdentifier>
     </Filter>
     <Filter Include="Target">
-      <UniqueIdentifier>{103d6cf1-4014-422c-b3ea-d2cf1cdafb8d}</UniqueIdentifier>
+      <UniqueIdentifier>{28b7ea62-415b-404c-9504-4b713a7fd7a4}</UniqueIdentifier>
     </Filter>
     <Filter Include="Environment">
-      <UniqueIdentifier>{7db1d605-ecba-4129-8049-9a545f7efc08}</UniqueIdentifier>
+      <UniqueIdentifier>{1d2c88a4-d401-4914-b1e9-8a8b4931ec6c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Misc %28or old%29">
-      <UniqueIdentifier>{f89217f8-406b-45b0-9380-bb306a682ce6}</UniqueIdentifier>
+      <UniqueIdentifier>{a6b50627-64cc-41ab-861d-6278e290c428}</UniqueIdentifier>
     </Filter>
     <Filter Include="Cache">
-      <UniqueIdentifier>{3548433d-058b-47b7-93ab-79c09bce9247}</UniqueIdentifier>
+      <UniqueIdentifier>{005d0334-30f0-484c-8a35-4a880bcb7648}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

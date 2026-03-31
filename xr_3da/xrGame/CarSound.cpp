@@ -19,14 +19,14 @@ void CCar::SCarSound::Init()
 	if (ini->section_exist("car_sound") && ini->line_exist("car_sound","snd_volume"))
 	{
 		volume  			= ini->r_float("car_sound","snd_volume");
-		snd_engine.create	(TRUE,ini->r_string("car_sound","snd_name"));//
+		snd_engine.create	(ini->r_string("car_sound","snd_name"), st_Effect, sg_SourceType);//
 		if(ini->line_exist("car_sound","relative_pos"))
 		{
 			relative_pos.set(ini->r_fvector3("car_sound","relative_pos"));
 		}
 		if(ini->line_exist("car_sound","transmission_switch"))
 		{
-			snd_transmission.create(TRUE,ini->r_string("car_sound","transmission_switch"));
+			snd_transmission.create(ini->r_string("car_sound","transmission_switch"), st_Effect, sg_SourceType);
 		}
 	
 	

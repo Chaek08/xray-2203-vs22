@@ -70,8 +70,8 @@ void	CSoundRender_TargetA::stop			()
 	if (rendering)
 	{
 		A_CHK		(alSourceStop(pSource));
-        A_CHK		(alSourcei	(pSource, AL_BUFFER,   NULL));
-		A_CHK		(alSourcei	(pSource, AL_SOURCE_RELATIVE,	FALSE));
+		A_CHK		(alSourcei	(pSource, AL_BUFFER,   NULL));
+		A_CHK		(alSourcei	(pSource, AL_SOURCE_RELATIVE,	TRUE));
 	}
     inherited::stop	();
 }
@@ -79,6 +79,7 @@ void	CSoundRender_TargetA::stop			()
 void	CSoundRender_TargetA::rewind			()
 {
 	inherited::rewind();
+
 	A_CHK			(alSourceStop(pSource));
 	A_CHK			(alSourcei	(pSource, AL_BUFFER,   NULL));
 	for (u32 buf_idx=0; buf_idx<sdef_target_count; buf_idx++)
@@ -128,13 +129,13 @@ void	CSoundRender_TargetA::fill_parameters()
 	VERIFY2(pEmitter,SE->source->file_name());
     A_CHK(alSourcef	(pSource, AL_MAX_DISTANCE, 			pEmitter->p_source.max_distance));
 
-	VERIFY2(pEmitter,SE->source->file_name());
+	VERIFY2(pEmitter,SE->source->file_name                                       ());
 	A_CHK(alSource3f(pSource, AL_POSITION,	 			pEmitter->p_source.position.x,pEmitter->p_source.position.y,-pEmitter->p_source.position.z));
 
 	VERIFY2(pEmitter,SE->source->file_name());
     A_CHK(alSourcei	(pSource, AL_SOURCE_RELATIVE,		pEmitter->b2D));
-    // 2D params
-    A_CHK(alSourcef	(pSource, AL_ROLLOFF_FACTOR,		psSoundRolloff));
+
+	A_CHK(alSourcef	(pSource, AL_ROLLOFF_FACTOR,		psSoundRolloff));
 
 	VERIFY2(pEmitter,SE->source->file_name());
     float	_gain	= pEmitter->smooth_volume;			clamp	(_gain,EPS_S,1.f);

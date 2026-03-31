@@ -321,8 +321,8 @@ void CEnvironment::load		()
 #ifdef DEBUG
 			m->name				= _n;
 #endif
-			m->left.create		(true,_l,0);
-			m->right.create		(true,_r,0);
+			m->left.create(_l, st_Music, sg_SourceType);
+			m->right.create(_r, st_Music, sg_SourceType);
 			playlist.push_back	(m);
 		}
 	}

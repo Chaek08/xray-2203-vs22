@@ -48,8 +48,8 @@ void CController::Load(LPCSTR section)
 	MotionMan.accel_chain_add		(eAnimWalkFwd,		eAnimRun);
 	MotionMan.accel_chain_add		(eAnimWalkDamaged,	eAnimRunDamaged);
 
-	::Sound->create(control_start_sound,TRUE, pSettings->r_string(section,"sound_control_start"),	SOUND_TYPE_WORLD);
-	::Sound->create(control_hit_sound,	TRUE, pSettings->r_string(section,"sound_control_hit"),		SOUND_TYPE_WORLD);
+	::Sound->create(control_start_sound, pSettings->r_string(section,"sound_control_start"), st_Effect, SOUND_TYPE_WORLD);
+	::Sound->create(control_hit_sound,	 pSettings->r_string(section,"sound_control_hit"), st_Effect, SOUND_TYPE_WORLD);
 
 	MotionMan.AddReplacedAnim(&m_bDamaged, eAnimStandIdle,	eAnimStandDamaged);
 	MotionMan.AddReplacedAnim(&m_bDamaged, eAnimRun,		eAnimRunDamaged);

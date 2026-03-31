@@ -15,7 +15,7 @@
 #include "memory_space_impl.h"
 #include "custommonster.h"
 #include "ai_object_location.h"
-#include "level_graph.h"
+#include "level_navigation_graph.h"
 #include "sound_user_data_visitor.h"
 #include "agent_manager.h"
 #include "agent_member_manager.h"
@@ -33,9 +33,6 @@
 
 CSoundMemoryManager::~CSoundMemoryManager		()
 {
-#ifdef USE_SELECTED_SOUND
-	xr_delete				(m_selected_sound);
-#endif
 }
 
 void CSoundMemoryManager::Load					(LPCSTR section)
@@ -48,10 +45,7 @@ void CSoundMemoryManager::reinit				()
 	m_priorities.clear		();
 	m_last_sound_time		= 0;
 	m_sound_threshold		= m_min_sound_threshold;
-	VERIFY					(_valid(m_sound_threshold));
-#ifdef USE_SELECTED_SOUND
-	xr_delete				(m_selected_sound);
-#endif
+	m_selected_sound		= 0;
 }
 
 void CSoundMemoryManager::reload				(LPCSTR section)
@@ -72,11 +66,8 @@ void CSoundMemoryManager::reload				(LPCSTR section)
 
 IC	void CSoundMemoryManager::update_sound_threshold			()
 {
-	VERIFY		(_valid(m_self_sound_factor));
-	VERIFY		(_valid(m_sound_threshold));
-	VERIFY		(_valid(m_min_sound_threshold));
 	VERIFY		(!fis_zero(m_decrease_factor));
-	VERIFY		(m_sound_decrease_quant);
+	VERIFY		(!fis_zero(m_sound_decrease_quant));
 	// t = max(t*f^((tc - tl)/tq),min_threshold)
 	m_sound_threshold		= std::max(
 		m_self_sound_factor*
@@ -117,7 +108,6 @@ IC	bool is_sound_type(int s, const ESoundTypes &t)
 
 void CSoundMemoryManager::feel_sound_new(CObject *object, int sound_type, CSound_UserDataPtr user_data, const Fvector &position, float sound_power)
 {
-	VERIFY					(_valid(sound_power));
 	if (!m_sounds)
 		return;
 
@@ -130,9 +120,7 @@ void CSoundMemoryManager::feel_sound_new(CObject *object, int sound_type, CSound
 	Msg						("%s (%d) - sound type %x from %s at %d in (%.2f,%.2f,%.2f) with power %.2f",*self->cName(),Device.dwTimeGlobal,sound_type,object ? *object->cName() : "world",Device.dwTimeGlobal,position.x,position.y,position.z,sound_power);
 #endif
 
-	VERIFY					(_valid(m_sound_threshold));
 	m_object->sound_callback(object,sound_type,position,sound_power);
-	VERIFY					(_valid(m_sound_threshold));
 		
 	update_sound_threshold	();
 
@@ -140,27 +128,21 @@ void CSoundMemoryManager::feel_sound_new(CObject *object, int sound_type, CSound
 	if (!entity_alive->g_Alive())
 		return;
 	
-	VERIFY					(_valid(sound_power));
 	if (is_sound_type(sound_type,SOUND_TYPE_WEAPON))
 		sound_power			*= m_weapon_factor;
 	
-	VERIFY					(_valid(sound_power));
 	if (is_sound_type(sound_type,SOUND_TYPE_ITEM))
 		sound_power			*= m_item_factor;
 
-	VERIFY					(_valid(sound_power));
 	if (is_sound_type(sound_type,SOUND_TYPE_MONSTER))
 		sound_power			*= m_npc_factor;
 
-	VERIFY					(_valid(sound_power));
 	if (is_sound_type(sound_type,SOUND_TYPE_ANOMALY))
 		sound_power			*= m_anomaly_factor;
 	
-	VERIFY					(_valid(sound_power));
 	if (is_sound_type(sound_type,SOUND_TYPE_WORLD))
 		sound_power			*= m_world_factor;
 	
-	VERIFY					(_valid(sound_power));
 	if (sound_power >= m_sound_threshold) {
 		if (is_sound_type(sound_type,SOUND_TYPE_WEAPON_SHOOTING)) {
 			// this is fake!
@@ -172,9 +154,7 @@ void CSoundMemoryManager::feel_sound_new(CObject *object, int sound_type, CSound
 	}
 
 	m_last_sound_time		= Device.dwTimeGlobal;
-	VERIFY					(_valid(m_sound_threshold));
 	m_sound_threshold		= _max(m_sound_threshold,sound_power);
-	VERIFY					(_valid(m_sound_threshold));
 }
 
 void CSoundMemoryManager::add			(const CObject *object, int sound_type, const Fvector &position, float sound_power)
@@ -233,12 +213,8 @@ void CSoundMemoryManager::add			(const CObject *object, int sound_type, const Fv
 		sound_object.fill		(game_object,self,ESoundTypes(sound_type),sound_power,!m_stalker ? squad_mask_type(-1) : m_stalker->agent_manager().member().mask(m_stalker));
 		if (!game_object)
 			sound_object.m_object_params.m_position = position;
-#ifdef USE_FIRST_GAME_TIME
-		sound_object.m_first_game_time	= Level().GetGameTime();
-#endif
-#ifdef USE_FIRST_LEVEL_TIME
 		sound_object.m_first_level_time	= Device.dwTimeGlobal;
-#endif
+		sound_object.m_first_game_time	= Level().GetGameTime();
 
 		VERIFY					(m_max_sound_count);
 		if (m_max_sound_count <= m_sounds->size()) {
@@ -262,13 +238,13 @@ struct CRemoveOfflinePredicate {
 		if (!object.m_object)
 			return	(false);
 
-		return		(!!object.m_object->H_Parent());
+		return		(!!object.m_object->getDestroy() || object.m_object->H_Parent());
 	}
 };
 
 void CSoundMemoryManager::update()
 {
-	START_PROFILE("Memory Manager/sounds::update")
+	START_PROFILE("AI/Memory Manager/sounds/update")
 
 	VERIFY						(m_sounds);
 	{
@@ -276,20 +252,17 @@ void CSoundMemoryManager::update()
 		m_sounds->erase						(I,m_sounds->end());
 	}
 
-#ifdef USE_SELECTED_SOUND
-	xr_delete					(m_selected_sound);
+	m_selected_sound			= 0;
 	u32							priority = u32(-1);
 	xr_vector<CSoundObject>::const_iterator	I = m_sounds->begin();
 	xr_vector<CSoundObject>::const_iterator	E = m_sounds->end();
 	for ( ; I != E; ++I) {
 		u32						cur_priority = this->priority(*I);
 		if (cur_priority < priority) {
-			m_selected_sound	= xr_new<CSoundObject>(*I);
+			m_selected_sound	= &*I;
 			priority			= cur_priority;
 		}
 	}
-#endif
-
 	STOP_PROFILE
 }
 
@@ -319,17 +292,4 @@ void CSoundMemoryManager::remove_links	(CObject *object)
 	SOUNDS::iterator		I = std::find_if(m_sounds->begin(),m_sounds->end(),CSoundObjectPredicate(object));
 	if (I != m_sounds->end())
 		m_sounds->erase		(I);
-
-#ifdef USE_SELECTED_SOUND
-	if (!m_selected_sound)
-		return;
-	
-	if (!m_selected_sound->m_object)
-		return;
-	
-	if (m_selected_sound->m_object->ID() != object->ID())
-		return;
-
-	xr_delete				(m_selected_sound);
-#endif
 }

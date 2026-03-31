@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "actor.h"
 #include "weapon.h"
 #include "mercuryball.h"
@@ -25,27 +25,27 @@ void CActor::feel_touch_delete	(CObject* O)
 {
 }
 
-BOOL CActor::feel_touch_contact		(CObject *O)
+BOOL CActor::feel_touch_contact(CObject *O)
 {
-	CInventoryItem	*item = smart_cast<CInventoryItem*>(O);
-	CInventoryOwner	*inventory_owner = smart_cast<CInventoryOwner*>(O);
+    if (!O) return FALSE;
+    if (O->getDestroy()) return FALSE;
 
-	if (item && item->Useful() && !item->object().H_Parent()) 
-		return TRUE;
+    CInventoryItem* item = smart_cast<CInventoryItem*>(O);
+    CInventoryOwner* inventory_owner = smart_cast<CInventoryOwner*>(O);
 
-	if(inventory_owner && inventory_owner != smart_cast<CInventoryOwner*>(this))
-		return TRUE;
+    if (item)
+    {
+        if (!item->Useful())
+            return FALSE;
 
-/**
-	CCustomZone	*custom_zone = smart_cast<CCustomZone*>(O);
-	if (!custom_zone)
-		return	(TRUE);
+        if (!O->H_Parent())
+            return TRUE;
+    }
 
-	if (custom_zone->inside(Position()))
-		return	(TRUE);
-/**/
+    if (inventory_owner && inventory_owner != smart_cast<CInventoryOwner*>(this))
+        return TRUE;
 
-	return		(FALSE);
+    return FALSE;
 }
 
 BOOL CActor::feel_touch_on_contact	(CObject *O)
@@ -77,7 +77,7 @@ ICF static BOOL info_trace_callback(collide::rq_result& result, LPVOID params)
 		bOverlaped		= TRUE;
 		return			FALSE;
 	}else{
-		//ïîëó÷èòü òðåóãîëüíèê è óçíàòü åãî ìàòåðèàë
+		//Ð¿Ð¾Ð»ÑƒÑ‡Ð¸Ñ‚ÑŒ Ñ‚Ñ€ÐµÑƒÐ³Ð¾Ð»ÑŒÐ½Ð¸Ðº Ð¸ ÑƒÐ·Ð½Ð°Ñ‚ÑŒ ÐµÐ³Ð¾ Ð¼Ð°Ñ‚ÐµÑ€Ð¸Ð°Ð»
 		CDB::TRI* T		= Level().ObjectSpace.GetStaticTris()+result.element;
 		if (GMLib.GetMaterialByIdx(T->material)->Flags.is(SGameMtl::flPassable)) 
 			return TRUE;
@@ -111,7 +111,7 @@ void CActor::PickupModeUpdate()
 {
 	if(!m_bPickupMode) return;
 
-	//ïîäáèðàíèå îáúåêòà
+	//Ð¿Ð¾Ð´Ð±Ð¸Ñ€Ð°Ð½Ð¸Ðµ Ð¾Ð±ÑŠÐµÐºÑ‚Ð°
 	if(inventory().m_pTarget && inventory().m_pTarget->Useful() &&
 		m_pUsableObject && m_pUsableObject->nonscript_usable())
 	{
@@ -127,8 +127,16 @@ void CActor::PickupModeUpdate()
 	CFrustum frustum;
 	frustum.CreateFromMatrix(Device.mFullTransform,FRUSTUM_P_LRTB|FRUSTUM_P_FAR);
 	//. slow (ray-query test)
-	for(xr_vector<CObject*>::iterator it = feel_touch.begin(); it != feel_touch.end(); it++)
-		if (CanPickItem(frustum,Device.vCameraPosition,*it)) PickupInfoDraw(*it);
+	for (xr_vector<CObject*>::iterator it = feel_touch.begin(); it != feel_touch.end(); it++)
+	{
+		CObject* obj = *it;
+
+		if (!obj) continue;
+		if (obj->getDestroy()) continue;
+
+		if (CanPickItem(frustum, Device.vCameraPosition, obj))
+			PickupInfoDraw(obj);
+	}
 }
 
 #include "../CameraBase.h"
@@ -185,7 +193,7 @@ void	CActor::PickupModeUpdate_COD	()
 
 	if (pNearestItem && m_bPickupMode)
 	{
-		//ïîäáèðàíèå îáúåêòà
+		//Ð¿Ð¾Ð´Ð±Ð¸Ñ€Ð°Ð½Ð¸Ðµ Ð¾Ð±ÑŠÐµÐºÑ‚Ð°
 		NET_Packet P;
 		u_EventGen(P,GE_OWNERSHIP_TAKE, ID());
 		P.w_u16(pNearestItem->object().ID());
@@ -208,10 +216,15 @@ void CActor::PickupInfoDraw(CObject* object)
 	res.mul(Device.mFullTransform,object->XFORM());
 	Fvector4 v_res;
 	Fvector shift;
-	if(item){
+	if(item)
+	{
+		if (item->object().getDestroy()) return;
+
 		draw_str = item->NameComplex();
 		shift.set(0,0,0);
-	}else if(inventory_owner){
+	}
+	else if(inventory_owner)
+	{
 		draw_str = inventory_owner->CharacterInfo().Name();
 		shift.set(0,1.2f,0);
 	}

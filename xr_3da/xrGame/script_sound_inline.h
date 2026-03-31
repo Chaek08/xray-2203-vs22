@@ -24,6 +24,17 @@ IC	void CScriptSound::Play					(CScriptGameObject *object, float delay)
 	Play					(object,delay,0);
 }
 		
+IC	void CScriptSound::PlayUnlimited		(CScriptGameObject *object)
+{
+	PlayUnlimited			(object,0.f,0);
+}
+
+IC	void CScriptSound::PlayUnlimited		(CScriptGameObject *object, float delay)
+{
+	PlayUnlimited			(object,delay,0);
+}
+		void				PlayUnlimited	(CScriptGameObject *object, float delay, int flags);
+
 IC	void CScriptSound::PlayAtPos			(CScriptGameObject *object, const Fvector &position)
 {
 	PlayAtPos				(object,position,0.f,0);
@@ -32,6 +43,16 @@ IC	void CScriptSound::PlayAtPos			(CScriptGameObject *object, const Fvector &pos
 IC	void CScriptSound::PlayAtPos			(CScriptGameObject *object, const Fvector &position, float delay)
 {
 	PlayAtPos				(object,position,delay,0);
+}
+
+IC	void CScriptSound::PlayAtPosUnlimited	(CScriptGameObject *object, const Fvector &position)
+{
+	PlayAtPosUnlimited		(object,position,0.f,0);
+}
+
+IC	void CScriptSound::PlayAtPosUnlimited	(CScriptGameObject *object, const Fvector &position, float delay)
+{
+	PlayAtPosUnlimited		(object,position,delay,0);
 }
 
 IC	void CScriptSound::SetMinDistance		(const float fMinDistance)
@@ -80,12 +101,6 @@ IC	void CScriptSound::Stop					()
 {
 	VERIFY				(m_sound._handle());
 	m_sound.stop		();
-}
-
-IC	void CScriptSound::StopDeffered			()
-{
-	VERIFY				(m_sound._handle());
-	m_sound.stop_deffered();
 }
 
 IC	void CScriptSound::SetPosition			(const Fvector &position)

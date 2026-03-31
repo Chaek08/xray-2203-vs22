@@ -17,13 +17,16 @@ CSoundRender_Emitter*	CSoundRender_Core::i_play(ref_sound* S, BOOL _loop, float 
 	return E;
 }
 
-void CSoundRender_Core::update	( const Fvector& P, const Fvector& D, const Fvector& N, float dt )
+void CSoundRender_Core::update	( const Fvector& P, const Fvector& D, const Fvector& N )
 {
 	u32 it;
 
 	if (0==bReady)				return;
     bLocked						= TRUE;
-	Timer_Value					= Timer.GetElapsed_ms();
+	u32 new_tm					= Timer.GetElapsed_ms();
+	Timer_Delta					= new_tm-Timer_Value;
+	float dt					= float(Timer_Delta)/1000.f;
+	Timer_Value					= new_tm;
 
 	s_emitters_u	++	;
 
@@ -94,7 +97,7 @@ void CSoundRender_Core::update	( const Fvector& P, const Fvector& D, const Fvect
 	}
 
 	// update EAX
-    if (psSoundFlags.test(ssEAX) && bEAX){
+    if (psSoundFlags.test(ss_EAX) && bEAX){
         if (bListenerMoved){
             bListenerMoved			= FALSE;
             e_target				= *get_environment	(P);
@@ -134,19 +137,44 @@ void	CSoundRender_Core::update_events		()
 	s_events.clear_not_free	();
 }
 
-void	CSoundRender_Core::statistic			(CSound_stats&  dest)
+void	CSoundRender_Core::statistic			(CSound_stats*  dest, CSound_stats_ext*  ext )
 {
-	dest._rendered		= 0;
-	for (u32 it=0; it<s_targets.size(); it++)	{
-		CSoundRender_Target*	T	= s_targets	[it];
-		if (T->get_emitter() && T->get_Rendering())	dest._rendered++;
+	if (dest){
+		dest->_rendered		= 0;
+		for (u32 it=0; it<s_targets.size(); it++)	{
+			CSoundRender_Target*	T	= s_targets	[it];
+			if (T->get_emitter() && T->get_Rendering())	dest->_rendered++;
+		}
+		dest->_simulated	= s_emitters.size();
+		dest->_cache_hits	= cache._stat_hit;
+		dest->_cache_misses	= cache._stat_miss;
+		dest->_events		= g_saved_event_count;
+		cache.stats_clear	();
 	}
-	dest._simulated		= s_emitters.size();
-	dest._cache_hits	= cache._stat_hit;
-	dest._cache_misses	= cache._stat_miss;
-	dest._events		= g_saved_event_count;
-	cache.stats_clear	();
+	if (ext){
+		for (u32 it=0; it<s_emitters.size(); it++){
+			CSoundRender_Emitter*	_E = s_emitters[it];	
+			CSound_stats_ext::SItem _I;
+			_I._3D					= !_E->b2D;
+			_I._rendered			= !!_E->target;
+			_I.name					= _E->source->fname;
+			_I.params				= _E->p_source;
+			_I.volume				= _E->smooth_volume;
+			if (_E->owner_data){
+				_I.game_object		= _E->owner_data->g_object;
+				_I.game_type		= _E->owner_data->g_type;
+				_I.type				= _E->owner_data->s_type;
+			}else{
+				_I.game_object		= 0;
+				_I.game_type		= 0;
+				_I.type				= st_Effect;
+			}
+			ext->append				(_I);
+		}
+	}
 }
+
+
 
 float CSoundRender_Core::get_occlusion_to( const Fvector& hear_pt, const Fvector& snd_pt, float dispersion )
 {

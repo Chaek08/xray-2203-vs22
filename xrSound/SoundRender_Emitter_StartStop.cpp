@@ -63,6 +63,17 @@ void CSoundRender_Emitter::rewind()
 	bRewind						=	TRUE;
 }
 
+void CSoundRender_Emitter::pause(BOOL bVal, int id)
+{
+	if (bVal){
+//.		Log("iPaused",iPaused);
+		if (0==iPaused)	iPaused	= id;
+	}else{
+//.		Log("iPaused",iPaused);
+		if (id==iPaused)iPaused	= 0;
+	}
+}
+
 void CSoundRender_Emitter::cancel()
 {
 	// Msg		("- %10s : %3d[%1.4f] : %s","cancel",dbg_ID,priority(),source->fname);
@@ -79,7 +90,7 @@ void CSoundRender_Emitter::cancel()
 		SoundRender->i_stop		(this);
 		break;
 	default:
-		Debug.fatal	("Non playing ref_sound forced out of render queue");
+		Debug.fatal					("Non playing ref_sound forced out of render queue");
 		break;
 	}
 }

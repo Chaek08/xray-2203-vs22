@@ -26,12 +26,16 @@ public:
 	IC		void				Play				(CScriptGameObject *object);
 	IC		void				Play				(CScriptGameObject *object, float delay);
 			void				Play				(CScriptGameObject *object, float delay, int flags);
+	IC		void				PlayUnlimited		(CScriptGameObject *object);
+	IC		void				PlayUnlimited		(CScriptGameObject *object, float delay);
+			void				PlayUnlimited		(CScriptGameObject *object, float delay, int flags);
 	IC		void				PlayAtPos			(CScriptGameObject *object, const Fvector &position);
 	IC		void				PlayAtPos			(CScriptGameObject *object, const Fvector &position, float delay);
 			void				PlayAtPos			(CScriptGameObject *object, const Fvector &position, float delay, int flags);
-			void				PlayNoFeedback		(CScriptGameObject *object,	u32 flags/*!< Looping */, float delay/*!< Delay */, Fvector pos, float vol);
+	IC		void				PlayAtPosUnlimited	(CScriptGameObject *object, const Fvector &position);
+	IC		void				PlayAtPosUnlimited	(CScriptGameObject *object, const Fvector &position, float delay);
+			void				PlayAtPosUnlimited	(CScriptGameObject *object, const Fvector &position, float delay, int flags);
 	IC		void				Stop				();
-	IC		void				StopDeffered		();
 	IC		void				SetPosition			(const Fvector &position);
 	IC		void				SetFrequency		(float frequency);
 	IC		void				SetVolume			(float volume);

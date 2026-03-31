@@ -1,14 +1,17 @@
 #include "stdafx.h"
 #pragma hdrstop
 
-
 #include "xrLevel.h"
 #include "soundrender_core.h"
 #include "soundrender_source.h"
 #include "soundrender_emitter.h"
+#pragma warning(push)
+#pragma warning(disable:4995)
+#include <eax.h>
+#pragma warning(pop)
 
 int		psSoundTargets			= 16;
-Flags32	psSoundFlags			= {ssHardware | ssEAX};
+Flags32	psSoundFlags			= {ss_Hardware | ss_EAX};
 float	psSoundOcclusionScale	= 0.5f;
 float	psSoundCull				= 0.01f;
 float	psSoundRolloff			= 0.75f;
@@ -41,6 +44,9 @@ CSoundRender_Core::CSoundRender_Core	()
     bListenerMoved				= FALSE;
     bReady						= FALSE;
     bLocked						= FALSE;
+	Timer_Value					= Timer.GetElapsed_ms();
+	Timer_Delta					= 0;
+	m_iPauseCounter				= 1;
 }
 
 CSoundRender_Core::~CSoundRender_Core()
@@ -96,6 +102,18 @@ void CSoundRender_Core::stop_emitters()
 {
 	for (u32 eit=0; eit<s_emitters.size(); eit++)
 		s_emitters[eit]->stop	(FALSE);
+}
+
+void CSoundRender_Core::pause_emitters(bool val)
+{
+	m_iPauseCounter				+= val?+1:-1;
+	VERIFY(m_iPauseCounter>=0);
+#ifdef DEBUG
+//.	Log("m_iPauseCounter",m_iPauseCounter);
+//.	Log("id",val?m_iPauseCounter:m_iPauseCounter+1);
+#endif // DEBUG
+	for (u32 it=0; it<s_emitters.size(); it++)
+		((CSoundRender_Emitter*)s_emitters[it])->pause	(val,val?m_iPauseCounter:m_iPauseCounter+1);
 }
 
 void CSoundRender_Core::env_load	()
@@ -214,7 +232,14 @@ void CSoundRender_Core::set_geometry_env(IReader* I)
 	names->close		();
 
 	// Load geometry
-	IReader*			geom	= I->open_chunk(1);
+	IReader*			geom_ch	= I->open_chunk(1);
+	
+	u8*	_data			= (u8*)xr_malloc(geom_ch->length());
+	
+	Memory.mem_copy		(_data, geom_ch->pointer(), geom_ch->length() );
+
+	IReader* geom		= xr_new<IReader>(_data, geom_ch->length(), 0);
+	
 	hdrCFORM			H;
 	geom->r				(&H,sizeof(hdrCFORM));
 	Fvector*	verts	= (Fvector*)geom->pointer();
@@ -235,7 +260,9 @@ void CSoundRender_Core::set_geometry_env(IReader* I)
 	geom_ENV			= xr_new<CDB::MODEL> ();
 	geom_ENV->build		(verts, H.vertcount, tris, H.facecount);
 #endif
-	geom->close			();
+	geom_ch->close			();
+	geom->close				();
+	xr_free					(_data);
 }
 
 void	CSoundRender_Core::verify_refsound		( ref_sound& S)
@@ -245,23 +272,29 @@ void	CSoundRender_Core::verify_refsound		( ref_sound& S)
 	void*		ptr_refsound	= &S;
 	void*		ptr_local		= &local_value;
 	ptrdiff_t	difference		= (ptrdiff_t)_abs(s64(ptrdiff_t(ptr_local) - ptrdiff_t(ptr_refsound)));
-	VERIFY2		(difference > (64*1024), "local/stack-based ref_sound passed. memory corruption will accur.");
+	string256	err_str;
+	if(difference < (4*1024))
+	{
+		sprintf		(err_str,"diff=[%d] local/stack-based ref_sound passed. memory corruption will accur.",difference);
+		VERIFY2		(0, err_str);
+	}
 #endif
 }
 
-void	CSoundRender_Core::create				( ref_sound& S, BOOL _3D, const char* fName, int type )
+void	CSoundRender_Core::create				( ref_sound& S, const char* fName, esound_type sound_type, int game_type )
 {
 	if (!bPresent)		return;
 	verify_refsound		(S);
-    S._p				= xr_new<ref_sound_data>(_3D,fName,type);
+    S._p				= xr_new<ref_sound_data>(fName,sound_type,game_type);
 }
 
-void	CSoundRender_Core::clone				( ref_sound& S, const ref_sound& from, int	type )
+void	CSoundRender_Core::clone				( ref_sound& S, const ref_sound& from, esound_type sound_type, int	game_type )
 {
 	if (!bPresent)		return;
 	S._p				= xr_new<ref_sound_data>();
 	S._p->handle		= from._p->handle;
-	S._p->g_type		= (type==st_SourceType)?S._p->handle->game_type():type;
+	S._p->g_type		= (game_type==sg_SourceType)?S._p->handle->game_type():game_type;
+	S._p->s_type		= sound_type;
 }
 
 
@@ -310,13 +343,14 @@ void	CSoundRender_Core::destroy	(ref_sound& S )
 	S._p				= 0;
 }                                                    
 
-void CSoundRender_Core::_create_data( ref_sound_data& S, BOOL _3D, LPCSTR fName, int type)
+void CSoundRender_Core::_create_data( ref_sound_data& S, LPCSTR fName, esound_type sound_type, int game_type)
 {
-	string_path			fn;
+	string256			fn;
 	strcpy				(fn,fName);
     if (strext(fn))		*strext(fn)	= 0;
-	S.handle			= (CSound_source*)SoundRender->i_create_source(fn,_3D);
-	S.g_type			= (type==st_SourceType)?S.handle->game_type():type;
+	S.handle			= (CSound_source*)SoundRender->i_create_source(fn);
+	S.g_type			= (game_type==sg_SourceType)?S.handle->game_type():game_type;
+	S.s_type			= sound_type;
 	S.feedback			= 0; 
     S.g_object			= 0; 
     S.g_userdata		= 0;
@@ -392,7 +426,6 @@ void						CSoundRender_Core::env_apply		()
 
 void CSoundRender_Core::update_listener( const Fvector& P, const Fvector& D, const Fvector& N, float dt )
 {
-    clamp							(dt,EPS_S,1.f/10.f);
 }
 
 void	CSoundRender_Core::i_eax_listener_set	(CSound_environment* _E)
@@ -500,7 +533,7 @@ void						CSoundRender_Core::refresh_sources()
 	for (u32 sit=0; sit<s_sources.size(); sit++){
     	CSoundRender_Source* s = s_sources[sit];
     	s->unload		();
-		s->load			(*s->fname,s->_3D);
+		s->load			(*s->fname);
     }
 }
 void CSoundRender_Core::set_environment_size	(CSound_environment* src_env, CSound_environment** dst_env)

@@ -16,18 +16,17 @@
 CScriptSound::CScriptSound				(LPCSTR caSoundName, ESoundTypes sound_type)
 {
 	m_caSoundToPlay			= caSoundName;
-	string_path				l_caFileName;
-	VERIFY(::Sound)	;
+	string256				l_caFileName;
+
 	if (FS.exist(l_caFileName,"$game_sounds$",caSoundName,".ogg"))
-		m_sound.create		(TRUE,caSoundName,sound_type);
+		m_sound.create		(caSoundName, st_Effect, sound_type);
 	else
 		ai().script_engine().script_log	(ScriptStorage::eLuaMessageTypeError,"File not found \"%s\"!",l_caFileName);
 }
 
 CScriptSound::~CScriptSound		()
 {
-	THROW3					(!m_sound._feedback(),"playing sound is not completed, but is destroying",m_sound._handle() ? m_sound._handle()->file_name() : "unknown");
-	m_sound.destroy			();
+	m_sound.destroy();
 }
 
 const Fvector &CScriptSound::GetPosition() const
@@ -44,20 +43,26 @@ const Fvector &CScriptSound::GetPosition() const
 
 void CScriptSound::Play			(CScriptGameObject *object, float delay, int flags)
 {
-	THROW3						(m_sound._handle(),"There is no sound",*m_caSoundToPlay);
-//	Msg							("%6d : CScriptSound::Play (%s), delay %f, flags %d",Device.dwTimeGlobal,m_sound._handle()->file_name(),delay,flags);
-	m_sound.play				(&object->object(),flags,delay);
+	VERIFY				(m_sound._handle());
+	m_sound.play		(&object->object(),flags,delay);
+}
+
+void CScriptSound::PlayUnlimited	(CScriptGameObject *object, float delay, int flags)
+{
+	VERIFY				(m_sound._handle());
+	VERIFY				((flags & sm_Looped) != sm_Looped);
+	m_sound.play		(&object->object(),flags,delay); //наебаал
 }
 
 void CScriptSound::PlayAtPos		(CScriptGameObject *object, const Fvector &position, float delay, int flags)
 {
-	THROW3						(m_sound._handle(),"There is no sound",*m_caSoundToPlay);
-//	Msg							("%6d : CScriptSound::Play (%s), delay %f, flags %d",m_sound._handle()->file_name(),delay,flags);
-	m_sound.play_at_pos			(&object->object(), position,flags,delay);
+	VERIFY				(m_sound._handle());
+	m_sound.play_at_pos(&object->object(), position,flags,delay);
 }
 
-void CScriptSound::PlayNoFeedback	(CScriptGameObject *object,	u32 flags/*!< Looping */, float delay/*!< Delay */, Fvector pos, float vol)
+void CScriptSound::PlayAtPosUnlimited(CScriptGameObject *object, const Fvector &position, float delay, int flags)
 {
-	THROW3						(m_sound._handle(),"There is no sound",*m_caSoundToPlay);
-	m_sound.play_no_feedback	(&object->object(), flags,delay,&pos,&vol);
+	VERIFY				(m_sound._handle());
+	VERIFY				((flags & sm_Looped) != sm_Looped);
+	m_sound.play_at_pos(&object->object(), position,flags,delay); //€ наебал вас всех
 }

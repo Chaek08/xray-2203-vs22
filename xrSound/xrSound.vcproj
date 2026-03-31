@@ -50,6 +50,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="TRUE"
+				AdditionalOptions="/NODEFAULTLIB:LIBCMTD"
 				AdditionalDependencies="vorbisfile_static_d.lib ogg_static_d.lib OpenAL32.lib"
 				OutputFile="$(OutDir)/xrSound.dll"
 				LinkIncremental="2"
@@ -86,7 +87,7 @@
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="x:\"
-			IntermediateDirectory="Release"
+			IntermediateDirectory=".\Release"
 			ConfigurationType="2"
 			CharacterSet="2"
 			WholeProgramOptimization="TRUE">
@@ -105,6 +106,7 @@
 				ExceptionHandling="FALSE"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="FALSE"
+				EnableEnhancedInstructionSet="1"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="3"
 				AssemblerOutput="0"
@@ -153,14 +155,13 @@
 		<Configuration
 			Name="Mixed|Win32"
 			OutputDirectory="x:\"
-			IntermediateDirectory="Mixed"
+			IntermediateDirectory=".\Mixed"
 			ConfigurationType="2"
 			CharacterSet="2"
 			WholeProgramOptimization="FALSE">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="3"
-				GlobalOptimizations="TRUE"
 				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="TRUE"
 				FavorSizeOrSpeed="1"
@@ -170,7 +171,7 @@
 				PreprocessorDefinitions="MIXED,WIN32;NDEBUG;_WINDOWS;_USRDLL;XRSOUND_EXPORTS"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
-				BufferSecurityCheck="FALSE"
+				BufferSecurityCheck="TRUE"
 				EnableFunctionLevelLinking="FALSE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="3"

@@ -151,7 +151,7 @@ void CHelicopter::Load(LPCSTR section)
 
 //lighting & sounds
 	shared_str expl_snd					= pSettings->r_string	(section,"explode_sound");
-	m_explodeSound.create				(TRUE,*expl_snd);
+	m_explodeSound.create				(*expl_snd, st_Effect, sg_SourceType);
 
 	m_light_range						= pSettings->r_float(section,"light_range");
 	m_light_brightness					= pSettings->r_float(section,"light_brightness");
@@ -250,7 +250,7 @@ BOOL CHelicopter::net_Spawn(CSE_Abstract*	DC)
 		A->CalculateBones	();
 	}
 
-	m_engineSound.create			(TRUE,*heli->engine_sound);
+	m_engineSound.create			(*heli->engine_sound, st_Effect, sg_SourceType);
 	m_engineSound.play_at_pos		(0,XFORM().c,sm_Looped);
 	
 	CShootingObject::Light_Create	();

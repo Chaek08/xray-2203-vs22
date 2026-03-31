@@ -57,6 +57,7 @@ void CSoundRender_CoreA::_initialize	(u64 window)
 	int majorVersion, minorVersion;
 	int defaultIdx					= pDeviceList->GetDefaultDevice();
 	int deviceIdx					= defaultIdx;
+	VERIFY							(defaultIdx>=0 && defaultIdx<pDeviceList->GetNumDevices());
 	const ALDeviceDesc& deviceDesc	= pDeviceList->GetDeviceDesc(deviceIdx);
 
 	Log("SOUND: OpenAL: All available devices:");
@@ -105,9 +106,9 @@ void CSoundRender_CoreA::_initialize	(u64 window)
 
     // Check for EAX extension
     bEAX 				        = deviceDesc.eax && !deviceDesc.eax_unwanted;
-    eaxSet 				        = (EAXSet*)alGetProcAddress	((const ALchar*)"EAXSet");
+    eaxSet 				        = (EAXSet)alGetProcAddress	((const ALchar*)"EAXSet");
     if (eaxSet==NULL) bEAX 		= false;
-    eaxGet 				        = (EAXGet*)alGetProcAddress	((const ALchar*)"EAXGet");
+    eaxGet 				        = (EAXGet)alGetProcAddress	((const ALchar*)"EAXGet");
     if (eaxGet==NULL) bEAX 		= false;
 
     if (bEAX){
@@ -146,7 +147,7 @@ void CSoundRender_CoreA::_initialize	(u64 window)
 	}
 }
 
-void CSoundRender_CoreA::set_volume(float f )
+void CSoundRender_CoreA::set_master_volume(float f )
 {
 	if (bPresent)				{
 		A_CHK				    (alListenerf	(AL_GAIN,f));
