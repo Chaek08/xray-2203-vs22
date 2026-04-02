@@ -122,7 +122,7 @@ ICF static BOOL grenade_hit_callback(collide::rq_result& result, LPVOID params)
 	u16 mtl_idx			= GAMEMTL_NONE_IDX;
 	if(result.O){	
 		CKinematics* V  = 0;
-		if (0!=(V=smart_cast<CKinematics*>(result.O->Visual()))){
+		if (0!=(V=dynamic_cast<CKinematics*>(result.O->Visual()))){
 			CBoneData& B= V->LL_GetData((u16)result.element);
 			mtl_idx		= B.game_mtl_idx;
 		}
@@ -191,7 +191,7 @@ void CExplosive::Explode()
 	pStaticPG = xr_new<CParticlesObject>(*m_sExplodeParticles,cast_game_object()->Sector()); 
 	
 	Fvector vel;
-	smart_cast<CPhysicsShellHolder*>(cast_game_object())->PHGetLinearVell(vel);
+	dynamic_cast<CPhysicsShellHolder*>(cast_game_object())->PHGetLinearVell(vel);
 
 	Fmatrix explode_matrix;
 	explode_matrix.identity();
@@ -345,8 +345,8 @@ void CExplosive::Explode()
 
 	//////////////////////////////////////////////////////////////////////////
 	// Explode Effector	//////////////
-	CGameObject* GO = smart_cast<CGameObject*>(Level().CurrentEntity());
-	CActor* pActor = smart_cast<CActor*>(GO);
+	CGameObject* GO = dynamic_cast<CGameObject*>(Level().CurrentEntity());
+	CActor* pActor = dynamic_cast<CActor*>(GO);
 	if(pActor)
 	{
 		float dist_to_actor = pActor->Position().distance_to(pos);
@@ -384,7 +384,7 @@ void CExplosive::GetExplDirection(Fvector &d)
 }
 void CExplosive::GetExplVelocity(Fvector &v)
 {
-	smart_cast<CPhysicsShellHolder*>(cast_game_object())->PHGetLinearVell(v);
+	dynamic_cast<CPhysicsShellHolder*>(cast_game_object())->PHGetLinearVell(v);
 }
 
 void CExplosive::feel_touch_new(CObject* O) 

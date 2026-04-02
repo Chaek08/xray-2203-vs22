@@ -22,7 +22,7 @@ void CControlledActor::reinit()
 
 void CControlledActor::take_control()
 {
-	m_actor = smart_cast<CActor*>	(Level().CurrentEntity());
+	m_actor = dynamic_cast<CActor*>	(Level().CurrentEntity());
 	
 	m_actor->SetControlled			(true);
 	m_actor->SetMouseScaleFactor	(flt_max);

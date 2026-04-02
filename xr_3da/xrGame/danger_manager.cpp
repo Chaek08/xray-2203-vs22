@@ -166,7 +166,7 @@ void CDangerManager::add			(const CVisibleObject &object)
 	if (!object.m_enabled)
 		return;
 
-	const CEntityAlive		*obj = smart_cast<const CEntityAlive*>(object.m_object);
+	const CEntityAlive		*obj = dynamic_cast<const CEntityAlive*>(object.m_object);
 	if (obj && !obj->g_Alive() && obj->killer_id() != ALife::_OBJECT_ID(-1)) {
 		add					(CDangerObject(obj,obj->Position(),object.m_level_time,CDangerObject::eDangerTypeCorpse,CDangerObject::eDangerPerceiveTypeSound));
 		return;
@@ -178,7 +178,7 @@ void CDangerManager::add			(const CSoundObject &object)
 	if (!object.m_enabled)
 		return;
 	
-	const CEntityAlive		*obj = smart_cast<const CEntityAlive*>(object.m_object);
+	const CEntityAlive		*obj = dynamic_cast<const CEntityAlive*>(object.m_object);
 	
 	if (object.m_sound_type & SOUND_TYPE_BULLET_HIT) {
 		add					(CDangerObject(obj,object.m_object_params.m_position,object.m_level_time,CDangerObject::eDangerTypeRicochet,CDangerObject::eDangerPerceiveTypeSound));
@@ -209,7 +209,7 @@ void CDangerManager::add			(const CHitObject &object)
 	if (fis_zero(object.m_amount))
 		return;
 
-	const CEntityAlive		*obj = smart_cast<const CEntityAlive*>(object.m_object);
+	const CEntityAlive		*obj = dynamic_cast<const CEntityAlive*>(object.m_object);
 	add						(CDangerObject(obj,obj->Position(),object.m_level_time,CDangerObject::eDangerTypeAttack,CDangerObject::eDangerPerceiveTypeHit));
 }
 

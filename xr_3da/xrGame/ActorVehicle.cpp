@@ -21,14 +21,14 @@ void CActor::attach_Vehicle(CHolderCustom* vehicle)
 	PickupModeOff		();
 	m_holder=vehicle;
 
-	CSkeletonAnimated* V		= smart_cast<CSkeletonAnimated*>(Visual()); R_ASSERT(V);
+	CSkeletonAnimated* V		= dynamic_cast<CSkeletonAnimated*>(Visual()); R_ASSERT(V);
 	
 	if(!m_holder->attach_Actor(this)){
 		m_holder=NULL;
 		return;
 	}
 	// temp play animation
-	CCar*	car			= smart_cast<CCar*>(m_holder);
+	CCar*	car			= dynamic_cast<CCar*>(m_holder);
 	u16 anim_type       = car->DriverAnimationType();
 	SActorVehicleAnims::SOneTypeCollection& anims=m_vehicle_anims->m_vehicles_type_collections[anim_type];
 	V->PlayCycle(anims.idles[0],FALSE);
@@ -48,7 +48,7 @@ void CActor::attach_Vehicle(CHolderCustom* vehicle)
 void CActor::detach_Vehicle()
 {
 	if(!m_holder) return;
-	CCar* car=smart_cast<CCar*>(m_holder);
+	CCar* car=dynamic_cast<CCar*>(m_holder);
 	if(!car)return;
 	CPHShellSplitterHolder*sh= car->PPhysicsShell()->SplitterHolder();
 	if(sh)sh->Deactivate();
@@ -66,7 +66,7 @@ void CActor::detach_Vehicle()
 	r_model_yaw_dest=r_model_yaw;
 	m_holder=NULL;
 	SetCallbacks		();
-	CSkeletonAnimated* V= smart_cast<CSkeletonAnimated*>(Visual()); R_ASSERT(V);
+	CSkeletonAnimated* V= dynamic_cast<CSkeletonAnimated*>(Visual()); R_ASSERT(V);
 	V->PlayCycle		(m_anims->m_normal.legs_idle);
 	V->PlayCycle		(m_anims->m_normal.m_torso_idle);
 	//mstate_wishful &=~mcAnyMove;
@@ -76,7 +76,7 @@ void CActor::detach_Vehicle()
 bool CActor::use_Vehicle(CPhysicsShellHolder* object)
 {
 	
-	CHolderCustom* vehicle=smart_cast<CHolderCustom*>(object);
+	CHolderCustom* vehicle=dynamic_cast<CHolderCustom*>(object);
 	Fvector center;
 	Center(center);
 	if(m_holder){
@@ -108,6 +108,6 @@ bool CActor::use_Vehicle(CPhysicsShellHolder* object)
 
 void CActor::on_reguested_spawn(CObject *object)
 {
-	CCar * car= smart_cast<CCar*>(object);
+	CCar * car= dynamic_cast<CCar*>(object);
 	attach_Vehicle(car);
 }

@@ -22,7 +22,7 @@ void CStateBloodsuckerVampireExecuteAbstract::initialize()
 
 	object->CControlledActor::take_control	();
 
-	CKinematics *pK = smart_cast<CKinematics*>(object->Visual());
+	CKinematics *pK = dynamic_cast<CKinematics*>(object->Visual());
 	Fmatrix bone_transform;
 	bone_transform = pK->LL_GetTransform(pK->LL_BoneID("bip01_head"));	
 
@@ -51,7 +51,7 @@ void CStateBloodsuckerVampireExecuteAbstract::execute()
 	}
 	
 	
-	CKinematics *pK = smart_cast<CKinematics*>(object->Visual());
+	CKinematics *pK = dynamic_cast<CKinematics*>(object->Visual());
 	Fmatrix bone_transform;
 	bone_transform = pK->LL_GetTransform(pK->LL_BoneID("bip01_head"));	
 

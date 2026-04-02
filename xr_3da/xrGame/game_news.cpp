@@ -90,7 +90,7 @@ LPCSTR GAME_NEWS_DATA::FullText()
 		CSE_ALifeDynamicObject	*newsActorOne = ai().alife().objects().object(newsItem.m_object_id[0]); VERIFY(newsActorOne);
 		name1 = newsActorOne->name_replace();
 		CSE_ALifeTraderAbstract* pTrader = NULL;
-		pTrader = smart_cast<CSE_ALifeTraderAbstract*>(newsActorOne);
+		pTrader = dynamic_cast<CSE_ALifeTraderAbstract*>(newsActorOne);
 		if(pTrader)
 		{
 			if(pTrader->specific_character().size())
@@ -104,7 +104,7 @@ LPCSTR GAME_NEWS_DATA::FullText()
 		if (newsItem.m_object_id[1] != static_cast<u16>(-1))
 		{
 			CSE_ALifeDynamicObject	*newsActorTwo = ai().alife().objects().object(newsItem.m_object_id[1]);
-			pTrader = smart_cast<CSE_ALifeTraderAbstract*>(newsActorTwo);
+			pTrader = dynamic_cast<CSE_ALifeTraderAbstract*>(newsActorTwo);
 			if(pTrader)
 			{
 				if(pTrader->specific_character().size())

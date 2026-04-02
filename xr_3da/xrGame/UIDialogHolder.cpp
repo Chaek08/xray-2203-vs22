@@ -47,7 +47,7 @@ void CDialogHolder::StartMenu (CUIDialogWnd* pDialog)
 
 	GetUICursor()->Show();
 	if(g_pGameLevel){
-		CActor* A = smart_cast<CActor*>( Level().CurrentViewEntity() );
+		CActor* A = dynamic_cast<CActor*>( Level().CurrentViewEntity() );
 		if ( A && pDialog->StopAnyMove() ){
 			A->StopAnyMove		();
 			A->PickupModeOff	();

@@ -420,7 +420,7 @@ void CUIMainIngameWnd::Draw()
 #ifdef DEBUG
 	if (g_bHudAdjustMode&&m_pWeapon) //draw firePoint,ShellPoint etc
 	{
-		CActor* pActor = smart_cast<CActor*>(Level().CurrentEntity());
+		CActor* pActor = dynamic_cast<CActor*>(Level().CurrentEntity());
 		if(!pActor)
 			return;
 
@@ -449,7 +449,7 @@ void CUIMainIngameWnd::Draw()
 
 			Fvector FP,SP;//,FP2;
 
-			CKinematics* V			= smart_cast<CKinematics*>(pWpnHud->Visual());
+			CKinematics* V			= dynamic_cast<CKinematics*>(pWpnHud->Visual());
 			V->CalculateBones		();
 
 			// fire point&direction
@@ -509,7 +509,7 @@ void CUIMainIngameWnd::Update()
 
 	static string256 text_str;
 
-	m_pActor = smart_cast<CActor*>(Level().CurrentEntity());
+	m_pActor = dynamic_cast<CActor*>(Level().CurrentEntity());
 	if (!m_pActor) 
 	{
 		m_pItem = NULL;
@@ -550,9 +550,9 @@ void CUIMainIngameWnd::Update()
 	if(m_pActor->inventory().GetActiveSlot() < m_pActor->inventory().m_slots.size()) 
 	{
 		PIItem item =  m_pActor->inventory().m_slots[m_pActor->inventory().GetActiveSlot()].m_pIItem;
-		CWeapon* pWeapon = smart_cast<CWeapon*>(item); 
-		CMissile* pMissile = smart_cast<CMissile*>(item); 
-		CWeaponMagazined* pWeaponMagazined = smart_cast<CWeaponMagazined*>(pWeapon);
+		CWeapon* pWeapon = dynamic_cast<CWeapon*>(item); 
+		CMissile* pMissile = dynamic_cast<CMissile*>(item); 
+		CWeaponMagazined* pWeaponMagazined = dynamic_cast<CWeaponMagazined*>(pWeapon);
 		
 		bool active_item_changed = false;
 		// Remember last used ammo types, and if this type doesn't changed 
@@ -972,7 +972,7 @@ bool CUIMainIngameWnd::OnKeyboardPress(int dik)
 		}
 		else if (3 == g_bHudAdjustMode) //MissileOffset
 		{
-			CActor *pActor = smart_cast<CActor*>(Level().CurrentEntity());
+			CActor *pActor = dynamic_cast<CActor*>(Level().CurrentEntity());
 
 			R_ASSERT(pActor);
 
@@ -1092,8 +1092,8 @@ void CUIMainIngameWnd::ReceivePdaMessage(CInventoryOwner* pSender, EPdaMsg msg, 
 	UIPdaMsgListWnd.AddItem<CUIListItem>(pItem, 0);	/*---*/ UIPdaMsgListWnd2.AddItem<CUIListItem>(pItem2, 0); 
 	UIPdaMsgListWnd.ScrollToBegin();				/*---*/ UIPdaMsgListWnd2.ScrollToBegin();
 
-	pItem->InitCharacter(smart_cast<CInventoryOwner*>(pSender));
-	pItem2->InitCharacter(smart_cast<CInventoryOwner*>(pSender));
+	pItem->InitCharacter(dynamic_cast<CInventoryOwner*>(pSender));
+	pItem2->InitCharacter(dynamic_cast<CInventoryOwner*>(pSender));
 
 	CUIColorAnimatorWrapper *p = xr_new<CUIColorAnimatorWrapper>("ui_main_msgs");
 	CUIColorAnimatorWrapper *p2 = xr_new<CUIColorAnimatorWrapper>("ui_main_msgs");
@@ -1131,7 +1131,7 @@ bool CUIMainIngameWnd::SetDelayForPdaMessage(int iValue, int iDelay){
 
 	if (index >= 0)
 	{
-        CUIPdaMsgListItem* item = smart_cast<CUIPdaMsgListItem*>(UIPdaMsgListWnd.GetItem(index));
+        CUIPdaMsgListItem* item = dynamic_cast<CUIPdaMsgListItem*>(UIPdaMsgListWnd.GetItem(index));
         item->SetDelay(iDelay);
 
 		index = UIPdaMsgListWnd2.FindItemWithValue(iValue);
@@ -1139,7 +1139,7 @@ bool CUIMainIngameWnd::SetDelayForPdaMessage(int iValue, int iDelay){
 #ifdef DEBUG
 		R_ASSERT2(index >= 0, "Item exist only in first list");
 #endif
-		item = smart_cast<CUIPdaMsgListItem*>(UIPdaMsgListWnd2.GetItem(index));
+		item = dynamic_cast<CUIPdaMsgListItem*>(UIPdaMsgListWnd2.GetItem(index));
         item->SetDelay(iDelay);
 
 		return true;
@@ -1387,7 +1387,7 @@ void CUIMainIngameWnd::FadeUpdate(CUIListWnd *pWnd)
 	for(int i=0; i<pWnd->GetSize(); i++)
 	{
 		CUIListItem			*pItem	= pWnd->GetItem(i);
-		CUIPdaMsgListItem	*pPItem = smart_cast<CUIPdaMsgListItem*>(pItem);
+		CUIPdaMsgListItem	*pPItem = dynamic_cast<CUIPdaMsgListItem*>(pItem);
 
 		if (! pPItem->IsTimeToDestroy() )
 			return;

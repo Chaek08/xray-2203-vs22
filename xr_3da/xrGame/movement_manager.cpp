@@ -130,8 +130,7 @@ CMovementManager::EPathType CMovementManager::path_type() const
 
 void CMovementManager::set_game_dest_vertex	(const GameGraph::_GRAPH_ID &game_vertex_id)
 {
-	game_path().set_dest_vertex(game_vertex_id);
-	m_path_actuality		= m_path_actuality && game_path().actual();
+
 }
 
 GameGraph::_GRAPH_ID CMovementManager::game_dest_vertex_id() const

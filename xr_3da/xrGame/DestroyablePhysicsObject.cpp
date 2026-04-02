@@ -43,7 +43,7 @@ void CDestroyablePhysicsObject::net_Destroy()
 BOOL CDestroyablePhysicsObject::net_Spawn(CSE_Abstract* DC)
 {
 	BOOL res=inherited::net_Spawn(DC);
-	CKinematics		*K=smart_cast<CKinematics*>(Visual());
+	CKinematics		*K=dynamic_cast<CKinematics*>(Visual());
 	CInifile* ini=K->LL_UserData();
 	//R_ASSERT2(ini->section_exist("destroyed"),"destroyable_object must have -destroyed- section in model user data");
 	CPHDestroyable::Init();
@@ -69,7 +69,7 @@ void CDestroyablePhysicsObject::Hit							(float P,Fvector &dir,CObject *who,s16
 		lua_game_object(), 
 		P,
 		dir,
-		smart_cast<const CGameObject*>(who)->lua_game_object(),
+		dynamic_cast<const CGameObject*>(who)->lua_game_object(),
 		element
 		);
 	P=CHitImmunity::AffectHit(P,hit_type);
@@ -94,7 +94,7 @@ void CDestroyablePhysicsObject::Destroy()
 void CDestroyablePhysicsObject::InitServerObject(CSE_Abstract* D)
 {
 	CPHDestroyable::InitServerObject(D);
-	CSE_ALifeObjectPhysic			*PO = smart_cast<CSE_ALifeObjectPhysic*>(D);
+	CSE_ALifeObjectPhysic			*PO = dynamic_cast<CSE_ALifeObjectPhysic*>(D);
 	if(PO)PO->type=epotSkeleton;
 }
 void CDestroyablePhysicsObject::shedule_Update(u32 dt)

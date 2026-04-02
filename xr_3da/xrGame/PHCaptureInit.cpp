@@ -24,7 +24,7 @@ CPHCapture::CPHCapture	(CPHCharacter   *a_character, CPhysicsShellHolder	*a_tage
 	if(!a_taget_object							||
 	   !a_taget_object->m_pPhysicsShell			||
 	   !a_taget_object->m_pPhysicsShell->bActive||
-	   smart_cast<CInventoryItem*>(a_taget_object)
+	   dynamic_cast<CInventoryItem*>(a_taget_object)
 	   ) 
 	{
 		m_taget_object=NULL;
@@ -41,7 +41,7 @@ CPHCapture::CPHCapture	(CPHCharacter   *a_character, CPhysicsShellHolder	*a_tage
 	m_taget_object			=a_taget_object;
 	m_character				=a_character;
 
-	CObject* capturer_object=smart_cast<CObject*>(m_character->PhysicsRefObject());
+	CObject* capturer_object=dynamic_cast<CObject*>(m_character->PhysicsRefObject());
 
 	if(!capturer_object)
 	{
@@ -50,7 +50,7 @@ CPHCapture::CPHCapture	(CPHCharacter   *a_character, CPhysicsShellHolder	*a_tage
 		return;
 	}
 
-	CKinematics* p_kinematics=smart_cast<CKinematics*>(capturer_object->Visual());
+	CKinematics* p_kinematics=dynamic_cast<CKinematics*>(capturer_object->Visual());
 
 	if(!p_kinematics)
 	{
@@ -101,7 +101,7 @@ CPHCapture::CPHCapture(CPHCharacter   *a_character,CPhysicsShellHolder	*a_taget_
 	if(!a_taget_object							||
 	   !a_taget_object->m_pPhysicsShell			||
 	   !a_taget_object->m_pPhysicsShell->bActive||
-	   smart_cast<CInventoryItem*>(a_taget_object)
+	   dynamic_cast<CInventoryItem*>(a_taget_object)
 	   ) 
 	{
 		m_taget_object=NULL;
@@ -118,7 +118,7 @@ CPHCapture::CPHCapture(CPHCharacter   *a_character,CPhysicsShellHolder	*a_taget_
 	m_taget_object			=a_taget_object;
 	m_character				=a_character;
 
-	CObject* capturer_object=smart_cast<CObject*>(m_character->PhysicsRefObject());
+	CObject* capturer_object=dynamic_cast<CObject*>(m_character->PhysicsRefObject());
 
 	if(!capturer_object)
 	{
@@ -127,7 +127,7 @@ CPHCapture::CPHCapture(CPHCharacter   *a_character,CPhysicsShellHolder	*a_taget_
 		return;
 	}
 
-	CKinematics* p_kinematics=smart_cast<CKinematics*>(capturer_object->Visual());
+	CKinematics* p_kinematics=dynamic_cast<CKinematics*>(capturer_object->Visual());
 
 	if(!p_kinematics)
 	{
@@ -174,7 +174,7 @@ CPHCapture::CPHCapture(CPHCharacter   *a_character,CPhysicsShellHolder	*a_taget_
 		return;
 	}
 
-	CKinematics* K=	smart_cast<CKinematics*>(V);
+	CKinematics* K=	dynamic_cast<CKinematics*>(V);
 
 	if(!K)
 	{
@@ -212,7 +212,7 @@ void CPHCapture::Init(CInifile* ini)
 	Fvector dir;
 	Fvector capture_bone_position;
 	capture_bone_position.set(m_capture_bone->mTransform.c);
-	smart_cast<CObject*>(m_character->PhysicsRefObject())->XFORM().transform_tiny(capture_bone_position);
+	dynamic_cast<CObject*>(m_character->PhysicsRefObject())->XFORM().transform_tiny(capture_bone_position);
 	m_taget_element->GetGlobalPositionDynamic(&dir);
 	dir.sub(capture_bone_position,dir);
 

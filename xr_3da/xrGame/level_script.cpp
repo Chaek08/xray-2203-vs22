@@ -50,9 +50,9 @@ CScriptGameObject *tpfGetActor()
 		ai().script_engine().script_log(eLuaMessageTypeError,"Do not use level.actor function!");
 	first_time = false;
 	
-	CActor *l_tpActor = smart_cast<CActor*>(Level().CurrentEntity());
+	CActor *l_tpActor = dynamic_cast<CActor*>(Level().CurrentEntity());
 	if (l_tpActor)
-		return	(smart_cast<CGameObject*>(l_tpActor)->lua_game_object());
+		return	(dynamic_cast<CGameObject*>(l_tpActor)->lua_game_object());
 	else
 		return	(0);
 }
@@ -64,7 +64,7 @@ CScriptGameObject *get_object_by_name(LPCSTR caObjectName)
 		ai().script_engine().script_log(eLuaMessageTypeError,"Do not use level.object function!");
 	first_time = false;
 	
-	CGameObject		*l_tpGameObject	= smart_cast<CGameObject*>(Level().Objects.FindObjectByName(caObjectName));
+	CGameObject		*l_tpGameObject	= dynamic_cast<CGameObject*>(Level().Objects.FindObjectByName(caObjectName));
 	if (l_tpGameObject)
 		return		(l_tpGameObject->lua_game_object());
 	else
@@ -74,7 +74,7 @@ CScriptGameObject *get_object_by_name(LPCSTR caObjectName)
 
 CScriptGameObject *get_object_by_id(u32 id)
 {
-	CGameObject* pGameObject = smart_cast<CGameObject*>(Level().Objects.net_Find(id));
+	CGameObject* pGameObject = dynamic_cast<CGameObject*>(Level().Objects.net_Find(id));
 	if(!pGameObject)
 		return NULL;
 

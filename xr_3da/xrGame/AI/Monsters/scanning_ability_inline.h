@@ -121,7 +121,7 @@ float CScanningAbilityAbstract::get_velocity(CObject *obj)
  //            (float(pos1.dwTime)/1000.f - float(pos0.dwTime)/1000.f));
 
 
-	CActor *actor = smart_cast<CActor *>(obj);
+	CActor *actor = dynamic_cast<CActor *>(obj);
 	return (actor->movement_control()->GetVelocityActual()); 
 }
 

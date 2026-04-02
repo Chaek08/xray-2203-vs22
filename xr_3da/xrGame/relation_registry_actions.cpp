@@ -63,11 +63,11 @@ void RELATION_REGISTRY::Action (CEntityAlive* from, CEntityAlive* to, ERelationA
 	static CHARACTER_REPUTATION_VALUE enemy_fight_help_reputation	= pSettings->r_s32(ACTIONS_POINTS_SECT, "enemy_fight_help_reputation");
 
 
-	CActor*				actor			= smart_cast<CActor*>				(from);
-	CInventoryOwner*	inv_owner_from	= smart_cast<CInventoryOwner*>		(from);
-	CAI_Stalker*		stalker_from	= smart_cast<CAI_Stalker*>			(from);
-	CAI_Stalker*		stalker			= smart_cast<CAI_Stalker*>			(to);
-	//CBaseMonster*	monster	= smart_cast<CBaseMonster*>	(to);
+	CActor*				actor			= dynamic_cast<CActor*>				(from);
+	CInventoryOwner*	inv_owner_from	= dynamic_cast<CInventoryOwner*>		(from);
+	CAI_Stalker*		stalker_from	= dynamic_cast<CAI_Stalker*>			(from);
+	CAI_Stalker*		stalker			= dynamic_cast<CAI_Stalker*>			(to);
+	//CBaseMonster*	monster	= dynamic_cast<CBaseMonster*>	(to);
 
 	//вычисление изменения репутации и рейтинга пока ведется 
 	//только для актера
@@ -77,7 +77,7 @@ void RELATION_REGISTRY::Action (CEntityAlive* from, CEntityAlive* to, ERelationA
 	if(stalker)
 	{
 		stalker->m_actor_relation_flags.set(action, TRUE);
-		relation = GetRelationType(smart_cast<CInventoryOwner*>(stalker), inv_owner_from);
+		relation = GetRelationType(dynamic_cast<CInventoryOwner*>(stalker), inv_owner_from);
 	}
 
 	switch(action)
@@ -100,8 +100,8 @@ void RELATION_REGISTRY::Action (CEntityAlive* from, CEntityAlive* to, ERelationA
 				if(fight_data && fight_data->total_hit > help_hit_threshold)
 				{
 #pragma todo("убрать поиск Level().Objects.net_Find, так как могут быть тормоза")
-					CAI_Stalker* defending_stalker = smart_cast<CAI_Stalker*>(Level().Objects.net_Find(fight_data->defender));
-					CAI_Stalker* attacking_stalker = smart_cast<CAI_Stalker*>(Level().Objects.net_Find(fight_data->attacker));
+					CAI_Stalker* defending_stalker = dynamic_cast<CAI_Stalker*>(Level().Objects.net_Find(fight_data->defender));
+					CAI_Stalker* attacking_stalker = dynamic_cast<CAI_Stalker*>(Level().Objects.net_Find(fight_data->attacker));
 					if(defending_stalker)
 						Action(actor, defending_stalker, attacking_stalker?FIGHT_HELP_HUMAN:FIGHT_HELP_MONSTER);
 				}

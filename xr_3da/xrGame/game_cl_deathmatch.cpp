@@ -54,7 +54,7 @@ CUIGameCustom* game_cl_Deathmatch::createGameUI()
 {
 	game_cl_mp::createGameUI();
 	CLASS_ID clsid			= CLSID_GAME_UI_DEATHMATCH;
-	m_game_ui	= smart_cast<CUIGameDM*> ( NEW_INSTANCE ( clsid ) );
+	m_game_ui	= dynamic_cast<CUIGameDM*> ( NEW_INSTANCE ( clsid ) );
 	R_ASSERT(m_game_ui);
 	m_game_ui->SetClGame(this);
 	m_game_ui->Init();
@@ -134,7 +134,7 @@ void game_cl_Deathmatch::OnSkinMenu_Ok			()
 {
 	CObject *l_pObj = Level().CurrentEntity();
 
-	CGameObject *l_pPlayer = smart_cast<CGameObject*>(l_pObj);
+	CGameObject *l_pPlayer = dynamic_cast<CGameObject*>(l_pObj);
 	if(!l_pPlayer) return;
 
 	NET_Packet		P;
@@ -301,7 +301,7 @@ string16 places[] = {
 void game_cl_Deathmatch::shedule_Update			(u32 dt)
 {
 	//fake	
-	if(!m_game_ui && HUD().GetUI() ) m_game_ui = smart_cast<CUIGameDM*>( HUD().GetUI()->UIGame() );
+	if(!m_game_ui && HUD().GetUI() ) m_game_ui = dynamic_cast<CUIGameDM*>( HUD().GetUI()->UIGame() );
 	if(m_game_ui)
 	{
 		m_game_ui->SetTimeMsgCaption("");
@@ -622,7 +622,7 @@ void		game_cl_Deathmatch::OnRender				()
 			cl_TeamStruct *pTS = &TeamList[ModifyTeam(ps->team)]; 
 
 			VERIFY(pObject);
-			CActor* pActor = smart_cast<CActor*>(pObject);
+			CActor* pActor = dynamic_cast<CActor*>(pObject);
 			VERIFY(pActor);
 			pActor->RenderIndicator(pTS->IndicatorPos, pTS->Indicator_r1, pTS->Indicator_r2, pTS->InvincibleShader);
 		}

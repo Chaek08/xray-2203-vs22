@@ -443,7 +443,7 @@ void CActor::g_cl_Orientate	(u32 mstate_rl, float dt)
 		unaffected_r_torso.roll		= r_torso.roll;
 	}
 
-	CWeapon *pWeapon = smart_cast<CWeapon*>(inventory().GetActiveSlot() != NO_ACTIVE_SLOT ? 
+	CWeapon *pWeapon = dynamic_cast<CWeapon*>(inventory().GetActiveSlot() != NO_ACTIVE_SLOT ? 
 		inventory().m_slots[inventory().GetActiveSlot()].m_pIItem : NULL);
 
 	if(pWeapon){
@@ -482,7 +482,7 @@ void CActor::g_sv_Orientate(u32 /**mstate_rl/**/, float /**dt/**/)
 	r_torso.pitch	= NET_Last.o_torso.pitch;
 	r_torso.roll	= NET_Last.o_torso.roll;
 
-	CWeapon *pWeapon = smart_cast<CWeapon*>(inventory().GetActiveSlot() != NO_ACTIVE_SLOT ? 
+	CWeapon *pWeapon = dynamic_cast<CWeapon*>(inventory().GetActiveSlot() != NO_ACTIVE_SLOT ? 
 		inventory().m_slots[inventory().GetActiveSlot()].m_pIItem : NULL);
 
 	if(pWeapon) 

@@ -110,7 +110,7 @@ bool	game_cl_mp::OnKeyboardPress			(int key)
 
 		};
 		if(b_need_to_send_ready){
-				CGameObject* GO = smart_cast<CGameObject*>(curr);
+				CGameObject* GO = dynamic_cast<CGameObject*>(curr);
 				NET_Packet			P;
 				GO->u_EventGen		(P,GE_GAME_EVENT,GO->ID()	);
 				P.w_u16(GAME_EVENT_PLAYER_READY);
@@ -498,7 +498,7 @@ void game_cl_mp::OnPlayerKilled			(NET_Packet& P)
 						Color_Weapon,
 						*(pWeapon->cName()));
 				//-----------------------------------
-				CInventoryItem* pIItem = smart_cast<CInventoryItem*>(pWeapon);
+				CInventoryItem* pIItem = dynamic_cast<CInventoryItem*>(pWeapon);
 				if (pIItem)
 				{
 					KMS.m_initiator.m_shader = GetEquipmentIconsShader();
@@ -526,7 +526,7 @@ void game_cl_mp::OnPlayerKilled			(NET_Packet& P)
 				
 				if (!pKiller)
 				{
-					CCustomZone* pAnomaly = smart_cast<CCustomZone*>(pOKiller);
+					CCustomZone* pAnomaly = dynamic_cast<CCustomZone*>(pOKiller);
 					if (pAnomaly)
 					{
 						KMS.m_initiator.m_shader = GetKillEventIconsShader();
@@ -612,7 +612,7 @@ void game_cl_mp::OnPlayerKilled			(NET_Packet& P)
 
 			if (!pKiller)
 			{
-				CCustomZone* pAnomaly = smart_cast<CCustomZone*>(pOKiller);
+				CCustomZone* pAnomaly = dynamic_cast<CCustomZone*>(pOKiller);
 				if (pAnomaly)
 				{
 					KMS.m_ext_info.m_shader = GetKillEventIconsShader();

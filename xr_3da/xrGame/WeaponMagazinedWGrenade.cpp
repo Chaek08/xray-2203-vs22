@@ -245,7 +245,7 @@ void CWeaponMagazinedWGrenade::state_Fire(float dt)
 		d.set	(get_LastFD());
 		
 		if(H_Parent()) 
-			smart_cast<CEntity*>	(H_Parent())->g_fireParams	(this, p1,d);
+			dynamic_cast<CEntity*>	(H_Parent())->g_fireParams	(this, p1,d);
 		else 
 			return;
 		
@@ -283,7 +283,7 @@ void CWeaponMagazinedWGrenade::SwitchState(u32 S)
 		Fvector						p1, d; 
 		p1.set						(get_LastFP2());
 		d.set						(get_LastFD());
-		CEntity*					E = smart_cast<CEntity*>(H_Parent());
+		CEntity*					E = dynamic_cast<CEntity*>(H_Parent());
 		if (E)						E->g_fireParams		(this, p1,d);
 		p1.set						(get_LastFP2());
 		
@@ -298,7 +298,7 @@ void CWeaponMagazinedWGrenade::SwitchState(u32 S)
 		d.mul(CRocketLauncher::m_fLaunchSpeed);
 		CRocketLauncher::LaunchRocket(launch_matrix, d, zero_vel);
 
-		CExplosiveRocket* pGrenade = smart_cast<CExplosiveRocket*>(getCurrentRocket()/*m_pRocket*/);
+		CExplosiveRocket* pGrenade = dynamic_cast<CExplosiveRocket*>(getCurrentRocket()/*m_pRocket*/);
 		VERIFY(pGrenade);
 		pGrenade->SetInitiator(H_Parent()->ID());
 
@@ -399,7 +399,7 @@ void CWeaponMagazinedWGrenade::OnH_B_Independent()
 
 bool CWeaponMagazinedWGrenade::CanAttach(PIItem pIItem)
 {
-	CGrenadeLauncher* pGrenadeLauncher = smart_cast<CGrenadeLauncher*>(pIItem);
+	CGrenadeLauncher* pGrenadeLauncher = dynamic_cast<CGrenadeLauncher*>(pIItem);
 	
 	if(pGrenadeLauncher &&
 	   CSE_ALifeItemWeapon::eAddonAttachable == m_eGrenadeLauncherStatus &&
@@ -422,7 +422,7 @@ bool CWeaponMagazinedWGrenade::CanDetach(const char* item_section_name)
 
 bool CWeaponMagazinedWGrenade::Attach(PIItem pIItem)
 {
-	CGrenadeLauncher* pGrenadeLauncher = smart_cast<CGrenadeLauncher*>(pIItem);
+	CGrenadeLauncher* pGrenadeLauncher = dynamic_cast<CGrenadeLauncher*>(pIItem);
 	
 	if(pGrenadeLauncher &&
 	   CSE_ALifeItemWeapon::eAddonAttachable == m_eGrenadeLauncherStatus &&
@@ -589,7 +589,7 @@ void CWeaponMagazinedWGrenade::UpdateSounds	()
 void CWeaponMagazinedWGrenade::UpdateGrenadeVisibility(bool visibility)
 {
 	if (H_Parent() != Level().CurrentEntity()) return;
-	CKinematics* pHudVisual = smart_cast<CKinematics*>(m_pHUD->Visual());
+	CKinematics* pHudVisual = dynamic_cast<CKinematics*>(m_pHUD->Visual());
 	VERIFY(pHudVisual);
 	pHudVisual->LL_SetBoneVisible(pHudVisual->LL_BoneID(*grenade_bone_name),visibility,TRUE);
 	pHudVisual->CalculateBones_Invalidate();

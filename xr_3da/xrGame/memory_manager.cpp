@@ -28,7 +28,7 @@ CMemoryManager::CMemoryManager		(CCustomMonster *monster, CSound_UserDataVisitor
 {
 	VERIFY				(monster);
 	m_object			= monster;
-	m_stalker			= smart_cast<CAI_Stalker*>(monster);
+	m_stalker			= dynamic_cast<CAI_Stalker*>(monster);
 
 	m_visual			= xr_new<CVisualMemoryManager>	(monster, m_stalker);
 	m_sound				= xr_new<CSoundMemoryManager>	(monster, m_stalker, visitor);
@@ -132,11 +132,11 @@ void CMemoryManager::update			(const xr_vector<T> &objects)
 
 		danger().add				(*I);
 		
-		const CEntityAlive			*entity_alive = smart_cast<const CEntityAlive*>((*I).m_object);
+		const CEntityAlive			*entity_alive = dynamic_cast<const CEntityAlive*>((*I).m_object);
 		if (entity_alive && enemy().add(entity_alive))
 			continue;
 
-		const CAI_Stalker			*stalker = smart_cast<const CAI_Stalker*>((*I).m_object);
+		const CAI_Stalker			*stalker = dynamic_cast<const CAI_Stalker*>((*I).m_object);
 		if (m_stalker && stalker && greeting().add(stalker))
 			continue;
 
@@ -152,7 +152,7 @@ CMemoryInfo CMemoryManager::memory(const CObject *object) const
 		return						(result);
 
 	ALife::_TIME_ID					game_time = 0;
-	const CGameObject				*game_object = smart_cast<const CGameObject*>(object);
+	const CGameObject				*game_object = dynamic_cast<const CGameObject*>(object);
 	VERIFY							(game_object);
 
 	{
@@ -196,7 +196,7 @@ u32 CMemoryManager::memory_time(const CObject *object) const
 		return						(0);
 
 	ALife::_TIME_ID					game_time = 0;
-	const CGameObject				*game_object = smart_cast<const CGameObject*>(object);
+	const CGameObject				*game_object = dynamic_cast<const CGameObject*>(object);
 	VERIFY							(game_object);
 
 	{

@@ -51,7 +51,7 @@ BOOL CPda::net_Spawn(CSE_Abstract* DC)
 	if (!inherited::net_Spawn(DC))
 		return			(FALSE);
 	CSE_Abstract		*abstract = (CSE_Abstract*)(DC);
-	CSE_ALifeItemPDA	*pda = smart_cast<CSE_ALifeItemPDA*>(abstract);
+	CSE_ALifeItemPDA	*pda = dynamic_cast<CSE_ALifeItemPDA*>(abstract);
 	R_ASSERT			(pda);
 	m_idOriginalOwner			= pda->m_original_owner;
 	m_SpecificChracterOwner		= pda->m_specific_character;
@@ -77,7 +77,7 @@ void CPda::Load(LPCSTR section)
 
 void CPda::shedule_Update(u32 dt)	
 {
-	// Msg							("-SUB-:[%x][%s] CPda::shedule_Update",smart_cast<void*>(this),*cName());
+	// Msg							("-SUB-:[%x][%s] CPda::shedule_Update",dynamic_cast<void*>(this),*cName());
 	inherited::shedule_Update	(dt);
 
 	if(!H_Parent()) return;
@@ -86,7 +86,7 @@ void CPda::shedule_Update(u32 dt)
 	//обновить список дос€гаемых PDA
 	if( IsOn() && Level().CurrentEntity() && Level().CurrentEntity()->ID()==H_Parent()->ID() )
 	{
-		CEntityAlive* EA = smart_cast<CEntityAlive*>(H_Parent());
+		CEntityAlive* EA = dynamic_cast<CEntityAlive*>(H_Parent());
 		if(!EA || !EA->g_Alive())
 		{
 			TurnOff();
@@ -109,7 +109,7 @@ void CPda::feel_touch_new(CObject* O)
 {
 	if(IsOff()) return;
 
-	CInventoryOwner* pInvOwner = smart_cast<CInventoryOwner*>(O);
+	CInventoryOwner* pInvOwner = dynamic_cast<CInventoryOwner*>(O);
 
 	if(pInvOwner && pInvOwner->IsActivePDA() && this != pInvOwner->GetPDA()) 
 	{
@@ -124,7 +124,7 @@ void CPda::feel_touch_new(CObject* O)
 
 void CPda::feel_touch_delete(CObject* O) 
 {
-	CInventoryOwner* pInvOwner = smart_cast<CInventoryOwner*>(O);
+	CInventoryOwner* pInvOwner = dynamic_cast<CInventoryOwner*>(O);
 
 	if(pInvOwner /*&& /*pInvOwner->IsActivePDA()*/) 
 	{
@@ -179,13 +179,13 @@ void CPda::feel_touch_delete(CObject* O)
 
 BOOL CPda::feel_touch_contact(CObject* O) 
 {
-	CInventoryOwner* pInvOwner = smart_cast<CInventoryOwner*>(O);
+	CInventoryOwner* pInvOwner = dynamic_cast<CInventoryOwner*>(O);
 	if(pInvOwner && pInvOwner->GetPDA() && 
 		this!=pInvOwner->GetPDA() && 
 		!pInvOwner->GetPDA()->getDestroy()	&& 
 		pInvOwner->IsActivePDA())
 	{
-		CEntityAlive* pEntityAlive = smart_cast<CEntityAlive*>(O);
+		CEntityAlive* pEntityAlive = dynamic_cast<CEntityAlive*>(O);
 		if(pEntityAlive && pEntityAlive->g_Alive() && !pEntityAlive->getDestroy())
 			return TRUE;
 	}
@@ -204,7 +204,7 @@ void CPda::OnH_A_Chield()
 
 	//передать информацию содержащуюс€ в pda
 	//объекту, который его подн€л
-	CActor* actor = smart_cast<CActor*>(H_Parent());
+	CActor* actor = dynamic_cast<CActor*>(H_Parent());
 	if(!actor) return;
 
 	//создать и отправить пакет о получении новой информации
@@ -240,7 +240,7 @@ void CPda::renderable_Render()
 CInventoryOwner* CPda::GetOriginalOwner()
 {
 	CObject* pObject =  Level().Objects.net_Find(GetOriginalOwnerID());
-	CInventoryOwner* pInvOwner = smart_cast<CInventoryOwner*>(pObject);
+	CInventoryOwner* pInvOwner = dynamic_cast<CInventoryOwner*>(pObject);
 
 	return pInvOwner;
 }
@@ -276,7 +276,7 @@ void CPda::SendMessage(u32 pda_num, EPdaMsg msg, INFO_ID info_id)
 void CPda::SendMessageID(u32 pda_ID, EPdaMsg msg, INFO_ID info_id)
 {
 	CObject* pObject =  Level().Objects.net_Find(pda_ID);
-	CPda* pPda = smart_cast<CPda*>(pObject);
+	CPda* pPda = dynamic_cast<CPda*>(pObject);
 
 	R_ASSERT2(pPda, "Wrong PDA ID");
 	if(pPda == NULL) return;
@@ -405,7 +405,7 @@ bool CPda::WaitForReply(u32 pda_ID)
 void		CPda::SetInfoPortion (INFO_ID info)
 {
 	CSE_Abstract* e_entity		= Level().Server->game->get_entity_from_eid	(ID()); VERIFY(e_entity);
-	CSE_ALifeItemPDA* pda		= smart_cast<CSE_ALifeItemPDA*>(e_entity);
+	CSE_ALifeItemPDA* pda		= dynamic_cast<CSE_ALifeItemPDA*>(e_entity);
 	if(!pda) return;
 	pda->m_info_portion = info;
 	m_InfoPortion = info;

@@ -283,7 +283,7 @@ void CStalkerActionCommunicateWithCustomer::initialize	()
 	object().sight().setup							(CSightAction(SightManager::eSightTypeCover,false,true));
 	object().CObjectHandler::set_goal				(eObjectActionIdle);
 	object().sound().remove_active_sounds			(u32(eStalkerSoundMaskNoHumming));
-	m_trader										= smart_cast<CAI_Trader*>(Level().Objects.net_Find(object().current_alife_task().m_tCustomerID));
+	m_trader										= dynamic_cast<CAI_Trader*>(Level().Objects.net_Find(object().current_alife_task().m_tCustomerID));
 	VERIFY											(m_trader);
 }
 

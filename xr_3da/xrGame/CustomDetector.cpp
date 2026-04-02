@@ -193,7 +193,7 @@ void CCustomDetector::feel_touch_new(CObject* O)
 {
 	if (!H_Parent() || H_Parent() != Level().CurrentViewEntity()) return;
 
-	CCustomZone *pZone = smart_cast<CCustomZone*>(O);
+	CCustomZone *pZone = dynamic_cast<CCustomZone*>(O);
 	if(pZone && pZone->IsEnabled()) 
 	{
 		if(bDebug) HUD().outMessage(0xffffffff,cName(),"started to feel a zone.");
@@ -206,7 +206,7 @@ void CCustomDetector::feel_touch_new(CObject* O)
 
 void CCustomDetector::feel_touch_delete(CObject* O)
 {
-	CCustomZone *pZone = smart_cast<CCustomZone*>(O);
+	CCustomZone *pZone = dynamic_cast<CCustomZone*>(O);
 	if(pZone)
 	{
 		if(bDebug) HUD().outMessage(0xffffffff,cName(),"stoped to feel a zone.");
@@ -218,13 +218,13 @@ void CCustomDetector::feel_touch_delete(CObject* O)
 
 BOOL CCustomDetector::feel_touch_contact(CObject* O) 
 {
-	return (NULL != smart_cast<CCustomZone*>(O));
+	return (NULL != dynamic_cast<CCustomZone*>(O));
 }
 
 void CCustomDetector::OnH_A_Chield() 
 {
-	m_pCurrentActor = smart_cast<CActor*>(H_Parent());
-	m_pCurrentInvOwner = smart_cast<CInventoryOwner*>(H_Parent());
+	m_pCurrentActor = dynamic_cast<CActor*>(H_Parent());
+	m_pCurrentInvOwner = dynamic_cast<CInventoryOwner*>(H_Parent());
 	inherited::OnH_A_Chield		();
 }
 

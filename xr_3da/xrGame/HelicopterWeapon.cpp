@@ -146,7 +146,7 @@ void CHelicopter::UpdateWeapons		()
 
 void CHelicopter::UpdateMGunDir()
 {
-	CKinematics* K		= smart_cast<CKinematics*>(Visual());
+	CKinematics* K		= dynamic_cast<CKinematics*>(Visual());
 	m_fire_bone_xform	= K->LL_GetTransform(m_fire_bone);
 
 	m_fire_bone_xform.mulA(XFORM());
@@ -188,7 +188,7 @@ void CHelicopter::UpdateMGunDir()
 void CHelicopter::startRocket(u16 idx)
 {
 	if((getRocketCount()>=1)&&m_use_rocket_on_attack) {
-		CExplosiveRocket* pGrenade = smart_cast<CExplosiveRocket*>(getCurrentRocket());
+		CExplosiveRocket* pGrenade = dynamic_cast<CExplosiveRocket*>(getCurrentRocket());
 		VERIFY(pGrenade);
 		pGrenade->SetInitiator(this->ID());
 		

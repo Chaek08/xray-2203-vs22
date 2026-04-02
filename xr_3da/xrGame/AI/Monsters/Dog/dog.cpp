@@ -36,7 +36,7 @@ void CAI_Dog::Load(LPCSTR section)
 
 	// todo: PUT visual from load OFF
 	SVelocityParam &velocity_run		= movement().get_velocity(MonsterMovement::eVelocityParameterRunNormal);
-	CJumping::AddState(smart_cast<CSkeletonAnimated*>(Visual())->ID_Cycle_Safe("jump_glide_0"), JT_GLIDE,	false,	0.f, velocity_run.velocity.angular_real);
+	CJumping::AddState(dynamic_cast<CSkeletonAnimated*>(Visual())->ID_Cycle_Safe("jump_glide_0"), JT_GLIDE,	false,	0.f, velocity_run.velocity.angular_real);
 
 	MotionMan.AddReplacedAnim(&m_bDamaged,		eAnimRun,		eAnimRunDamaged);
 	MotionMan.AddReplacedAnim(&m_bDamaged,		eAnimWalkFwd,	eAnimWalkDamaged);
@@ -159,7 +159,7 @@ void CAI_Dog::UpdateCL()
 
 		if (strike_in_jump) return;
 		
-		const CEntity *pE = smart_cast<const CEntity *>(CJumping::GetEnemy());
+		const CEntity *pE = dynamic_cast<const CEntity *>(CJumping::GetEnemy());
 		if (!pE) return;
 
 		Fvector trace_from;

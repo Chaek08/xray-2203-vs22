@@ -95,7 +95,7 @@ u8 CAI_Trader::get_anim_count(LPCSTR anim)
 	u8 count = 0;
 
 	for (int i=0; ; ++i) {
-		if (smart_cast<CSkeletonAnimated*>(Visual())->ID_Cycle_Safe(strconcat(s_temp, anim,itoa(i,s,10))))  count++;
+		if (dynamic_cast<CSkeletonAnimated*>(Visual())->ID_Cycle_Safe(strconcat(s_temp, anim,itoa(i,s,10))))  count++;
 		else break;
 	}
 
@@ -117,7 +117,7 @@ void CAI_Trader::select_head_anim(u32 type)
 
 	// construct name
 	string128 s1,s2;
-	m_tpHeadDef = smart_cast<CSkeletonAnimated*>(Visual())->ID_Cycle_Safe(strconcat(s2,*it->second.name,itoa(index,s1,10)));
+	m_tpHeadDef = dynamic_cast<CSkeletonAnimated*>(Visual())->ID_Cycle_Safe(strconcat(s2,*it->second.name,itoa(index,s1,10)));
 }
 
 // Animation Callbacks
@@ -141,8 +141,8 @@ void CAI_Trader::SelectAnimation		(const Fvector& /**_view/**/, const Fvector& /
 	// назначить глобальную анимацию
 	if (!m_tpGlobalDef) {
 		// выбор анимации
-		m_tpGlobalDef = smart_cast<CSkeletonAnimated*>(Visual())->ID_Cycle("rot_5");
-		smart_cast<CSkeletonAnimated*>(Visual())->PlayCycle(m_tpGlobalDef,TRUE,AnimGlobalCallback,this);
+		m_tpGlobalDef = dynamic_cast<CSkeletonAnimated*>(Visual())->ID_Cycle("rot_5");
+		dynamic_cast<CSkeletonAnimated*>(Visual())->PlayCycle(m_tpGlobalDef,TRUE,AnimGlobalCallback,this);
 	}
 
 	AssignHeadAnimation();
@@ -154,7 +154,7 @@ void CAI_Trader::AssignHeadAnimation()
 	if (!m_tpHeadDef)	{
 		if (m_cur_head_anim_type != MonsterSpace::eHeadAnimNone) {
 			select_head_anim(m_cur_head_anim_type);
-			smart_cast<CSkeletonAnimated*>(Visual())->PlayCycle(m_tpHeadDef,TRUE,AnimHeadCallback,this);	
+			dynamic_cast<CSkeletonAnimated*>(Visual())->PlayCycle(m_tpHeadDef,TRUE,AnimHeadCallback,this);	
 		}
 	}
 }
@@ -205,7 +205,7 @@ void CAI_Trader::LookAtActor(CBoneInstance *B)
 BOOL CAI_Trader::net_Spawn			(CSE_Abstract* DC)
 {
 	CSE_Abstract			*e	= (CSE_Abstract*)(DC);
-	CSE_ALifeTrader			*l_tpTrader = smart_cast<CSE_ALifeTrader*>(e);
+	CSE_ALifeTrader			*l_tpTrader = dynamic_cast<CSE_ALifeTrader*>(e);
 	R_ASSERT				(l_tpTrader);
 	clone					(l_tpTrader->m_tpOrderedArtefacts,m_tpOrderedArtefacts);
 
@@ -222,7 +222,7 @@ BOOL CAI_Trader::net_Spawn			(CSE_Abstract* DC)
 	m_dwMoney				= l_tpTrader->m_dwMoney;
 
 	// Установка callback на кости
-	CBoneInstance			*bone_head =	&smart_cast<CKinematics*>(Visual())->LL_GetBoneInstance(smart_cast<CKinematics*>(Visual())->LL_BoneID("bip01_head"));
+	CBoneInstance			*bone_head =	&dynamic_cast<CKinematics*>(Visual())->LL_GetBoneInstance(dynamic_cast<CKinematics*>(Visual())->LL_BoneID("bip01_head"));
 	bone_head->set_callback	(BoneCallback,this);
 
 	shedule.t_min			= 25;
@@ -264,7 +264,7 @@ void CAI_Trader::OnEvent		(NET_Packet& P, u16 type)
 		case GE_OWNERSHIP_TAKE:
 			P.r_u16		(id);
 			Obj = Level().Objects.net_Find	(id);
-			if(inventory().Take(smart_cast<CGameObject*>(Obj), false, false)) 
+			if(inventory().Take(dynamic_cast<CGameObject*>(Obj), false, false)) 
 				Obj->H_SetParent(this);
 			else
 			{
@@ -278,7 +278,7 @@ void CAI_Trader::OnEvent		(NET_Packet& P, u16 type)
 		case GE_OWNERSHIP_REJECT:
 			P.r_u16		(id);
 			Obj = Level().Objects.net_Find	(id);
-			if(inventory().Drop(smart_cast<CGameObject*>(Obj))) 
+			if(inventory().Drop(dynamic_cast<CGameObject*>(Obj))) 
 				Obj->H_SetParent(0);
 			break;
 		case GE_TRANSFER_AMMO:
@@ -292,7 +292,7 @@ void CAI_Trader::feel_touch_new				(CObject* O)
 	if (Remote())		return;
 
 	// Now, test for game specific logical objects to minimize traffic
-	CInventoryItem		*I	= smart_cast<CInventoryItem*>	(O);
+	CInventoryItem		*I	= dynamic_cast<CInventoryItem*>	(O);
 
 	if (I && I->useful_for_NPC()) {
 		Msg("Taking item %s!",*I->object().cName());
@@ -327,7 +327,7 @@ void CAI_Trader::shedule_Update	(u32 dt)
 
 void CAI_Trader::g_WeaponBones	(int &L, int &R1, int &R2)
 {
-	CKinematics *V	= smart_cast<CKinematics*>(Visual());
+	CKinematics *V	= dynamic_cast<CKinematics*>(Visual());
 	R1				= V->LL_BoneID("bip01_r_hand");
 	R2				= V->LL_BoneID("bip01_r_finger2");
 	L				= V->LL_BoneID("bip01_l_finger1");
@@ -484,7 +484,7 @@ bool CAI_Trader::BuyArtefact (CArtefact* pArtefact)
 void CAI_Trader::SyncArtefactsWithServer	()
 {
 	CSE_Abstract					*e	= Level().Server->game->get_entity_from_eid(ID()); VERIFY(e);
-    CSE_ALifeTrader					*l_tpTrader = smart_cast<CSE_ALifeTrader*>(e);
+    CSE_ALifeTrader					*l_tpTrader = dynamic_cast<CSE_ALifeTrader*>(e);
 	delete_data						(l_tpTrader->m_tpOrderedArtefacts);
 	clone							(m_tpOrderedArtefacts, l_tpTrader->m_tpOrderedArtefacts);
 }
@@ -492,7 +492,7 @@ void CAI_Trader::SyncArtefactsWithServer	()
 
 ALife::ERelationType  CAI_Trader::tfGetRelationType	(const CEntityAlive *tpEntityAlive) const
 {
-	const CInventoryOwner* pOtherIO = smart_cast<const CInventoryOwner*>(tpEntityAlive);
+	const CInventoryOwner* pOtherIO = dynamic_cast<const CInventoryOwner*>(tpEntityAlive);
 
 	ALife::ERelationType relation = ALife::eRelationTypeDummy;
 

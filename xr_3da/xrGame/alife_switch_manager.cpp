@@ -66,7 +66,7 @@ void CALifeSwitchManager::add_online(CSE_ALifeDynamicObject *object, bool update
 	object->m_bOnline	= true;
 
 	NET_Packet						tNetPacket;
-	CSE_Abstract					*l_tpAbstract = smart_cast<CSE_Abstract*>(object);
+	CSE_Abstract					*l_tpAbstract = dynamic_cast<CSE_Abstract*>(object);
 	server().entity_Destroy			(l_tpAbstract);
 	object->s_flags.or				(M_SPAWN_UPDATE);
 	ClientID						clientID;
@@ -81,7 +81,7 @@ void CALifeSwitchManager::add_online(CSE_ALifeDynamicObject *object, bool update
 	}
 #endif
 
-	CSE_ALifeTraderAbstract			*tpTraderParams = smart_cast<CSE_ALifeTraderAbstract*>(object);
+	CSE_ALifeTraderAbstract			*tpTraderParams = dynamic_cast<CSE_ALifeTraderAbstract*>(object);
 	if (tpTraderParams) {
 		OBJECT_IT					I = object->children.begin();
 		OBJECT_IT					E = object->children.end();
@@ -90,10 +90,10 @@ void CALifeSwitchManager::add_online(CSE_ALifeDynamicObject *object, bool update
 				continue;
 
 			CSE_ALifeDynamicObject	*l_tpALifeDynamicObject = objects().object(*I);
-			CSE_ALifeInventoryItem	*l_tpALifeInventoryItem = smart_cast<CSE_ALifeInventoryItem*>(l_tpALifeDynamicObject);
+			CSE_ALifeInventoryItem	*l_tpALifeInventoryItem = dynamic_cast<CSE_ALifeInventoryItem*>(l_tpALifeDynamicObject);
 			R_ASSERT2				(l_tpALifeInventoryItem,"Non inventory item object has parent?!");
 			l_tpALifeInventoryItem->base()->s_flags.or(M_SPAWN_UPDATE);
-			CSE_Abstract			*l_tpAbstract = smart_cast<CSE_Abstract*>(l_tpALifeInventoryItem);
+			CSE_Abstract			*l_tpAbstract = dynamic_cast<CSE_Abstract*>(l_tpALifeInventoryItem);
 			server().entity_Destroy(l_tpAbstract);
 
 #ifdef DEBUG
@@ -130,7 +130,7 @@ struct remove_non_savable_predicate {
 	{
 		CSE_Abstract	*object = m_server->game->get_entity_from_eid(id);
 		VERIFY			(object);
-		CSE_ALifeObject	*alife_object = smart_cast<CSE_ALifeObject*>(object);
+		CSE_ALifeObject	*alife_object = dynamic_cast<CSE_ALifeObject*>(object);
 		VERIFY			(alife_object);
 		return			(!alife_object->can_save());
 	}
@@ -141,7 +141,7 @@ void CALifeSwitchManager::remove_online(CSE_ALifeDynamicObject *object, bool upd
 	object->m_bOnline			= false;
 	
 	m_saved_chidren				= object->children;
-	CSE_ALifeTraderAbstract		*inventory_owner = smart_cast<CSE_ALifeTraderAbstract*>(object);
+	CSE_ALifeTraderAbstract		*inventory_owner = dynamic_cast<CSE_ALifeTraderAbstract*>(object);
 	if (inventory_owner) {
 		OBJECT_VECTOR::iterator	I = remove_if(m_saved_chidren.begin(),m_saved_chidren.end(),remove_non_savable_predicate(&server()));
 		m_saved_chidren.erase	(I,m_saved_chidren.end());
@@ -161,11 +161,11 @@ void CALifeSwitchManager::remove_online(CSE_ALifeDynamicObject *object, bool upd
 
 	if (inventory_owner) {
 		for (u32 i=0, n=m_saved_chidren.size(); i<n; ++i) {
-			CSE_ALifeDynamicObject	*child = smart_cast<CSE_ALifeDynamicObject*>(objects().object(m_saved_chidren[i],true));
+			CSE_ALifeDynamicObject	*child = dynamic_cast<CSE_ALifeDynamicObject*>(objects().object(m_saved_chidren[i],true));
 			R_ASSERT				(child);
 			child->m_bOnline		= false;
 
-			CSE_ALifeInventoryItem	*inventory_item = smart_cast<CSE_ALifeInventoryItem*>(child);
+			CSE_ALifeInventoryItem	*inventory_item = dynamic_cast<CSE_ALifeInventoryItem*>(child);
 			VERIFY2					(inventory_item,"Non inventory item object has parent?!");
 #ifdef DEBUG
 			if (psAI_Flags.test(aiALife)) {
@@ -213,13 +213,13 @@ void CALifeSwitchManager::switch_online(CSE_ALifeDynamicObject *object)
 	}
 #endif
 	
-	CSE_ALifeAnomalousZone			*l_tpAnomalousZone = smart_cast<CSE_ALifeAnomalousZone*>(object);
+	CSE_ALifeAnomalousZone			*l_tpAnomalousZone = dynamic_cast<CSE_ALifeAnomalousZone*>(object);
 	if (l_tpAnomalousZone && (l_tpAnomalousZone->m_maxPower < EPS_L))
 		return;
 
 	object->m_bOnline				= true;
 
-	CSE_ALifeGroupAbstract			*tpALifeGroupAbstract = smart_cast<CSE_ALifeGroupAbstract*>(object);
+	CSE_ALifeGroupAbstract			*tpALifeGroupAbstract = dynamic_cast<CSE_ALifeGroupAbstract*>(object);
 	if (tpALifeGroupAbstract) {
 		OBJECT_IT					I = tpALifeGroupAbstract->m_tpMembers.begin(), B = I;
 		OBJECT_IT					E = tpALifeGroupAbstract->m_tpMembers.end();
@@ -229,7 +229,7 @@ void CALifeSwitchManager::switch_online(CSE_ALifeDynamicObject *object)
 			if (tpALifeGroupAbstract->m_bCreateSpawnPositions) {
 				J->o_Position		= object->o_Position;
 				J->m_tNodeID		= object->m_tNodeID;
-				CSE_ALifeMonsterAbstract	*l_tpALifeMonsterAbstract = smart_cast<CSE_ALifeMonsterAbstract*>(J);
+				CSE_ALifeMonsterAbstract	*l_tpALifeMonsterAbstract = dynamic_cast<CSE_ALifeMonsterAbstract*>(J);
 				if (l_tpALifeMonsterAbstract)
 					l_tpALifeMonsterAbstract->o_torso.yaw = angle_normalize_signed((I - B)/N*PI_MUL_2);
 			}
@@ -252,18 +252,18 @@ void CALifeSwitchManager::switch_offline(CSE_ALifeDynamicObject *object)
 	}
 #endif
 	
-	CSE_ALifeAnomalousZone			*l_tpAnomalousZone = smart_cast<CSE_ALifeAnomalousZone*>(object);
+	CSE_ALifeAnomalousZone			*l_tpAnomalousZone = dynamic_cast<CSE_ALifeAnomalousZone*>(object);
 	if (l_tpAnomalousZone && (l_tpAnomalousZone->m_maxPower < EPS_L))
 		return;
 
 	object->m_bOnline	= false;
-	CSE_ALifeGroupAbstract			*tpALifeGroupAbstract = smart_cast<CSE_ALifeGroupAbstract*>(object);
+	CSE_ALifeGroupAbstract			*tpALifeGroupAbstract = dynamic_cast<CSE_ALifeGroupAbstract*>(object);
 	if (tpALifeGroupAbstract) {
 		OBJECT_IT					I = tpALifeGroupAbstract->m_tpMembers.begin();
 		OBJECT_IT					E = tpALifeGroupAbstract->m_tpMembers.end();
 		if (I != E) {
-			CSE_ALifeMonsterAbstract	*tpGroupMember	= smart_cast<CSE_ALifeMonsterAbstract*>(objects().object(*I));
-			CSE_ALifeMonsterAbstract	*tpGroup		= smart_cast<CSE_ALifeMonsterAbstract*>(tpALifeGroupAbstract);
+			CSE_ALifeMonsterAbstract	*tpGroupMember	= dynamic_cast<CSE_ALifeMonsterAbstract*>(objects().object(*I));
+			CSE_ALifeMonsterAbstract	*tpGroup		= dynamic_cast<CSE_ALifeMonsterAbstract*>(tpALifeGroupAbstract);
 			if (tpGroupMember && tpGroup) {
 				tpGroup->m_fCurSpeed	= tpGroup->m_fGoingSpeed;
 				tpGroup->o_Position		= tpGroupMember->o_Position;
@@ -297,10 +297,10 @@ void CALifeSwitchManager::furl_object	(CSE_ALifeDynamicObject *I)
 {
 	if (I->m_bOnline)
 		if (0xffff == I->ID_Parent) {
-			CSE_ALifeGroupAbstract *tpALifeGroupAbstract = smart_cast<CSE_ALifeGroupAbstract*>(I);
+			CSE_ALifeGroupAbstract *tpALifeGroupAbstract = dynamic_cast<CSE_ALifeGroupAbstract*>(I);
 			if (tpALifeGroupAbstract)
 				for (u32 i=0, N = (u32)tpALifeGroupAbstract->m_tpMembers.size(); i<N; ++i) {
-					CSE_ALifeMonsterAbstract	*l_tpALifeMonsterAbstract = smart_cast<CSE_ALifeMonsterAbstract*>(objects().object(tpALifeGroupAbstract->m_tpMembers[i]));
+					CSE_ALifeMonsterAbstract	*l_tpALifeMonsterAbstract = dynamic_cast<CSE_ALifeMonsterAbstract*>(objects().object(tpALifeGroupAbstract->m_tpMembers[i]));
 					if (l_tpALifeMonsterAbstract && l_tpALifeMonsterAbstract->fHealth <= 0) {
 						l_tpALifeMonsterAbstract->m_bDirectControl	= true;
 						l_tpALifeMonsterAbstract->m_bOnline			= false;
@@ -342,7 +342,7 @@ bool CALifeSwitchManager::synchronize_location(CSE_ALifeDynamicObject *I)
 		return				(true);
 
 	// checking if it is a group of objects
-	CSE_ALifeGroupAbstract	*tpALifeGroupAbstract = smart_cast<CSE_ALifeGroupAbstract*>(I);
+	CSE_ALifeGroupAbstract	*tpALifeGroupAbstract = dynamic_cast<CSE_ALifeGroupAbstract*>(I);
 	if (tpALifeGroupAbstract) {
 		// checking if group is empty then remove it
 		if (tpALifeGroupAbstract->m_tpMembers.empty()) {
@@ -400,7 +400,7 @@ void CALifeSwitchManager::switch_object	(CSE_ALifeDynamicObject	*I)
 		// checking if the object is not attached
 		if (0xffff == I->ID_Parent) {
 			// checking if the object is not a group of objects
-			CSE_ALifeGroupAbstract *tpALifeGroupAbstract = smart_cast<CSE_ALifeGroupAbstract*>(I);
+			CSE_ALifeGroupAbstract *tpALifeGroupAbstract = dynamic_cast<CSE_ALifeGroupAbstract*>(I);
 			if (!tpALifeGroupAbstract) {
 				// checking if the object is ready to switch offline
 				if (I->can_switch_offline() && (!I->can_switch_online() || (graph().actor()->o_Position.distance_to(I->o_Position) > offline_distance())))
@@ -414,7 +414,7 @@ void CALifeSwitchManager::switch_object	(CSE_ALifeDynamicObject	*I)
 				u32 i = 0, N = (u32)tpALifeGroupAbstract->m_tpMembers.size();
 				for (; i<N; ++i) {
 					// casting group member to the abstract monster to get access to the Health property
-					CSE_ALifeMonsterAbstract	*tpGroupMember = smart_cast<CSE_ALifeMonsterAbstract*>(objects().object(tpALifeGroupAbstract->m_tpMembers[i]));
+					CSE_ALifeMonsterAbstract	*tpGroupMember = dynamic_cast<CSE_ALifeMonsterAbstract*>(objects().object(tpALifeGroupAbstract->m_tpMembers[i]));
 					if (tpGroupMember)
 						// check if monster is not dead
 						if (tpGroupMember->fHealth <= 0) {
@@ -423,16 +423,16 @@ void CALifeSwitchManager::switch_object	(CSE_ALifeDynamicObject	*I)
 							tpGroupMember->m_bDirectControl	= true;
 							tpALifeGroupAbstract->m_tpMembers.erase(tpALifeGroupAbstract->m_tpMembers.begin() + i);
 							tpGroupMember->m_bOnline		= false;
-							CSE_ALifeInventoryItem			*item = smart_cast<CSE_ALifeInventoryItem*>(tpGroupMember);
+							CSE_ALifeInventoryItem			*item = dynamic_cast<CSE_ALifeInventoryItem*>(tpGroupMember);
 							if (item && item->attached()) {
-								 CSE_ALifeTraderAbstract	*trader = smart_cast<CSE_ALifeTraderAbstract*>(objects().object(tpGroupMember->ID_Parent,true));
+								 CSE_ALifeTraderAbstract	*trader = dynamic_cast<CSE_ALifeTraderAbstract*>(objects().object(tpGroupMember->ID_Parent,true));
 								 if (trader)
 									 trader->detach			(item);
 							}
 							// store the __new separate object into the registries
 							register_object					(tpGroupMember);
 							// and remove it from the graph point but do not remove it from the current level map
-							CSE_ALifeInventoryItem			*l_tpALifeInventoryItem = smart_cast<CSE_ALifeInventoryItem*>(tpGroupMember);
+							CSE_ALifeInventoryItem			*l_tpALifeInventoryItem = dynamic_cast<CSE_ALifeInventoryItem*>(tpGroupMember);
 							if (!l_tpALifeInventoryItem || !l_tpALifeInventoryItem->attached())
 								graph().remove				(tpGroupMember,tpGroupMember->m_tGraphID,false);
 							tpGroupMember->m_bOnline		= true;
@@ -463,10 +463,10 @@ void CALifeSwitchManager::switch_object	(CSE_ALifeDynamicObject	*I)
 #ifdef DEBUG
 			if (psAI_Flags.test(aiALife)) {
 				// checking if parent is online too
-				CSE_ALifeCreatureAbstract	*l_tpALifeCreatureAbstract = smart_cast<CSE_ALifeCreatureAbstract*>(objects().object(I->ID_Parent));
+				CSE_ALifeCreatureAbstract	*l_tpALifeCreatureAbstract = dynamic_cast<CSE_ALifeCreatureAbstract*>(objects().object(I->ID_Parent));
 				if (l_tpALifeCreatureAbstract && (l_tpALifeCreatureAbstract->fHealth < EPS_L))
 					Msg				("! uncontrolled situation [%d][%d][%s][%f]",I->ID,I->ID_Parent,l_tpALifeCreatureAbstract->name_replace(),l_tpALifeCreatureAbstract->fHealth);
-				R_ASSERT2			(!smart_cast<CSE_ALifeCreatureAbstract*>(objects().object(I->ID_Parent)) || (smart_cast<CSE_ALifeCreatureAbstract*>(objects().object(I->ID_Parent))->fHealth >= EPS_L),"Parent offline, item online...");
+				R_ASSERT2			(!dynamic_cast<CSE_ALifeCreatureAbstract*>(objects().object(I->ID_Parent)) || (dynamic_cast<CSE_ALifeCreatureAbstract*>(objects().object(I->ID_Parent))->fHealth >= EPS_L),"Parent offline, item online...");
 				if (!objects().object(I->ID_Parent)->m_bOnline)
 					Msg				("! uncontrolled situation [%d][%d][%s][%f]",I->ID,I->ID_Parent,l_tpALifeCreatureAbstract->name_replace(),l_tpALifeCreatureAbstract->fHealth);
 			}
@@ -479,14 +479,14 @@ void CALifeSwitchManager::switch_object	(CSE_ALifeDynamicObject	*I)
 		// checking if the object is not attached
 		if (0xffff == I->ID_Parent) {
 			// checking if the object is not an empty group of objects
-			CSE_ALifeGroupAbstract *tpALifeGroupAbstract = smart_cast<CSE_ALifeGroupAbstract*>(I);
+			CSE_ALifeGroupAbstract *tpALifeGroupAbstract = dynamic_cast<CSE_ALifeGroupAbstract*>(I);
 			if (tpALifeGroupAbstract && tpALifeGroupAbstract->m_tpMembers.empty()) {
 				// release empty group of objects
 				release(I);
 				return;
 			}
 			else {
-				CSE_ALifeSchedulable	*schedulable = smart_cast<CSE_ALifeSchedulable*>(I);
+				CSE_ALifeSchedulable	*schedulable = dynamic_cast<CSE_ALifeSchedulable*>(I);
 				// checking if the abstract monster has just died
 				if (schedulable) {
 					if (!schedulable->need_update(I)) {
@@ -508,7 +508,7 @@ void CALifeSwitchManager::switch_object	(CSE_ALifeDynamicObject	*I)
 			// checking if parent is offline too
 #ifdef DEBUG
 			if (psAI_Flags.test(aiALife)) {
-				CSE_ALifeCreatureAbstract	*l_tpALifeCreatureAbstract = smart_cast<CSE_ALifeCreatureAbstract*>(objects().object(I->ID_Parent));
+				CSE_ALifeCreatureAbstract	*l_tpALifeCreatureAbstract = dynamic_cast<CSE_ALifeCreatureAbstract*>(objects().object(I->ID_Parent));
 				if (l_tpALifeCreatureAbstract && (l_tpALifeCreatureAbstract->fHealth < EPS_L))
 					Msg				("! uncontrolled situation [%d][%d][%s][%f]",I->ID,I->ID_Parent,l_tpALifeCreatureAbstract->name_replace(),l_tpALifeCreatureAbstract->fHealth);
 				R_ASSERT2			(!l_tpALifeCreatureAbstract || (l_tpALifeCreatureAbstract->fHealth >= EPS_L),"Parent online, item offline...");

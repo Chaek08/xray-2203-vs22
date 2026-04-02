@@ -193,7 +193,7 @@ shared_str CMapLocation::LevelName()
 			return "ERROR";
 		}
 		
-		CSE_ALifeObject* AO = smart_cast<CSE_ALifeObject*>(E);
+		CSE_ALifeObject* AO = dynamic_cast<CSE_ALifeObject*>(E);
 		if(AO)	
 			return  ai().game_graph().header().level(ai().game_graph().vertex(AO->m_tGraphID)->level_id()).name();
 		else	

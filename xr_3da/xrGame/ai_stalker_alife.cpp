@@ -37,18 +37,6 @@ IC	bool CAI_Stalker::CTradeItem::operator==(u16 id) const
 
 bool CAI_Stalker::task_completed			(const CALifeTask *_task)
 {
-	const CALifeTask	&task = *_task;
-
-	switch (task.m_tTaskType) {
-		case ALife::eTaskTypeSearchForItemCL :
-		case ALife::eTaskTypeSearchForItemCG : {
-			return		(!!inventory().dwfGetSameItemCount(task.m_caSection));
-		}
-		case ALife::eTaskTypeSearchForItemOL :
-		case ALife::eTaskTypeSearchForItemOG : {
-			return		(inventory().bfCheckForObject(task.m_tObjectID));
-		}
-	}
 	return				(false);
 }
 
@@ -75,36 +63,7 @@ bool CAI_Stalker::similar_task				(const CALifeTask *prev_task, const CALifeTask
 
 void CAI_Stalker::select_alife_task			()
 {
-	CALifeTask						*current_task = m_current_alife_task;
-	ALife::OBJECT_IT				I = m_tpKnownCustomers.begin();
-	ALife::OBJECT_IT				E = m_tpKnownCustomers.end();
-	for ( ; I != E; ++I) {
-		ALife::OBJECT_TASK_MAP::const_iterator	J = ai().alife().tasks().cross().find(*I);
-		R_ASSERT2					(ai().alife().tasks().cross().end() != J,"Can't find a specified customer in the Task registry!\nPossibly, there is no traders at all or there is no anomalous zones.");
 
-		u32							l_dwMinTryCount = u32(-1);
-		ALife::_TASK_ID				l_tBestTaskID = ALife::_TASK_ID(-1);
-		ALife::TASK_SET::const_iterator	i = (*J).second.begin();
-		ALife::TASK_SET::const_iterator	e = (*J).second.end();
-		for ( ; i != e; ++i) {
-			CALifeTask				*l_tpTask = ai().alife().tasks().task(*i);
-			if (similar_task(current_task,l_tpTask) && !task_completed(l_tpTask))
-				continue;
-
-			if (!l_tpTask->m_dwTryCount) {
-				l_tBestTaskID		= l_tpTask->m_tTaskID;
-				break;
-			}
-			else
-				if (l_tpTask->m_dwTryCount < l_dwMinTryCount) {
-					l_dwMinTryCount = l_tpTask->m_dwTryCount;
-					l_tBestTaskID	= l_tpTask->m_tTaskID;
-				}
-		}
-
-		if (ALife::_TASK_ID(-1) != l_tBestTaskID)
-			m_current_alife_task	= ai().alife().tasks().task(l_tBestTaskID);
-	}
 }
 
 CALifeTask &CAI_Stalker::current_alife_task	()
@@ -136,7 +95,7 @@ u32 CAI_Stalker::fill_items						(CInventory &inventory, CGameObject *old_owner,
 			continue;
 
 		if (CLSID_DEVICE_PDA == (*I)->object().CLS_ID) {
-			CPda				*pda = smart_cast<CPda*>(*I);
+			CPda				*pda = dynamic_cast<CPda*>(*I);
 			VERIFY				(pda);
 			if (pda->GetOriginalOwnerID() == old_owner->ID())
 				continue;
@@ -204,11 +163,11 @@ void CAI_Stalker::choose_food						()
 		if (m_total_money < (*I).m_item->Cost())
 			continue;
 
-		CEatableItem				*eatable_item = smart_cast<CEatableItem*>((*I).m_item);
+		CEatableItem				*eatable_item = dynamic_cast<CEatableItem*>((*I).m_item);
 		if (!eatable_item)
 			continue;
 
-		CMedkit						*medikit = smart_cast<CMedkit*>((*I).m_item);
+		CMedkit						*medikit = dynamic_cast<CMedkit*>((*I).m_item);
 		if (medikit)
 			continue;
 
@@ -300,7 +259,7 @@ void CAI_Stalker::choose_weapon						(ALife::EWeaponPriorityType weapon_priority
 	}
 	if (best_weapon) {
 		buy_item_virtual			(*best_weapon);
-		attach_available_ammo		(smart_cast<CWeapon*>(best_weapon->m_item));
+		attach_available_ammo		(dynamic_cast<CWeapon*>(best_weapon->m_item));
 	}
 }
 
@@ -313,7 +272,7 @@ void CAI_Stalker::choose_medikit					()
 		if (m_total_money < (*I).m_item->Cost())
 			continue;
 
-		CMedkit						*medikit = smart_cast<CMedkit*>((*I).m_item);
+		CMedkit						*medikit = dynamic_cast<CMedkit*>((*I).m_item);
 		if (!medikit)
 			continue;
 
@@ -336,7 +295,7 @@ void CAI_Stalker::choose_detector					()
 		if (m_total_money < (*I).m_item->Cost())
 			continue;
 
-		CCustomDetector			*detector = smart_cast<CCustomDetector*>((*I).m_item);
+		CCustomDetector			*detector = dynamic_cast<CCustomDetector*>((*I).m_item);
 		if (!detector)
 			continue;
 
@@ -376,7 +335,7 @@ void CAI_Stalker::communicate						(CInventoryOwner *trader)
 	m_sell_info_actuality	= false;
 	VERIFY					(trader);
 	m_current_trader		= trader;
-	m_trader_game_object	= smart_cast<CGameObject*>(trader);
+	m_trader_game_object	= dynamic_cast<CGameObject*>(trader);
 	VERIFY					(m_trader_game_object);
 
 	collect_items			();

@@ -16,7 +16,7 @@ int CArtefactMerger::GetArtefactNum()
 	for(ARTIFACT_LIST_it it = m_ArtefactList.begin();
 							m_ArtefactList.end() != it;
 							++it)
-						if(smart_cast<A*>(*it)) ++artifact_count;
+						if(dynamic_cast<A*>(*it)) ++artifact_count;
 	return artifact_count;
 };
 
@@ -35,7 +35,7 @@ template<typename A> void CArtefactMerger::DestroyArtefacts(int num_to_destroy)
 	ARTIFACT_LIST_it it = m_ArtefactList.begin();
 	do
 	{
-		if(smart_cast<A*>(*it)) 
+		if(dynamic_cast<A*>(*it)) 
 		{
 			++artifact_count;
 			//удалить объект артефакта

@@ -166,7 +166,7 @@ void CUIEncyclopediaWnd::Draw()
 void CUIEncyclopediaWnd::ReloadArticles()
 {
 	static u32 prevArticlesCount = 0;
-	CActor *pActor = smart_cast<CActor*>(Level().CurrentEntity());
+	CActor *pActor = dynamic_cast<CActor*>(Level().CurrentEntity());
 	if(pActor && pActor->encyclopedia_registry->registry().objects_ptr() && pActor->encyclopedia_registry->registry().objects_ptr()->size() > prevArticlesCount)
 	{
 		ARTICLE_VECTOR::const_iterator it = pActor->encyclopedia_registry->registry().objects_ptr()->begin();

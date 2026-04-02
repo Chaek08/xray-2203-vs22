@@ -61,7 +61,7 @@ void CUINewsWnd::Init()
 
 void CUINewsWnd::AddNews()
 {
-	CActor *pActor = smart_cast<CActor*>(Level().CurrentEntity());
+	CActor *pActor = dynamic_cast<CActor*>(Level().CurrentEntity());
 	UIListWnd.RemoveAll();
 
 	static u32 lastNewsCount = 0;

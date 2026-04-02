@@ -25,7 +25,7 @@ void CWeaponRG6::FireStart ()
 		p1.set(get_LastFP()); 
 		d.set(get_LastFD());
 
-		CEntity* E = smart_cast<CEntity*>(H_Parent());
+		CEntity* E = dynamic_cast<CEntity*>(H_Parent());
 		if (E) E->g_fireParams (this, p1,d);
 
 		Fmatrix launch_matrix;
@@ -40,7 +40,7 @@ void CWeaponRG6::FireStart ()
 
 		CRocketLauncher::LaunchRocket(launch_matrix, d, zero_vel);
 
-		CExplosiveRocket* pGrenade = smart_cast<CExplosiveRocket*>(getCurrentRocket());
+		CExplosiveRocket* pGrenade = dynamic_cast<CExplosiveRocket*>(getCurrentRocket());
 		VERIFY(pGrenade);
 		pGrenade->SetInitiator(H_Parent()->ID());
 

@@ -105,14 +105,14 @@ void	CCar::Load					( LPCSTR section )
 {
 	inherited::Load					(section);
 	//CPHSkeleton::Load(section);
-	ISpatial*		self				=	smart_cast<ISpatial*> (this);
+	ISpatial*		self				=	dynamic_cast<ISpatial*> (this);
 	if (self)		self->spatial.type	|=	STYPE_VISIBLEFORAI;	
 }
 
 BOOL	CCar::net_Spawn				(CSE_Abstract* DC)
 {
 	CSE_Abstract					*e = (CSE_Abstract*)(DC);
-	CSE_ALifeCar					*co=smart_cast<CSE_ALifeCar*>(e);
+	CSE_ALifeCar					*co=dynamic_cast<CSE_ALifeCar*>(e);
 	BOOL							R = inherited::net_Spawn(DC);
 	CPHSkeleton::Spawn(e);
 	setEnabled						(TRUE);
@@ -131,11 +131,11 @@ BOOL	CCar::net_Spawn				(CSE_Abstract* DC)
 
 void CCar::SpawnInitPhysics	(CSE_Abstract	*D)
 {
-	CSE_PHSkeleton		*so = smart_cast<CSE_PHSkeleton*>(D);
+	CSE_PHSkeleton		*so = dynamic_cast<CSE_PHSkeleton*>(D);
 	R_ASSERT						(so);
 	ParseDefinitions				();//parse ini filling in m_driving_wheels,m_steering_wheels,m_breaking_wheels
 	CreateSkeleton					();//creates m_pPhysicsShell & fill in bone_map
-	CKinematics *K					=smart_cast<CKinematics*>(Visual());
+	CKinematics *K					=dynamic_cast<CKinematics*>(Visual());
 	K->CalculateBones_Invalidate();//this need to call callbacks
 	K->CalculateBones	();
 	Init							();//inits m_driving_wheels,m_steering_wheels,m_breaking_wheels values using recieved in ParceDefinitions & from bone_map
@@ -145,7 +145,7 @@ void CCar::SpawnInitPhysics	(CSE_Abstract	*D)
 
 void	CCar::net_Destroy()
 {
-	CKinematics* pKinematics=smart_cast<CKinematics*>(Visual());
+	CKinematics* pKinematics=dynamic_cast<CKinematics*>(Visual());
 	if(m_bone_steer!=BI_NONE)
 	{
 
@@ -227,7 +227,7 @@ void CCar::RestoreNetState(CSE_PHSkeleton* po)
 	if(!po->_flags.test(CSE_PHSkeleton::flSavedData))return;
 	CPHSkeleton::RestoreNetState(po);
 	
-	CSE_ALifeCar* co=smart_cast<CSE_ALifeCar*>(po);
+	CSE_ALifeCar* co=dynamic_cast<CSE_ALifeCar*>(po);
 
 	{
 		xr_map<u16,SDoor>::iterator i,e;
@@ -443,7 +443,7 @@ bool CCar::attach_Actor(CActor* actor)
 	if(Owner()) return false;
 	CHolderCustom::attach_Actor(actor);
 
-	CKinematics* K	= smart_cast<CKinematics*>(Visual());
+	CKinematics* K	= dynamic_cast<CKinematics*>(Visual());
 	CInifile* ini	= K->LL_UserData();
 	int id;
 	if(ini->line_exist("car_definition","driver_place"))
@@ -537,7 +537,7 @@ void CCar::ParseDefinitions()
 	
 	bone_map.clear();
 
-	CKinematics* pKinematics=smart_cast<CKinematics*>(Visual());
+	CKinematics* pKinematics=dynamic_cast<CKinematics*>(Visual());
 	bone_map.insert(mk_pair(pKinematics->LL_GetBoneRoot(),physicsBone()));
 	CInifile* ini = pKinematics->LL_UserData();
 	R_ASSERT2(ini,"Car has no description !!! See ActorEditor Object - UserData");
@@ -649,7 +649,7 @@ void CCar::CreateSkeleton()
 {
 
 	if (!Visual()) return;
-	CSkeletonAnimated* K = smart_cast<CSkeletonAnimated*>(Visual());
+	CSkeletonAnimated* K = dynamic_cast<CSkeletonAnimated*>(Visual());
 	if(K)
 	{
 		K->PlayCycle		("idle");
@@ -658,7 +658,7 @@ void CCar::CreateSkeleton()
 
 
 	m_pPhysicsShell		= P_create_Shell();
-	m_pPhysicsShell->build_FromKinematics(smart_cast<CKinematics*>(Visual()),&bone_map);
+	m_pPhysicsShell->build_FromKinematics(dynamic_cast<CKinematics*>(Visual()),&bone_map);
 	m_pPhysicsShell->set_PhysicsRefObject(this);
 	m_pPhysicsShell->mXFORM.set(XFORM());
 	m_pPhysicsShell->Activate(true);
@@ -670,7 +670,7 @@ void CCar::CreateSkeleton()
 void CCar::Init()
 {
 	//get reference wheel radius
-	CKinematics* pKinematics=smart_cast<CKinematics*>(Visual());
+	CKinematics* pKinematics=dynamic_cast<CKinematics*>(Visual());
 	CInifile* ini = pKinematics->LL_UserData();
 	R_ASSERT2(ini,"Car has no description !!! See ActorEditor Object - UserData");
 	///SWheel& ref_wheel=m_wheels_map.find(pKinematics->LL_BoneID(ini->r_string("car_definition","reference_wheel")))->second;
@@ -1430,7 +1430,7 @@ void CCar::OnEvent(NET_Packet& P, u16 type)
 		{
 			P.r_u16		(id);
 			CObject* O	= Level().Objects.net_Find	(id);
-			if(GetInventory()->Take(smart_cast<CGameObject*>(O), false, false)) 
+			if(GetInventory()->Take(dynamic_cast<CGameObject*>(O), false, false)) 
 			{
 				O->H_SetParent(this);
 			}
@@ -1449,7 +1449,7 @@ void CCar::OnEvent(NET_Packet& P, u16 type)
 			P.r_u16		(id);
 			CObject* O	= Level().Objects.net_Find	(id);
 
-			if(GetInventory()->Drop(smart_cast<CGameObject*>(O))) 
+			if(GetInventory()->Drop(dynamic_cast<CGameObject*>(O))) 
 			{
 				O->H_SetParent(0);
 			}
@@ -1561,7 +1561,7 @@ void CCar::CarExplode()
 //	if(! l_pUD1) return;
 //	if(!l_pUD2) return;
 //
-//	CEntityAlive* capturer=smart_cast<CEntityAlive*>(l_pUD1->ph_ref_object);
+//	CEntityAlive* capturer=dynamic_cast<CEntityAlive*>(l_pUD1->ph_ref_object);
 //	if(capturer)
 //	{
 //		CPHCapture* capture=capturer->m_PhysicMovementControl->PHCapture();
@@ -1579,7 +1579,7 @@ void CCar::CarExplode()
 //
 //	}
 //
-//	capturer=smart_cast<CEntityAlive*>(l_pUD2->ph_ref_object);
+//	capturer=dynamic_cast<CEntityAlive*>(l_pUD2->ph_ref_object);
 //	if(capturer)
 //	{
 //		CPHCapture* capture=capturer->m_PhysicMovementControl->PHCapture();
@@ -1599,7 +1599,7 @@ void CCar::CarExplode()
 
 template <class T> IC void CCar::fill_wheel_vector(LPCSTR S,xr_vector<T>& type_wheels)
 {
-	CKinematics* pKinematics	=smart_cast<CKinematics*>(Visual());
+	CKinematics* pKinematics	=dynamic_cast<CKinematics*>(Visual());
 	string64					S1;
 	int count =					_GetItemCount(S);
 	for (int i=0 ;i<count; ++i) 
@@ -1631,7 +1631,7 @@ template <class T> IC void CCar::fill_wheel_vector(LPCSTR S,xr_vector<T>& type_w
 
 IC void CCar::fill_exhaust_vector(LPCSTR S,xr_vector<SExhaust>& exhausts)
 {
-	CKinematics* pKinematics	=smart_cast<CKinematics*>(Visual());
+	CKinematics* pKinematics	=dynamic_cast<CKinematics*>(Visual());
 	string64					S1;
 	int count =					_GetItemCount(S);
 	for (int i=0 ;i<count; ++i) 
@@ -1655,7 +1655,7 @@ IC void CCar::fill_exhaust_vector(LPCSTR S,xr_vector<SExhaust>& exhausts)
 
 IC void CCar::fill_doors_map(LPCSTR S,xr_map<u16,SDoor>& doors)
 {
-	CKinematics* pKinematics	=smart_cast<CKinematics*>(Visual());
+	CKinematics* pKinematics	=dynamic_cast<CKinematics*>(Visual());
 	string64					S1;
 	int count =					_GetItemCount(S);
 	for (int i=0 ;i<count; ++i) 

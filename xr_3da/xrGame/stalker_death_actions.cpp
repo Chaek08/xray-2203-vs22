@@ -36,7 +36,7 @@ void CStalkerActionDead::initialize		()
 	if (object().inventory().TotalWeight() <= 0)
 		return;
 	
-	CWeapon					*tpWeapon = smart_cast<CWeapon*>(object().inventory().ActiveItem());
+	CWeapon					*tpWeapon = dynamic_cast<CWeapon*>(object().inventory().ActiveItem());
 	if (!(!tpWeapon || !tpWeapon->GetAmmoElapsed() || !object().hammer_is_clutched() || (Device.dwTimeGlobal - object().GetLevelDeathTime() > 500))) {
 		object().inventory().Action(kWPN_FIRE,	CMD_START);
 		xr_vector<CInventorySlot>::iterator I = object().inventory().m_slots.begin(), B = I;
@@ -53,7 +53,7 @@ void CStalkerActionDead::execute		()
 	inherited::execute		();
 	object().movement().enable_movement(false);
 
-	CWeapon					*tpWeapon = smart_cast<CWeapon*>(object().inventory().ActiveItem());
+	CWeapon					*tpWeapon = dynamic_cast<CWeapon*>(object().inventory().ActiveItem());
 	if (!tpWeapon || !tpWeapon->GetAmmoElapsed() || !object().hammer_is_clutched() || (Device.dwTimeGlobal - object().GetLevelDeathTime() > 500)) {
 		xr_vector<CInventorySlot>::iterator I = object().inventory().m_slots.begin(), B = I;
 		xr_vector<CInventorySlot>::iterator E = object().inventory().m_slots.end();

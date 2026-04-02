@@ -76,14 +76,14 @@ void CUITalkWnd::Init()
 
 void CUITalkWnd::InitTalkDialog()
 {
-	m_pActor = smart_cast<CActor *>(Level().CurrentEntity());
+	m_pActor = dynamic_cast<CActor *>(Level().CurrentEntity());
 	if (m_pActor && !m_pActor->IsTalking()) return;
 
-	m_pOurInvOwner = smart_cast<CInventoryOwner*>(m_pActor);
+	m_pOurInvOwner = dynamic_cast<CInventoryOwner*>(m_pActor);
 	m_pOthersInvOwner = m_pActor->GetTalkPartner();
 
-	m_pOurDialogManager = smart_cast<CPhraseDialogManager*>(m_pOurInvOwner);
-	m_pOthersDialogManager = smart_cast<CPhraseDialogManager*>(m_pOthersInvOwner);
+	m_pOurDialogManager = dynamic_cast<CPhraseDialogManager*>(m_pOurInvOwner);
+	m_pOthersDialogManager = dynamic_cast<CPhraseDialogManager*>(m_pOthersInvOwner);
 
 	//имена собеседников
 	UITalkDialogWnd.UICharacterInfoLeft.InitCharacter(m_pOurInvOwner);
@@ -91,7 +91,7 @@ void CUITalkWnd::InitTalkDialog()
 	UITalkDialogWnd.UIDialogFrame.UITitleText.SetText(m_pOthersInvOwner->CharacterInfo().Name());
 	UITalkDialogWnd.UIOurPhrasesFrame.UITitleText.SetText(m_pOurInvOwner->CharacterInfo().Name());
 	
-//	CEntityAlive* ContactEA = smart_cast<CEntityAlive*>(m_pOthersInvOwner);
+//	CEntityAlive* ContactEA = dynamic_cast<CEntityAlive*>(m_pOthersInvOwner);
 //	UITalkDialogWnd.UICharacterInfoRight.SetRelation(ContactEA->tfGetRelationType(m_pActor));
 
 	//очистить лог сообщений
@@ -215,7 +215,7 @@ void CUITalkWnd::Update()
 	//остановить разговор, если нужно
 	if (m_pActor && !m_pActor->IsTalking())
 	{
-//		CUIGameSP* pGameSP = smart_cast<CUIGameSP*>(HUD().GetUI()->UIGame());
+//		CUIGameSP* pGameSP = dynamic_cast<CUIGameSP*>(HUD().GetUI()->UIGame());
 //		if(pGameSP) pGameSP->StartStopMenu(this);
 		Game().StartStopMenu(this,true);
 	}

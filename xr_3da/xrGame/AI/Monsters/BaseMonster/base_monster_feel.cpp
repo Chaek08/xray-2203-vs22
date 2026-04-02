@@ -32,7 +32,7 @@ void CBaseMonster::feel_sound_new(CObject* who, int eType, CSound_UserDataPtr us
 		user_data->accept	(sound_user_data_visitor());
 	
 	// ignore sounds if not from enemies
-	CEntityAlive* entity = smart_cast<CEntityAlive*> (who);
+	CEntityAlive* entity = dynamic_cast<CEntityAlive*> (who);
 	if (entity && (!EnemyMan.is_enemy(entity))) return;
 
 	// ignore unknown sounds
@@ -70,9 +70,9 @@ void CBaseMonster::HitEntity(const CEntity *pEntity, float fDamage, float impuls
 
 		CEntity		*pEntityNC	= const_cast<CEntity*>(pEntity);
 		VERIFY		(pEntityNC);
-		pEntityNC->Hit(fDamage,hit_dir,this, smart_cast<CKinematics*>(pEntityNC->Visual())->LL_GetBoneRoot(),position_in_bone_space,impulse);
+		pEntityNC->Hit(fDamage,hit_dir,this, dynamic_cast<CKinematics*>(pEntityNC->Visual())->LL_GetBoneRoot(),position_in_bone_space,impulse);
 
-		if (smart_cast<CActor *>(pEntityNC)) {
+		if (dynamic_cast<CActor *>(pEntityNC)) {
 			//HUD().GetUI()->UIMainIngameWnd.PlayClawsAnimation	("monster");
 			SetAttackEffector									();
 		}
@@ -89,7 +89,7 @@ void CBaseMonster::HitEntity(const CEntity *pEntity, float fDamage, float impuls
 BOOL  CBaseMonster::feel_vision_isRelevant(CObject* O)
 {
 	if (!g_Alive())					return FALSE;
-	if (0==smart_cast<CEntity*>(O))	return FALSE;
+	if (0==dynamic_cast<CEntity*>(O))	return FALSE;
 	
 	if ((O->spatial.type & STYPE_VISIBLEFORAI) != STYPE_VISIBLEFORAI) return FALSE;
 	
@@ -97,11 +97,11 @@ BOOL  CBaseMonster::feel_vision_isRelevant(CObject* O)
 	if (m_bSleep) return FALSE;
 	
 	// если не враг - не видит
-	CEntityAlive* entity = smart_cast<CEntityAlive*> (O);
+	CEntityAlive* entity = dynamic_cast<CEntityAlive*> (O);
 	if (entity && entity->g_Alive()) {
 		if (!EnemyMan.is_enemy(entity)) {
 			// если видит друга - проверить наличие у него врагов
-			CBaseMonster *monster = smart_cast<CBaseMonster *>(entity);
+			CBaseMonster *monster = dynamic_cast<CBaseMonster *>(entity);
 			if (monster) EnemyMan.transfer_enemy(monster);
 			return FALSE;
 		}
@@ -140,18 +140,18 @@ void CBaseMonster::HitSignal(float amount, Fvector& vLocalDir, CObject* who, s16
 		lua_game_object(), 
 		amount,
 		vLocalDir,
-		smart_cast<const CGameObject*>(who)->lua_game_object(),
+		dynamic_cast<const CGameObject*>(who)->lua_game_object(),
 		element
 	);
 
 	// если нейтрал - добавить как врага
-	CEntityAlive	*obj = smart_cast<CEntityAlive*>(who);
+	CEntityAlive	*obj = dynamic_cast<CEntityAlive*>(who);
 	if (obj && (tfGetRelationType(obj) == ALife::eRelationTypeNeutral)) EnemyMan.add_enemy(obj);
 }
 
 void CBaseMonster::SetAttackEffector() 
 {
-	CActor *pA = smart_cast<CActor *>(Level().CurrentEntity());
+	CActor *pA = dynamic_cast<CActor *>(Level().CurrentEntity());
 	if (pA) {
 		pA->EffectorManager().AddEffector(xr_new<CMonsterEffectorHit>(db().m_attack_effector.ce_time,db().m_attack_effector.ce_amplitude,db().m_attack_effector.ce_period_number,db().m_attack_effector.ce_power));
 		Level().Cameras.AddEffector(xr_new<CMonsterEffector>(db().m_attack_effector.ppi, db().m_attack_effector.time, db().m_attack_effector.time_attack, db().m_attack_effector.time_release));

@@ -38,8 +38,8 @@ void CStalkerAnimationManager::torso_play_callback	(CBlend *blend)
 void CStalkerAnimationManager::fill_object_info		()
 {
 	VERIFY					(object().inventory().ActiveItem());
-	m_weapon				= smart_cast<CWeapon*>	(object().inventory().ActiveItem());
-	m_missile				= smart_cast<CMissile*>	(object().inventory().ActiveItem());
+	m_weapon				= dynamic_cast<CWeapon*>	(object().inventory().ActiveItem());
+	m_missile				= dynamic_cast<CMissile*>	(object().inventory().ActiveItem());
 }
 
 MotionID CStalkerAnimationManager::no_object_animation(const EBodyState &body_state) const

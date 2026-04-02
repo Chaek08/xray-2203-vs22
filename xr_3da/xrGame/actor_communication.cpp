@@ -100,7 +100,7 @@ void CActor::AddEncyclopediaArticle	 (const CInfoPortion* info_portion) const
 
 	if( HUD().GetUI() ){
 
-		CUIGameSP* pGameSP = smart_cast<CUIGameSP*>(HUD().GetUI()->UIGame());
+		CUIGameSP* pGameSP = dynamic_cast<CUIGameSP*>(HUD().GetUI()->UIGame());
 		if(pGameSP) 
 		{
 			if(actor_diary_article && pGameSP->PdaMenu.UIDiaryWnd.IsShown() &&
@@ -149,7 +149,7 @@ void CActor::AddGameTask			 (const CInfoPortion* info_portion) const
 			HUD().GetUI()->UIMainIngameWnd->SetFlashIconState(CUIMainIngameWnd::efiPdaTask, true);
 
 	if( HUD().GetUI() ){
-		CUIGameSP* pGameSP = smart_cast<CUIGameSP*>(HUD().GetUI()->UIGame());
+		CUIGameSP* pGameSP = dynamic_cast<CUIGameSP*>(HUD().GetUI()->UIGame());
 		if(pGameSP) 
 		{
 			if(pGameSP->PdaMenu.UIDiaryWnd.IsShown() &&
@@ -171,7 +171,7 @@ void  CActor::AddGameNews			 (GAME_NEWS_DATA& news_data)
 		if(ALife::eNewsTypeKill == pNewsItem->m_news_type/* || ALife::eNewsTypeRetreat == pNewsItem->m_news_type*/)
 		{
 			CSE_Abstract* E = Level().Server->game->get_entity_from_eid(pNewsItem->m_object_id[1]);
-			CSE_ALifeTraderAbstract	 *pTA	= smart_cast<CSE_ALifeTraderAbstract*>(E); 
+			CSE_ALifeTraderAbstract	 *pTA	= dynamic_cast<CSE_ALifeTraderAbstract*>(E); 
 			if(!pTA) return;
 		}
 		else return;
@@ -186,7 +186,7 @@ void  CActor::AddGameNews			 (GAME_NEWS_DATA& news_data)
 		HUD().GetUI()->UIMainIngameWnd->OnNewsReceived(news_data);
 
 	if( HUD().GetUI() ){
-		CUIGameSP* pGameSP = smart_cast<CUIGameSP*>(HUD().GetUI()->UIGame());
+		CUIGameSP* pGameSP = dynamic_cast<CUIGameSP*>(HUD().GetUI()->UIGame());
 		if(pGameSP) 
 		{
 			if(pGameSP->PdaMenu.UIDiaryWnd.IsShown() &&
@@ -219,7 +219,7 @@ bool CActor::OnReceiveInfo(INFO_ID info_id) const
 	if(!HUD().GetUI())
 		return false;
 	//только если находимся в режиме single
-	CUIGameSP* pGameSP = smart_cast<CUIGameSP*>(HUD().GetUI()->UIGame());
+	CUIGameSP* pGameSP = dynamic_cast<CUIGameSP*>(HUD().GetUI()->UIGame());
 	if(!pGameSP) return false;
 /*
 	//обновить отмеки на карте, если мы прямо в карте и находимся
@@ -252,7 +252,7 @@ void CActor::OnDisableInfo(INFO_ID info_id)  const
 		return;
 
 	//только если находимся в режиме single
-	CUIGameSP* pGameSP = smart_cast<CUIGameSP*>(HUD().GetUI()->UIGame());
+	CUIGameSP* pGameSP = dynamic_cast<CUIGameSP*>(HUD().GetUI()->UIGame());
 	if(!pGameSP) return;
 
 /* 
@@ -281,13 +281,13 @@ void CActor::ReceivePdaMessage(u16 who, EPdaMsg msg, INFO_ID info_id)
 	//только если находимся в режиме single
 	if(!HUD().GetUI())
 		return;
-	CUIGameSP* pGameSP = smart_cast<CUIGameSP*>(HUD().GetUI()->UIGame());
+	CUIGameSP* pGameSP = dynamic_cast<CUIGameSP*>(HUD().GetUI()->UIGame());
 	if(!pGameSP) return;
 
 	//визуализация в интерфейсе
 	CObject* pPdaObject =  Level().Objects.net_Find(who);
 	VERIFY(pPdaObject);
-	CPda* pPda = smart_cast<CPda*>(pPdaObject);
+	CPda* pPda = dynamic_cast<CPda*>(pPdaObject);
 	VERIFY(pPda);
 	HUD().GetUI()->UIMainIngameWnd->ReceivePdaMessage(pPda->GetOriginalOwner(), msg, info_id);
 
@@ -304,7 +304,7 @@ void CActor::ReceivePdaMessage(u16 who, EPdaMsg msg, INFO_ID info_id)
 void  CActor::ReceivePhrase		(DIALOG_SHARED_PTR& phrase_dialog)
 {
 	//только если находимся в режиме single
-	CUIGameSP* pGameSP = smart_cast<CUIGameSP*>(HUD().GetUI()->UIGame());
+	CUIGameSP* pGameSP = dynamic_cast<CUIGameSP*>(HUD().GetUI()->UIGame());
 	if(!pGameSP) return;
 
 	if(pGameSP->TalkMenu.IsShown())
@@ -340,7 +340,7 @@ void   CActor::UpdateAvailableDialogs	(CPhraseDialogManager* partner)
 	}
 
 	//добавить актерский диалог собеседника
-	CInventoryOwner* pInvOwnerPartner = smart_cast<CInventoryOwner*>(partner); VERIFY(pInvOwnerPartner);
+	CInventoryOwner* pInvOwnerPartner = dynamic_cast<CInventoryOwner*>(partner); VERIFY(pInvOwnerPartner);
 	
 	for(u32 i = 0; i<pInvOwnerPartner->CharacterInfo().ActorDialogs().size(); i++)
 		AddAvailableDialog(pInvOwnerPartner->CharacterInfo().ActorDialogs()[i], partner);
@@ -379,7 +379,7 @@ void CActor::RunTalkDialog(CInventoryOwner* talk_partner)
 	{	
 		StartTalk(talk_partner);
 		//только если находимся в режиме single
-		CUIGameSP* pGameSP = smart_cast<CUIGameSP*>(HUD().GetUI()->UIGame());
+		CUIGameSP* pGameSP = dynamic_cast<CUIGameSP*>(HUD().GetUI()->UIGame());
 		if(pGameSP)
 		{
 			if(pGameSP->MainInputReceiver())
@@ -391,7 +391,7 @@ void CActor::RunTalkDialog(CInventoryOwner* talk_partner)
 
 void CActor::StartTalk (CInventoryOwner* talk_partner)
 {
-	CGameObject* GO = smart_cast<CGameObject*>(talk_partner); VERIFY(GO);
+	CGameObject* GO = dynamic_cast<CGameObject*>(talk_partner); VERIFY(GO);
 	//обновить информацию о контакте
 	UpdateContact(GO->ID());
 
@@ -430,7 +430,7 @@ void CActor::NewPdaContact		(CInventoryOwner* pInvOwner)
 void CActor::LostPdaContact		(CInventoryOwner* pInvOwner)
 {
 
-	CGameObject* GO = smart_cast<CGameObject*>(pInvOwner);
+	CGameObject* GO = dynamic_cast<CGameObject*>(pInvOwner);
 	if (GO){
 
 		for(int t = ALife::eRelationTypeFriend; t<ALife::eRelationTypeLast; ++t){

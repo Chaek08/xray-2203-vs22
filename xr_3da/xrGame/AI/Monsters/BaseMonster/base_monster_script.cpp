@@ -49,7 +49,7 @@ bool CBaseMonster::bfAssignMovement (CScriptEntityAction *tpEntityAction)
 	switch (l_tMovementAction.m_tGoalType) {
 		
 		case CScriptMovementAction::eGoalTypeObject : {
-			CGameObject		*l_tpGameObject = smart_cast<CGameObject*>(l_tMovementAction.m_tpObjectToGo);
+			CGameObject		*l_tpGameObject = dynamic_cast<CGameObject*>(l_tMovementAction.m_tpObjectToGo);
 			movement().set_target_point	(l_tpGameObject->Position(), l_tpGameObject->ai_location().level_vertex_id());
 			break;
 													  }
@@ -75,7 +75,7 @@ bool CBaseMonster::bfAssignObject(CScriptEntityAction *tpEntityAction)
 //	if (!l_tObjectAction.m_tpObject)
 //		return	(false == (l_tObjectAction.m_bCompleted = true));
 //
-//	CEntityAlive	*l_tpEntity		= smart_cast<CEntityAlive*>(l_tObjectAction.m_tpObject);
+//	CEntityAlive	*l_tpEntity		= dynamic_cast<CEntityAlive*>(l_tObjectAction.m_tpObject);
 //	if (!l_tpEntity) return	(false == (l_tObjectAction.m_bCompleted = true));
 //
 //	switch (l_tObjectAction.m_tGoalType) {
@@ -179,7 +179,7 @@ bool CBaseMonster::bfAssignMonsterAction(CScriptEntityAction *tpEntityAction)
 	CScriptMonsterAction	&l_tAction = tpEntityAction->m_tMonsterAction;	
 	if (l_tAction.completed()) return false;
 
-	CEntityAlive *pE = smart_cast<CEntityAlive *>(l_tAction.m_tObject);
+	CEntityAlive *pE = dynamic_cast<CEntityAlive *>(l_tAction.m_tObject);
 
 	switch(l_tAction.m_tAction) {
 		case eGA_Rest:		
@@ -273,7 +273,7 @@ CEntity *CBaseMonster::GetCurrentEnemy()
 	CEntity *enemy = 0;
 	
 	if (EnemyMan.get_enemy()) 
-		enemy = const_cast<CEntity *>(smart_cast<const CEntity*>(EnemyMan.get_enemy()));
+		enemy = const_cast<CEntity *>(dynamic_cast<const CEntity*>(EnemyMan.get_enemy()));
 
 	if (!enemy || enemy->getDestroy() || !enemy->g_Alive()) enemy = 0;
 
@@ -285,7 +285,7 @@ CEntity *CBaseMonster::GetCurrentCorpse()
 	CEntity *corpse = 0;
 
 	if (CorpseMan.get_corpse()) 
-		corpse = const_cast<CEntity *>(smart_cast<const CEntity*>(CorpseMan.get_corpse()));
+		corpse = const_cast<CEntity *>(dynamic_cast<const CEntity*>(CorpseMan.get_corpse()));
 
 	if (!corpse || corpse->getDestroy() || corpse->g_Alive()) corpse = 0;
 

@@ -237,8 +237,8 @@ void CUIInventoryWnd::Draw()
 
 void CUIInventoryWnd::Update()
 {
-	//CActor *pActor = smart_cast<CActor*>(Level().CurrentEntity());
-	CEntityAlive *pEntityAlive = smart_cast<CEntityAlive*>(Level().CurrentEntity());
+	//CActor *pActor = dynamic_cast<CActor*>(Level().CurrentEntity());
+	CEntityAlive *pEntityAlive = dynamic_cast<CEntityAlive*>(Level().CurrentEntity());
 
 	if(pEntityAlive) 
 	{
@@ -273,7 +273,7 @@ void CUIInventoryWnd::Update()
 		UpdateWeight(UIBagWnd, true);
 
 		// update money
-		CInventoryOwner* pOurInvOwner = smart_cast<CInventoryOwner*>(pEntityAlive);
+		CInventoryOwner* pOurInvOwner = dynamic_cast<CInventoryOwner*>(pEntityAlive);
 		char sMoney[50];
 		int  iMoney(pOurInvOwner->m_dwMoney);
 		itoa(iMoney, sMoney, 10);
@@ -300,7 +300,7 @@ void CUIInventoryWnd::Show()
 
 	if (GameID() != GAME_SINGLE)
 	{
-		CActor *pActor = smart_cast<CActor*>(Level().CurrentEntity());
+		CActor *pActor = dynamic_cast<CActor*>(Level().CurrentEntity());
 		if(!pActor) return;
 
         pActor->HideCurrentWeapon(GEG_PLAYER_INVENTORYMENU_OPEN);//, false);
@@ -320,7 +320,7 @@ void CUIInventoryWnd::Hide()
 
 
 	//достать вещь в активный слот
-	CActor *pActor = smart_cast<CActor*>(Level().CurrentEntity());
+	CActor *pActor = dynamic_cast<CActor*>(Level().CurrentEntity());
 	if(pActor && m_iCurrentActiveSlot != NO_ACTIVE_SLOT && 
 		pActor->inventory().m_slots[m_iCurrentActiveSlot].m_pIItem)
 	{
@@ -330,7 +330,7 @@ void CUIInventoryWnd::Hide()
 
 	if (GameID() != GAME_SINGLE)
 	{
-		CActor *pActor = smart_cast<CActor*>(Level().CurrentEntity());
+		CActor *pActor = dynamic_cast<CActor*>(Level().CurrentEntity());
 		if(!pActor) return;
 
 		pActor->RestoreHidedWeapon(GEG_PLAYER_INVENTORYMENU_CLOSE);
@@ -445,7 +445,7 @@ bool CUIInventoryWnd::ToBelt()
 //запуск и остановка меню работы с артефактами
 void CUIInventoryWnd::StartArtefactMerger()
 {
-	UIArtefactMergerWnd.InitArtefactMerger(smart_cast<CArtefactMerger*>(m_pCurrentItem));
+	UIArtefactMergerWnd.InitArtefactMerger(dynamic_cast<CArtefactMerger*>(m_pCurrentItem));
 	UIArtefactMergerWnd.Show();
 }
 void CUIInventoryWnd::StopArtefactMerger()
@@ -531,7 +531,7 @@ void CUIInventoryWnd::AttachAddon()
 
 
 	//спрятать вещь из активного слота в инвентарь на время вызова менюшки
-	CActor *pActor = smart_cast<CActor*>(Level().CurrentEntity());
+	CActor *pActor = dynamic_cast<CActor*>(Level().CurrentEntity());
 	if(pActor && m_pItemToUpgrade == pActor->inventory().ActiveItem())
 	{
 					m_iCurrentActiveSlot = pActor->inventory().GetActiveSlot();
@@ -539,7 +539,7 @@ void CUIInventoryWnd::AttachAddon()
 //		m_iCurrentActiveSlot = pActor->HideActiveItem();
 	}
 
-	(smart_cast<CUIDragDropList*>(m_pCurrentDragDropItem->GetParent()))->
+	(dynamic_cast<CUIDragDropList*>(m_pCurrentDragDropItem->GetParent()))->
 									DetachChild(m_pCurrentDragDropItem);
 	SetCurrentItem(NULL);
 	m_pCurrentDragDropItem = NULL;
@@ -558,7 +558,7 @@ void CUIInventoryWnd::DetachAddon(const char* addon_name)
 	m_pCurrentItem->Detach(addon_name);
 
 	//спрятать вещь из активного слота в инвентарь на время вызова менюшки
-	CActor *pActor = smart_cast<CActor*>(Level().CurrentEntity());
+	CActor *pActor = dynamic_cast<CActor*>(Level().CurrentEntity());
 	if(pActor && m_pCurrentItem == pActor->inventory().ActiveItem())
 	{
 			m_iCurrentActiveSlot = pActor->inventory().GetActiveSlot();
@@ -686,7 +686,7 @@ bool CUIInventoryWnd::OnKeyboard(int dik, EUIMessages keyboard_action)
 
 		CObject* O = Level().CurrentEntity();
 		if( O ){
-			IInputReceiver*		IR	= smart_cast<IInputReceiver*>( smart_cast<CGameObject*>(O) );
+			IInputReceiver*		IR	= dynamic_cast<IInputReceiver*>( dynamic_cast<CGameObject*>(O) );
 
 			if(keyboard_action==WINDOW_KEY_PRESSED)
 					IR->IR_OnKeyboardPress(key_binding[dik]);

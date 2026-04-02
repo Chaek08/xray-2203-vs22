@@ -104,7 +104,7 @@ void CUIGameLog::Update()
 	for (int i = 0; i < UILogList.GetSize(); ++i)
 	{
 		pItem = UILogList.GetItem(i);
-		CUIPdaMsgListItem	*pPItem = smart_cast<CUIPdaMsgListItem*>(pItem);
+		CUIPdaMsgListItem	*pPItem = dynamic_cast<CUIPdaMsgListItem*>(pItem);
 
 		VERIFY(pItem);
 		anm		= reinterpret_cast<CUIColorAnimatorWrapper*>(pItem->GetData());

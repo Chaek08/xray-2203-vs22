@@ -262,7 +262,7 @@ void CLevel::ProcessGameEvents		()
 				Msg("* WARNING: c_EVENT[%d] : unknown dest",dest);
 				continue;
 			}
-			CGameObject* GO = smart_cast<CGameObject*>(O);
+			CGameObject* GO = dynamic_cast<CGameObject*>(O);
 			if (!GO)		{
 				Msg("! ERROR: c_EVENT[%d] : non-game-object",dest);
 				continue;
@@ -282,7 +282,7 @@ void CLevel::ProcessGameEvents		()
 					ok			= false;
 				}
 
-				CGameObject		*GD = smart_cast<CGameObject*>(D);
+				CGameObject		*GD = dynamic_cast<CGameObject*>(D);
 				if (!GD)		{
 					Msg			("! ERROR: c_EVENT[%d] : non-game-object",id);
 					ok			= false;
@@ -420,15 +420,15 @@ void CLevel::OnRender()
 	if (bDebug)	{
 		for (u32 I=0; I < Level().Objects.o_count(); I++) {
 			CObject*	_O		= Level().Objects.o_get_by_iterator(I);
-			CSpaceRestrictor	*space_restrictor = smart_cast<CSpaceRestrictor*>	(_O);
+			CSpaceRestrictor	*space_restrictor = dynamic_cast<CSpaceRestrictor*>	(_O);
 			if (space_restrictor)
 				space_restrictor->OnRender();
-			CClimableObject		*climable		  = smart_cast<CClimableObject*>	(_O);
+			CClimableObject		*climable		  = dynamic_cast<CClimableObject*>	(_O);
 			if(climable)
 				climable->OnRender();
 			if (GameID() != GAME_SINGLE)
 			{
-				CInventoryItem* pIItem = smart_cast<CInventoryItem*>(_O);
+				CInventoryItem* pIItem = dynamic_cast<CInventoryItem*>(_O);
 				if (pIItem) pIItem->OnRender();
 			}
 		}
@@ -616,7 +616,7 @@ void __stdcall		CLevel::PhisStepsCallback	( u32 Time0, u32 Time1 )
 	for (xr_vector<CObject*>::iterator O=Level().Objects.objects.begin(); O!=Level().Objects.objects.end(); ++O) 
 	{
 		if( (*O)->CLS_ID == CLSID_OBJECT_ACTOR){
-			CActor* pActor = smart_cast<CActor*>(*O);
+			CActor* pActor = dynamic_cast<CActor*>(*O);
 			if (!pActor || pActor->Remote()) continue;
 				pActor->UpdatePosStack(Time0, Time1);
 		}

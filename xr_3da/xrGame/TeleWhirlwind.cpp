@@ -19,7 +19,7 @@ bool CTeleWhirlwind::activate(CPhysicsShellHolder *obj, float strength, float he
 {
 	if(inherited::activate(obj,strength,height,max_time_keep))
 	{
-		CTeleWhirlwindObject*o=smart_cast<CTeleWhirlwindObject*>(objects.back());
+		CTeleWhirlwindObject*o=dynamic_cast<CTeleWhirlwindObject*>(objects.back());
 		VERIFY(o);
 		o->set_throw_power(m_throw_power);
 		return true;
@@ -164,10 +164,10 @@ bool	CTeleWhirlwindObject::destroy_object		(const Fvector dir,float val)
 		
 		m_telekinesis->add_impact(dir,val*10.f);
 
-		CParticlesPlayer* PP = smart_cast<CParticlesPlayer*>(object);
+		CParticlesPlayer* PP = dynamic_cast<CParticlesPlayer*>(object);
 		if(PP)
 		{
-			u16 root=(smart_cast<CKinematics*>(object->Visual()))->LL_GetBoneRoot();
+			u16 root=(dynamic_cast<CKinematics*>(object->Visual()))->LL_GetBoneRoot();
 			PP->StartParticles(m_telekinesis->destroing_particles(),root, Fvector().set(0,1,0),m_telekinesis->OwnerObject()->ID());
 		}
 		return true;

@@ -21,18 +21,18 @@
 
 bool CAI_Stalker::useful		(const CItemManager *manager, const CGameObject *object) const
 {
-	const CExplosive	*explosive = smart_cast<const CExplosive*>(object);
+	const CExplosive	*explosive = dynamic_cast<const CExplosive*>(object);
 	if (explosive && (explosive->CurrentParentID() != 0xffff))
 		agent_manager().explosive().register_explosive(explosive,object);
 
 	if (!memory().item().useful(object))
 		return			(false);
 
-	const CInventoryItem *inventory_item = smart_cast<const CInventoryItem*>(object);
+	const CInventoryItem *inventory_item = dynamic_cast<const CInventoryItem*>(object);
 	if (!inventory_item || !inventory_item->useful_for_NPC())
 		return			(false);
 
-	const CBolt			*bolt = smart_cast<const CBolt*>(object);
+	const CBolt			*bolt = dynamic_cast<const CBolt*>(object);
 	if (bolt)
 		return			(false);
 
@@ -53,7 +53,7 @@ float CAI_Stalker::evaluate		(const CItemManager *manager, const CGameObject *ob
 
 ALife::ERelationType  CAI_Stalker::tfGetRelationType	(const CEntityAlive *tpEntityAlive) const
 {
-	const CInventoryOwner* pOtherIO = smart_cast<const CInventoryOwner*>(tpEntityAlive);
+	const CInventoryOwner* pOtherIO = dynamic_cast<const CInventoryOwner*>(tpEntityAlive);
 	
 	ALife::ERelationType relation = ALife::eRelationTypeDummy;
 		

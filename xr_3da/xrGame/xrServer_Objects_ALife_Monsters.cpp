@@ -351,7 +351,7 @@ void CSE_ALifeTraderAbstract::set_specific_character	(SPECIFIC_CHARACTER_ID new_
 	selected_char.Load(m_SpecificCharacter);
 	if(selected_char.Visual())
 	{
-		CSE_Visual* visual = smart_cast<CSE_Visual*>(base()); VERIFY(visual);
+		CSE_Visual* visual = dynamic_cast<CSE_Visual*>(base()); VERIFY(visual);
 		if(xr_strlen(selected_char.Visual())>0)
 			visual->set_visual(selected_char.Visual());
 	}
@@ -361,7 +361,7 @@ void CSE_ALifeTraderAbstract::set_specific_character	(SPECIFIC_CHARACTER_ID new_
 	if(NO_COMMUNITY_INDEX == m_community_index)
 	{
 		m_community_index = selected_char.Community().index();
-		CSE_ALifeCreatureAbstract* creature = smart_cast<CSE_ALifeCreatureAbstract*>(base());
+		CSE_ALifeCreatureAbstract* creature = dynamic_cast<CSE_ALifeCreatureAbstract*>(base());
 		if (creature)
 			creature->s_team = selected_char.Community().team();
 	}
@@ -394,7 +394,7 @@ PROFILE_ID CSE_ALifeTraderAbstract::character_profile()
 	shared_str profile_id = CCharacterInfo::IndexToId(m_iCharacterProfile, NULL, true);
 	if(!*profile_id)
 	{
-		CSE_ALifeObject* O = smart_cast<CSE_ALifeObject*>(base()); VERIFY(O);
+		CSE_ALifeObject* O = dynamic_cast<CSE_ALifeObject*>(base()); VERIFY(O);
 		Debug.fatal("wrong profile id %s, for %s at level %s", *profile_id, O->name_replace(),ai().game_graph().header().level(ai().game_graph().vertex(O->m_tGraphID)->level_id()).name());
 	}
 
@@ -942,7 +942,7 @@ void CSE_ALifeZoneVisual::FillProps(LPCSTR pref, PropItemVec& values)
 {
 	inherited1::FillProps		(pref, values);
 	inherited2::FillProps		(pref, values);
-	ISE_Abstract* abstract		= smart_cast<ISE_Abstract*>(this); VERIFY(abstract);
+	ISE_Abstract* abstract		= dynamic_cast<ISE_Abstract*>(this); VERIFY(abstract);
 	PHelper().CreateChoose(values,	PrepareKey(pref,abstract->name(),"Attack animation"),	&attack_animation, smSkeletonAnims,0,(void*)*visual_name);
 }
 //-------------------------------------------------------------------------
@@ -1650,7 +1650,7 @@ void CSE_ALifeMonsterRat::FillProps			(LPCSTR pref, PropItemVec& items)
 
 bool CSE_ALifeMonsterRat::bfUseful		()
 {
-	return						(!smart_cast<CSE_ALifeGroupAbstract*>(this) && (fHealth <= EPS_L));
+	return						(!dynamic_cast<CSE_ALifeGroupAbstract*>(this) && (fHealth <= EPS_L));
 }
 
 

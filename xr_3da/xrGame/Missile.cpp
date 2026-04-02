@@ -147,7 +147,7 @@ void CMissile::spawn_fake_missile()
 //#endif
 //	CSE_Abstract		*D	= F_entity_Create(*cNameSect());
 //	R_ASSERT			(D);
-//	CSE_ALifeDynamicObject				*l_tpALifeDynamicObject = smart_cast<CSE_ALifeDynamicObject*>(D);
+//	CSE_ALifeDynamicObject				*l_tpALifeDynamicObject = dynamic_cast<CSE_ALifeDynamicObject*>(D);
 //	R_ASSERT							(l_tpALifeDynamicObject);
 //	l_tpALifeDynamicObject->m_tNodeID	= level_vertex_id();
 //	// Fill
@@ -176,7 +176,7 @@ void CMissile::spawn_fake_missile()
 			true
 		);
 
-		CSE_ALifeObject				*alife_object = smart_cast<CSE_ALifeObject*>(object);
+		CSE_ALifeObject				*alife_object = dynamic_cast<CSE_ALifeObject*>(object);
 		VERIFY						(alife_object);
 		alife_object->m_flags.set	(CSE_ALifeObject::flCanSave,FALSE);
 
@@ -191,7 +191,7 @@ void CMissile::OnH_A_Chield()
 {
 	inherited::OnH_A_Chield();
 
-	if(!m_fake_missile && !smart_cast<CMissile*>(H_Parent())) 
+	if(!m_fake_missile && !dynamic_cast<CMissile*>(H_Parent())) 
 		spawn_fake_missile	();
 }
 
@@ -235,7 +235,7 @@ void CMissile::UpdateCL()
 			SwitchState(MS_THROW);
 		else 
 		{
-			CActor	*actor = smart_cast<CActor*>(H_Parent());
+			CActor	*actor = dynamic_cast<CActor*>(H_Parent());
 			if (actor) {				
 				m_fThrowForce		+= (m_fForceGrowSpeed * Device.dwTimeDelta) * .001f;
 				if (m_fThrowForce > m_fMaxForce)
@@ -409,12 +409,12 @@ void CMissile::UpdateXForm	()
 		if (0==H_Parent())	return;
 
 		// Get access to entity and its visual
-		CEntityAlive*		E		= smart_cast<CEntityAlive*>(H_Parent());
+		CEntityAlive*		E		= dynamic_cast<CEntityAlive*>(H_Parent());
         
 		if(!E)				return	;
 
 		VERIFY				(E);
-		CKinematics*		V		= smart_cast<CKinematics*>	(E->Visual());
+		CKinematics*		V		= dynamic_cast<CKinematics*>	(E->Visual());
 		VERIFY				(V);
 
 		// Get matrices
@@ -457,7 +457,7 @@ void CMissile::Hide()
 
 void CMissile::setup_throw_params()
 {
-	CActor* pActor = smart_cast<CActor*>(H_Parent());
+	CActor* pActor = dynamic_cast<CActor*>(H_Parent());
 	MSG1("setup throw pars");
 	if(pActor)// && pActor->HUDview())
 	{
@@ -482,7 +482,7 @@ void CMissile::setup_throw_params()
 
 void CMissile::Throw() 
 {
-	VERIFY								(smart_cast<CEntity*>(H_Parent()));
+	VERIFY								(dynamic_cast<CEntity*>(H_Parent()));
 	MSG1								("throw");
 	//Fvector								throw_point, throw_direction;
 	//entity->g_fireParams				(throw_point,throw_direction);
@@ -510,7 +510,7 @@ void CMissile::OnEvent(NET_Packet& P, u16 type)
 	switch (type) {
 		case GE_OWNERSHIP_TAKE : {
 			P.r_u16(id);
-			CMissile		*missile = smart_cast<CMissile*>(Level().Objects.net_Find(id));			
+			CMissile		*missile = dynamic_cast<CMissile*>(Level().Objects.net_Find(id));			
 			m_fake_missile	= missile;
 			missile->H_SetParent(this);
 			missile->Position().set(Position());
@@ -528,7 +528,7 @@ void CMissile::OnEvent(NET_Packet& P, u16 type)
 			{
 				MSG1("!no fake missile!");
 			}
-			CMissile		*missile = smart_cast<CMissile*>(Level().Objects.net_Find(id));
+			CMissile		*missile = dynamic_cast<CMissile*>(Level().Objects.net_Find(id));
 			if (!missile)
 			{
 				MSG1("!no found fake missile!");
@@ -622,7 +622,7 @@ void  CMissile::UpdateFireDependencies_internal	()
 		if (hud_mode && !IsHidden())
 		{
 			// 1st person view - skeletoned
-			CKinematics* V			= smart_cast<CKinematics*>(m_pHUD->Visual());
+			CKinematics* V			= dynamic_cast<CKinematics*>(m_pHUD->Visual());
 			V->CalculateBones		();
 
 			// fire point&direction
@@ -644,7 +644,7 @@ void CMissile::activate_physic_shell()
 {
 	MSG1	("start activ shell");
 
-	if (!smart_cast<CMissile*>(H_Parent())) {
+	if (!dynamic_cast<CMissile*>(H_Parent())) {
 		inherited::activate_physic_shell();
 		MSG1("go active inherited");
 		return;
@@ -667,7 +667,7 @@ void CMissile::activate_physic_shell()
 	m_pPhysicsShell->Activate	(m_throw_matrix, l_vel, a_vel);
 	//m_pPhysicsShell->AddTracedGeom();
 	m_pPhysicsShell->SetAllGeomTraced();
-	smart_cast<CKinematics*>(Visual())->CalculateBones();
+	dynamic_cast<CKinematics*>(Visual())->CalculateBones();
 	MSG1("end self activ shell");
 	//Msg("time [%f]", Device.fTimeGlobal);
 	//Msg("pos [%f],[%f],[%f]",m_throw_matrix.c.x,m_throw_matrix.c.y,m_throw_matrix.c.z);

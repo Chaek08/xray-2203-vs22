@@ -263,7 +263,7 @@ CPhysicsElement* CPHShell::get_ElementByStoreOrder(u16 num)
 
 CPHSynchronize*	CPHShell::get_ElementSync			  (u16 element)
 {
-	return smart_cast<CPHSynchronize*>(elements[element]);
+	return dynamic_cast<CPHSynchronize*>(elements[element]);
 }
 
 CPhysicsElement* CPHShell::get_Element(u16 bone_id)
@@ -313,7 +313,7 @@ u16			CPHShell::get_JointsNumber				()
 	return u16(joints.size());
 }
 void  CPHShell:: BonesCallback				(CBoneInstance* B){
-	///CPHElement*	E			= smart_cast<CPHElement*>	(static_cast<CPhysicsBase*>(B->Callback_Param));
+	///CPHElement*	E			= dynamic_cast<CPHElement*>	(static_cast<CPhysicsBase*>(B->Callback_Param));
 
 	CPHElement*	E			= cast_PHElement(B->Callback_Param);
 	E->BonesCallBack(B);
@@ -321,7 +321,7 @@ void  CPHShell:: BonesCallback				(CBoneInstance* B){
 
 
 void  CPHShell::StataticRootBonesCallBack			(CBoneInstance* B){
-	///CPHElement*	E			= smart_cast<CPHElement*>	(static_cast<CPhysicsBase*>(B->Callback_Param));
+	///CPHElement*	E			= dynamic_cast<CPHElement*>	(static_cast<CPhysicsBase*>(B->Callback_Param));
 
 	CPHElement*	E			= cast_PHElement(B->Callback_Param);
 	E->StataticRootBonesCallBack(B);
@@ -1191,7 +1191,7 @@ u16 CPHShell::BoneIdToRootGeom(u16 id)
 void CPHShell::SetJointRootGeom(CPhysicsElement* root_e,CPhysicsJoint* J)
 {
 	CPHElement* e=cast_PHElement(root_e);
-	CPHJoint*	j=smart_cast<CPHJoint*>(J);
+	CPHJoint*	j=dynamic_cast<CPHJoint*>(J);
 	R_ASSERT(e);
 	R_ASSERT(j);
 	CPHFracturesHolder* f_holder=e->FracturesHolder();
@@ -1321,7 +1321,7 @@ void CPHShell::add_Element					(CPhysicsElement* E)		  {
 void CPHShell::add_Joint					(CPhysicsJoint* J)					{
 	if(!J)return;
 	joints.push_back((CPHJoint*)J);
-	smart_cast<CPHJoint*>(J)->SetShell(this);
+	dynamic_cast<CPHJoint*>(J)->SetShell(this);
 }
 
 CODEGeom* CPHShell::get_GeomByID(u16 bone_id)

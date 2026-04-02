@@ -15,7 +15,7 @@ CALifeScheduleRegistry::~CALifeScheduleRegistry	()
 
 void CALifeScheduleRegistry::add		(CSE_ALifeDynamicObject *object)
 {
-	CSE_ALifeSchedulable		*schedulable = smart_cast<CSE_ALifeSchedulable*>(object);
+	CSE_ALifeSchedulable		*schedulable = dynamic_cast<CSE_ALifeSchedulable*>(object);
 	if (!schedulable || !schedulable->need_update(object))
 		return;
 
@@ -24,7 +24,7 @@ void CALifeScheduleRegistry::add		(CSE_ALifeDynamicObject *object)
 
 void CALifeScheduleRegistry::remove	(CSE_ALifeDynamicObject *object, bool no_assert)
 {
-	CSE_ALifeSchedulable		*schedulable = smart_cast<CSE_ALifeSchedulable*>(object);
+	CSE_ALifeSchedulable		*schedulable = dynamic_cast<CSE_ALifeSchedulable*>(object);
 	if (!schedulable)
 		return;
 

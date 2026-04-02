@@ -71,7 +71,7 @@ IC	void CSMotivationManager::add_motivation_action	(u32 motivation_id, CSMotivat
 {
 	ACTIONS::const_iterator	I = m_motivation_actions.find(motivation_id);
 	THROW					(I == m_motivation_actions.end());
-	CSMotivationAction		*action = smart_cast<CSMotivationAction*>(motivation);
+	CSMotivationAction		*action = dynamic_cast<CSMotivationAction*>(motivation);
 	if (!action)
 		return;
 

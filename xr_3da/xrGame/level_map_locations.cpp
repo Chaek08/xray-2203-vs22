@@ -109,7 +109,7 @@ SMapLocation*  CLevel::GetMapLocationByID(u16 object_id)
 
 void  CLevel::AddEntityMapLocation		(const CGameObject* object, EMapLocationFlags location_type)
 {
-	const CEntity* entity = smart_cast<const CEntity*>(object);
+	const CEntity* entity = dynamic_cast<const CEntity*>(object);
 	if(!entity) return;
 
 	SMapLocation map_location;
@@ -117,7 +117,7 @@ void  CLevel::AddEntityMapLocation		(const CGameObject* object, EMapLocationFlag
 	map_location.object_id = entity->ID();
 	map_location.icon_width = map_location.icon_height = 1;	
 
-	const CInventoryOwner* pInvOwner = smart_cast<const CInventoryOwner*>(entity);
+	const CInventoryOwner* pInvOwner = dynamic_cast<const CInventoryOwner*>(entity);
 	if(pInvOwner)
 	{
 		map_location.icon_x = pInvOwner->CharacterInfo().MapIconX();

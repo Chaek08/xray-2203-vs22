@@ -181,8 +181,8 @@ void CJumpingAbility::pointbreak()
 
 Fvector CJumpingAbility::get_target(CObject *obj)
 {
-	u16 bone_id			= smart_cast<CKinematics*>(obj->Visual())->LL_GetBoneRoot			();
-	CBoneInstance &bone = smart_cast<CKinematics*>(obj->Visual())->LL_GetBoneInstance		(bone_id);
+	u16 bone_id			= dynamic_cast<CKinematics*>(obj->Visual())->LL_GetBoneRoot			();
+	CBoneInstance &bone = dynamic_cast<CKinematics*>(obj->Visual())->LL_GetBoneInstance		(bone_id);
 
 	Fmatrix	global_transform;
 	global_transform.set	(obj->XFORM());
@@ -239,7 +239,7 @@ void CJumpingAbility::hit_test()
 
 	if (Level().ObjectSpace.RayPick(trace_from, m_object->Direction(), m_hit_trace_range, collide::rqtObject, l_rq)) {
 		if ((l_rq.O == m_target_object) && (l_rq.range < m_hit_trace_range)) {
-			m_object->HitEntityInJump(smart_cast<CEntity*>(m_target_object));
+			m_object->HitEntityInJump(dynamic_cast<CEntity*>(m_target_object));
 			m_object_hitted = true;
 		}
 	}

@@ -74,7 +74,7 @@ void CHelicopter::StartFlame ()
 
 void CHelicopter::UpdateHeliParticles	()
 {
-	CKinematics* K		= smart_cast<CKinematics*>(Visual());
+	CKinematics* K		= dynamic_cast<CKinematics*>(Visual());
 	m_particleXFORM	= K->LL_GetTransform(m_smoke_bone);
 	m_particleXFORM.mulA(XFORM());
 
@@ -265,7 +265,7 @@ void CHelicopter::DieHelicopter()
 {
 	if ( state() == CHelicopter::eDead )
 		return;
-	CKinematics* K		= smart_cast<CKinematics*>(Visual());
+	CKinematics* K		= dynamic_cast<CKinematics*>(Visual());
 	if(true /*!PPhysicsShell()*/){
 		string256						I;
 		LPCSTR bone;

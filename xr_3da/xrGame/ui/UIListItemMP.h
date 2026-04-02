@@ -10,7 +10,7 @@
 #pragma once
 #include "UIListItem.h"
 
-#define SERVER_WIDTH smart_cast<int>((1.0/5)*GetWidth())
+#define SERVER_WIDTH dynamic_cast<int>((1.0/5)*GetWidth())
 
 class CUIListItemMP : CUIListItem {
 public:

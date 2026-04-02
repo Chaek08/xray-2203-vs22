@@ -39,7 +39,7 @@ void CALifeSurgeManager::generate_anomaly_map	()
 	D_OBJECT_P_MAP::const_iterator			I = objects().objects().begin();
 	D_OBJECT_P_MAP::const_iterator			E = objects().objects().end();
 	for ( ; I != E; ++I) {
-		CSE_ALifeAnomalousZone				*anomaly = smart_cast<CSE_ALifeAnomalousZone*>((*I).second);
+		CSE_ALifeAnomalousZone				*anomaly = dynamic_cast<CSE_ALifeAnomalousZone*>((*I).second);
 		if (!anomaly || !randI(20))
 			continue;
 
@@ -57,14 +57,14 @@ void CALifeSurgeManager::kill_creatures()
 	D_OBJECT_P_MAP::const_iterator	I = objects().objects().begin();
 	D_OBJECT_P_MAP::const_iterator	E = objects().objects().end();
 	for ( ; I != E; ++I) {
-		CSE_ALifeCreatureAbstract *l_tpALifeCreatureAbstract = smart_cast<CSE_ALifeCreatureAbstract*>((*I).second);
+		CSE_ALifeCreatureAbstract *l_tpALifeCreatureAbstract = dynamic_cast<CSE_ALifeCreatureAbstract*>((*I).second);
 		if (l_tpALifeCreatureAbstract && (l_tpALifeCreatureAbstract->m_bDirectControl) && (l_tpALifeCreatureAbstract->fHealth > 0.f)) {
-			CSE_ALifeGroupAbstract *l_tpALifeGroupAbstract = smart_cast<CSE_ALifeGroupAbstract*>((*I).second);
+			CSE_ALifeGroupAbstract *l_tpALifeGroupAbstract = dynamic_cast<CSE_ALifeGroupAbstract*>((*I).second);
 			ai().ef_storage().alife().member_item() = (*I).second;
 			if (l_tpALifeGroupAbstract) {
 				GameGraph::_GRAPH_ID	l_tGraphID = l_tpALifeCreatureAbstract->m_tGraphID;
 				for (u32 i=0, N = (u32)l_tpALifeGroupAbstract->m_tpMembers.size(); i<N; ++i) {
-					CSE_ALifeCreatureAbstract	*l_tpALifeCreatureAbstract = smart_cast<CSE_ALifeCreatureAbstract*>(objects().object(l_tpALifeGroupAbstract->m_tpMembers[i]));
+					CSE_ALifeCreatureAbstract	*l_tpALifeCreatureAbstract = dynamic_cast<CSE_ALifeCreatureAbstract*>(objects().object(l_tpALifeGroupAbstract->m_tpMembers[i]));
 					R_ASSERT2					(l_tpALifeCreatureAbstract,"Group class differs from the member class!");
 					ai().ef_storage().alife().member_item() = l_tpALifeCreatureAbstract;
 					if (randF(100) > ai().ef_storage().m_pfSurgeDeathProbability->ffGetValue()) {
@@ -98,7 +98,7 @@ void CALifeSurgeManager::sell_artefacts(CSE_ALifeTrader &tTrader)
 		xr_vector<u16>::iterator	e = tTrader.children.end();
 		for ( ; i != e; ++i) {
 			// checking if the purchased item is an artefact
-			CSE_ALifeItemArtefact *l_tpALifeItemArtefact = smart_cast<CSE_ALifeItemArtefact*>(objects().object(*i));
+			CSE_ALifeItemArtefact *l_tpALifeItemArtefact = dynamic_cast<CSE_ALifeItemArtefact*>(objects().object(*i));
 			if (!l_tpALifeItemArtefact)
 				continue;
 
@@ -181,7 +181,7 @@ void CALifeSurgeManager::buy_supplies(CSE_ALifeTrader &tTrader)
 		xr_vector<u16>::iterator	e = tTrader.children.end();
 		for ( ; i != e; ++i) {
 			// checking if the purchased item is an item
-			CSE_ALifeInventoryItem	*l_tpALifeInventoryItem = smart_cast<CSE_ALifeInventoryItem*>(objects().object(*i));
+			CSE_ALifeInventoryItem	*l_tpALifeInventoryItem = dynamic_cast<CSE_ALifeInventoryItem*>(objects().object(*i));
 			R_ASSERT2				(l_tpALifeInventoryItem,"Non inventory object has a parent?!");
 			// adding item to the temporary item map
 			ITEM_COUNT_PAIR_IT		k = m_tpTraderItems.find(*l_tpALifeInventoryItem->base()->s_name);
@@ -226,9 +226,9 @@ void CALifeSurgeManager::buy_supplies(CSE_ALifeTrader &tTrader)
 				// create item object
 				CSE_Abstract			*l_tpSE_Abstract = spawn_item	(S,tTrader.o_Position,tTrader.m_tNodeID,tTrader.m_tGraphID,tTrader.ID);
 				R_ASSERT2				(l_tpSE_Abstract,"Can't create entity.");
-				CSE_ALifeDynamicObject	*i = smart_cast<CSE_ALifeDynamicObject*>(l_tpSE_Abstract);
+				CSE_ALifeDynamicObject	*i = dynamic_cast<CSE_ALifeDynamicObject*>(l_tpSE_Abstract);
 				R_ASSERT2				(i,"Non-ALife object in the 'game.spawn'");
-				CSE_ALifeItem			*l_tpALifeItem = smart_cast<CSE_ALifeItem*>(i);
+				CSE_ALifeItem			*l_tpALifeItem = dynamic_cast<CSE_ALifeItem*>(i);
 				R_ASSERT2				(l_tpALifeItem,"Non-item object in the trader supplies string!");
 				
 				// checking if there is enough money to buy an item
@@ -319,7 +319,7 @@ void CALifeSurgeManager::assign_stalker_customers()
 	D_OBJECT_P_MAP::const_iterator	I = objects().objects().begin();
 	D_OBJECT_P_MAP::const_iterator	E = objects().objects().end();
 	for ( ; I != E; ++I) {
-		CSE_ALifeHumanAbstract		*l_tpALifeHumanAbstract = smart_cast<CSE_ALifeHumanAbstract*>((*I).second);
+		CSE_ALifeHumanAbstract		*l_tpALifeHumanAbstract = dynamic_cast<CSE_ALifeHumanAbstract*>((*I).second);
 		if (l_tpALifeHumanAbstract && xr_strlen(l_tpALifeHumanAbstract->m_caKnownCustomers)) {
 //			u32						N = _GetItemCount(l_tpALifeHumanAbstract->m_caKnownCustomers);
 //			if (!N)
@@ -333,7 +333,7 @@ void CALifeSurgeManager::assign_stalker_customers()
 //				D_OBJECT_P_MAP::const_iterator	II = objects().objects().begin();
 //				D_OBJECT_P_MAP::const_iterator	EE = objects().objects().end();
 //				for ( ; II != EE; ++II) {
-//					CSE_ALifeTraderAbstract *l_tpTraderAbstract = smart_cast<CSE_ALifeTraderAbstract*>((*II).second);
+//					CSE_ALifeTraderAbstract *l_tpTraderAbstract = dynamic_cast<CSE_ALifeTraderAbstract*>((*II).second);
 //					if (l_tpTraderAbstract) {
 //						if (!xr_strcmp((*II).second->name_replace(),S)) {
 //							l_tpALifeHumanAbstract->m_tpKnownCustomers.push_back((*II).second->ID);
@@ -456,7 +456,7 @@ void CALifeSurgeManager::spawn_new_spawns			()
 	xr_vector<ALife::_SPAWN_ID>::const_iterator	I = m_temp_spawns.begin();
 	xr_vector<ALife::_SPAWN_ID>::const_iterator	E = m_temp_spawns.end();
 	for ( ; I != E; ++I) {
-		CSE_ALifeDynamicObject	*object, *spawn = smart_cast<CSE_ALifeDynamicObject*>(&spawns().spawns().vertex(*I)->data()->object());
+		CSE_ALifeDynamicObject	*object, *spawn = dynamic_cast<CSE_ALifeDynamicObject*>(&spawns().spawns().vertex(*I)->data()->object());
 		VERIFY					(spawn);
 //		Msg						("LSS : SURGE : SPAWN : [%s],[%s], level %s",*spawn->s_name,spawn->name_replace(),*ai().game_graph().header().level(ai().game_graph().vertex(spawn->m_tGraphID)->level_id()).name());
 		create					(object,spawn,*I);

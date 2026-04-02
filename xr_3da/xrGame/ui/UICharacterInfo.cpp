@@ -263,7 +263,7 @@ void CUICharacterInfo::InitCharacter(CInventoryOwner* pOwner)
 	pInvOwner = pOwner;
 	InitCharacter(&pInvOwner->CharacterInfo());
 
-	CActor *m_pActor = smart_cast<CActor *>(pInvOwner);
+	CActor *m_pActor = dynamic_cast<CActor *>(pInvOwner);
 	if (m_pActor)
 	{
 		UIRelationCaption.Show(false);
@@ -271,7 +271,7 @@ void CUICharacterInfo::InitCharacter(CInventoryOwner* pOwner)
 	}
 	else
 	{
-		CActor *pActor = smart_cast<CActor*>(Level().CurrentEntity());
+		CActor *pActor = dynamic_cast<CActor*>(Level().CurrentEntity());
 		if(pActor)
 			SetRelation(RELATION_REGISTRY().GetRelationType(pInvOwner, static_cast<CInventoryOwner*>(pActor)),
 						RELATION_REGISTRY().GetAttitude(pInvOwner, static_cast<CInventoryOwner*>(pActor)));
@@ -331,11 +331,11 @@ void CUICharacterInfo::ResetAllStrings()
 void CUICharacterInfo::Update()
 {
 	inherited::Update();
-	if( pInvOwner&&(smart_cast<CObject*>(pInvOwner))->getDestroy() )
+	if( pInvOwner&&(dynamic_cast<CObject*>(pInvOwner))->getDestroy() )
 		pInvOwner = NULL;
 
 	if(pInvOwner&&Device.dwFrame%30){
-		CActor *m_pActor = smart_cast<CActor *>(pInvOwner);
+		CActor *m_pActor = dynamic_cast<CActor *>(pInvOwner);
 		if (m_pActor)
 		{
 			UIRelationCaption.Show(false);
@@ -343,7 +343,7 @@ void CUICharacterInfo::Update()
 		}
 		else
 		{
-			CActor *pActor = smart_cast<CActor*>(Level().CurrentEntity());
+			CActor *pActor = dynamic_cast<CActor*>(Level().CurrentEntity());
 			if(pActor)
 				SetRelation(RELATION_REGISTRY().GetRelationType(pInvOwner, static_cast<CInventoryOwner*>(pActor)),
 							RELATION_REGISTRY().GetAttitude(pInvOwner, static_cast<CInventoryOwner*>(pActor)));

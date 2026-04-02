@@ -82,7 +82,7 @@ void CUIActorInfoWnd::Show(bool status)
 	inherited::Show(status);
 	if (!status) return;
 	
-	CActor *pActor = smart_cast<CActor*>(Level().CurrentEntity());
+	CActor *pActor = dynamic_cast<CActor*>(Level().CurrentEntity());
 	if (pActor)
 	{
 		UICharacterInfo.InitCharacter(&pActor->CharacterInfo());

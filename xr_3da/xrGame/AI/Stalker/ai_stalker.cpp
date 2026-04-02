@@ -198,7 +198,7 @@ void CAI_Stalker::Load				(LPCSTR section)
 BOOL CAI_Stalker::net_Spawn			(CSE_Abstract* DC)
 {
 	CSE_Abstract					*e	= (CSE_Abstract*)(DC);
-	CSE_ALifeHumanStalker			*tpHuman = smart_cast<CSE_ALifeHumanStalker*>(e);
+	CSE_ALifeHumanStalker			*tpHuman = dynamic_cast<CSE_ALifeHumanStalker*>(e);
 	R_ASSERT						(tpHuman);
 	m_demo_mode						= !!tpHuman->m_demo_mode;
 	m_group_behaviour				= !!tpHuman->m_flags.test(CSE_ALifeObject::flGroupBehaviour);
@@ -249,7 +249,7 @@ BOOL CAI_Stalker::net_Spawn			(CSE_Abstract* DC)
 		sound().set_sound_mask(u32(eStalkerSoundMaskDie));
 
 	//загрузить иммунитеты из модельки сталкера
-	CKinematics* pKinematics = smart_cast<CKinematics*>(Visual()); VERIFY(pKinematics);
+	CKinematics* pKinematics = dynamic_cast<CKinematics*>(Visual()); VERIFY(pKinematics);
 	CInifile* ini = pKinematics->LL_UserData();
 	if(ini)
 	{
@@ -503,7 +503,7 @@ void CAI_Stalker ::PHHit				(float P,Fvector &dir, CObject *who,s16 element,Fvec
 
 CPHDestroyable*		CAI_Stalker::		ph_destroyable	()						
 {
-	return smart_cast<CPHDestroyable*>(character_physics_support());
+	return dynamic_cast<CPHDestroyable*>(character_physics_support());
 }
 
 #include "../../enemy_manager.h"
@@ -596,7 +596,7 @@ void CAI_Stalker::shedule_Update		( u32 DT )
 float CAI_Stalker::Radius() const
 { 
 	float R		= inherited::Radius();
-	CWeapon* W	= smart_cast<CWeapon*>(inventory().ActiveItem());
+	CWeapon* W	= dynamic_cast<CWeapon*>(inventory().ActiveItem());
 	if (W) R	+= W->Radius();
 	return R;
 }
@@ -634,7 +634,7 @@ void CAI_Stalker::OnRender			()
 	if (!psAI_Flags.is(aiVision))
 		return;
 
-	if (!smart_cast<CGameObject*>(Level().CurrentEntity()))
+	if (!dynamic_cast<CGameObject*>(Level().CurrentEntity()))
 		return;
 
 	Fvector						shift;
@@ -656,7 +656,7 @@ void CAI_Stalker::OnRender			()
 	float						x = (1.f + v_res.x)/2.f * (Device.dwWidth);
 	float						y = (1.f - v_res.y)/2.f * (Device.dwHeight);
 
-	CNotYetVisibleObject		*object = memory().visual().not_yet_visible_object(smart_cast<CGameObject*>(Level().CurrentEntity()));
+	CNotYetVisibleObject		*object = memory().visual().not_yet_visible_object(dynamic_cast<CGameObject*>(Level().CurrentEntity()));
 	string64					out_text;
 	sprintf						(out_text,"%.2f",object ? object->m_value : 0.f);
 

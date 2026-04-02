@@ -127,7 +127,7 @@ void CChimera::reinit()
 	movement().detail().add_velocity(MonsterMovement::eChimeraVelocityParameterJumpTwo,			CDetailPathManager::STravelParams(m_fsVelocityJumpTwo.velocity.linear,	m_fsVelocityJumpTwo.velocity.angular_path, m_fsVelocityJumpTwo.velocity.angular_real));
 
 	MotionID			def1, def2, def3;
-	CSkeletonAnimated	*pSkel = smart_cast<CSkeletonAnimated*>(Visual());
+	CSkeletonAnimated	*pSkel = dynamic_cast<CSkeletonAnimated*>(Visual());
 
 	def1				= pSkel->ID_Cycle_Safe("jump_attack_0");	VERIFY(def1);
 	def2				= pSkel->ID_Cycle_Safe("jump_attack_1");	VERIFY(def2);

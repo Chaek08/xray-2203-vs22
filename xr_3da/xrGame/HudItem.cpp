@@ -50,10 +50,10 @@ CHudItem::~CHudItem(void)
 
 DLL_Pure *CHudItem::_construct	()
 {
-	m_object			= smart_cast<CPhysicItem*>(this);
+	m_object			= dynamic_cast<CPhysicItem*>(this);
 	VERIFY				(m_object);
 
-	m_item				= smart_cast<CInventoryItem*>(this);
+	m_item				= dynamic_cast<CInventoryItem*>(this);
 	VERIFY				(m_item);
 
 	return				(m_object);
@@ -188,7 +188,7 @@ void CHudItem::UpdateHudPosition	()
 
 		Fmatrix							trans;
 
-		CActor* pActor = smart_cast<CActor*>(object().H_Parent());
+		CActor* pActor = dynamic_cast<CActor*>(object().H_Parent());
 		if(pActor){
 			pActor->EffectorManager().affected_Matrix	(trans);
 			UpdateHudInertion							(trans, pActor->cam_FirstEye()->yaw, pActor->cam_FirstEye()->pitch);
@@ -273,7 +273,7 @@ void CHudItem::OnH_A_Chield		()
 	hud_mode = FALSE;
 	
 	if (m_pHUD) {
-		if(Level().CurrentEntity() == object().H_Parent() && smart_cast<CActor*>(object().H_Parent()))
+		if(Level().CurrentEntity() == object().H_Parent() && dynamic_cast<CActor*>(object().H_Parent()))
 			m_pHUD->SetCurrentEntityHud(true);
 		else
 			m_pHUD->SetCurrentEntityHud(false);
@@ -282,7 +282,7 @@ void CHudItem::OnH_A_Chield		()
 
 void CHudItem::OnH_B_Chield		()
 {
-	if (item().m_pInventory && item().m_pInventory->ActiveItem() == smart_cast<PIItem>(this))
+	if (item().m_pInventory && item().m_pInventory->ActiveItem() == dynamic_cast<PIItem>(this))
 		OnActiveItem ();
 	else
 		OnHiddenItem ();

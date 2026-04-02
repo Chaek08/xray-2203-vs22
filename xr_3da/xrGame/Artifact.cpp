@@ -125,7 +125,7 @@ BOOL CArtefact::net_Spawn(CSE_Abstract* DC)
 	/////////////////////////////////////////
 	m_CarringBoneID = u16(-1);
 	/////////////////////////////////////////
-	CSkeletonAnimated	*K=smart_cast<CSkeletonAnimated*>(Visual());
+	CSkeletonAnimated	*K=dynamic_cast<CSkeletonAnimated*>(Visual());
 	if(K)K->PlayCycle("idle");
 	
 	
@@ -160,7 +160,7 @@ void CArtefact::OnH_A_Chield()
 	}
 	else
 	{
-		CKinematics* K	= smart_cast<CKinematics*>(H_Parent()->Visual());
+		CKinematics* K	= dynamic_cast<CKinematics*>(H_Parent()->Visual());
 		if (K)
 			m_CarringBoneID			= K->LL_BoneID("bip01_head");
 		else
@@ -186,7 +186,7 @@ void CArtefact::UpdateCL()
 	Fvector vel = {0, 0, 0};
 	if (H_Parent()) 
 	{
-		CPhysicsShellHolder* pPhysicsShellHolder = smart_cast<CPhysicsShellHolder*>(H_Parent());
+		CPhysicsShellHolder* pPhysicsShellHolder = dynamic_cast<CPhysicsShellHolder*>(H_Parent());
 		if(pPhysicsShellHolder) pPhysicsShellHolder->PHGetLinearVell(vel);
 	}
 
@@ -386,7 +386,7 @@ void SArtefactActivation::ChangeEffects()
 												iFloor(state_def.m_time*1000) );
 	};
 	if(state_def.m_animation.size()){
-		CSkeletonAnimated	*K=smart_cast<CSkeletonAnimated*>(m_af->Visual());
+		CSkeletonAnimated	*K=dynamic_cast<CSkeletonAnimated*>(m_af->Visual());
 		if(K)K->PlayCycle(*state_def.m_animation);
 	}
 
@@ -417,7 +417,7 @@ void SArtefactActivation::SpawnAnomaly()
 															0xffff,
 															true
 		);
-		CSE_ALifeAnomalousZone*		AlifeZone = smart_cast<CSE_ALifeAnomalousZone*>(object);
+		CSE_ALifeAnomalousZone*		AlifeZone = dynamic_cast<CSE_ALifeAnomalousZone*>(object);
 		VERIFY(AlifeZone);
 		CShapeData::shape_def		_shape;
 		_shape.data.sphere.P.set	(0.0f,0.0f,0.0f);

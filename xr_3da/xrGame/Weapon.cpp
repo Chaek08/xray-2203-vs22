@@ -98,11 +98,11 @@ void CWeapon::UpdateXForm	()
 		if (0==H_Parent())	return;
 
 		// Get access to entity and its visual
-		CEntityAlive*	E		= smart_cast<CEntityAlive*>(H_Parent());
+		CEntityAlive*	E		= dynamic_cast<CEntityAlive*>(H_Parent());
 		
 		if(!E) return;
 		R_ASSERT		(E);
-		CKinematics*	V		= smart_cast<CKinematics*>	(E->Visual());
+		CKinematics*	V		= dynamic_cast<CKinematics*>	(E->Visual());
 		VERIFY			(V);
 
 		// Get matrices
@@ -151,7 +151,7 @@ void CWeapon::UpdateFireDependencies_internal()
 		if (hud_mode && (0!=H_Parent()))// && Local())
 		{
 			// 1st person view - skeletoned
-			CKinematics* V			= smart_cast<CKinematics*>(m_pHUD->Visual());
+			CKinematics* V			= dynamic_cast<CKinematics*>(m_pHUD->Visual());
 			V->CalculateBones		();
 
 			// fire point&direction
@@ -388,7 +388,7 @@ BOOL CWeapon::net_Spawn		(CSE_Abstract* DC)
 {
 	BOOL bResult					= inherited::net_Spawn(DC);
 	CSE_Abstract					*e	= (CSE_Abstract*)(DC);
-	CSE_ALifeItemWeapon			    *E	= smart_cast<CSE_ALifeItemWeapon*>(e);
+	CSE_ALifeItemWeapon			    *E	= dynamic_cast<CSE_ALifeItemWeapon*>(e);
 
 	//iAmmoCurrent					= E->a_current;
 	iAmmoElapsed					= E->a_elapsed;
@@ -737,7 +737,7 @@ void CWeapon::SpawnAmmo(u32 boxCurr, LPCSTR ammoSect, u32 ParentID)
 
 	// Create
 	CSE_Abstract		*D		= F_entity_Create(ammoSect);
-	CSE_ALifeItemAmmo	*l_pA	= smart_cast<CSE_ALifeItemAmmo*>(D);
+	CSE_ALifeItemAmmo	*l_pA	= dynamic_cast<CSE_ALifeItemAmmo*>(D);
 	R_ASSERT(l_pA);
 	// Fill
 	l_pA->m_boxSize = (u16)pSettings->r_s32(ammoSect, "box_size");
@@ -789,7 +789,7 @@ int CWeapon::GetAmmoCurrent() const
 
 		for(TIItemContainer::iterator l_it = m_pInventory->m_belt.begin(); m_pInventory->m_belt.end() != l_it; ++l_it) 
 		{
-			CWeaponAmmo *l_pAmmo = smart_cast<CWeaponAmmo*>(*l_it);
+			CWeaponAmmo *l_pAmmo = dynamic_cast<CWeaponAmmo*>(*l_it);
 
 			if(l_pAmmo && !xr_strcmp(l_pAmmo->cNameSect(), l_ammoType)) 
 			{
@@ -799,7 +799,7 @@ int CWeapon::GetAmmoCurrent() const
 
 		for(TIItemContainer::iterator l_it = m_pInventory->m_ruck.begin(); m_pInventory->m_ruck.end() != l_it; ++l_it) 
 		{
-			CWeaponAmmo *l_pAmmo = smart_cast<CWeaponAmmo*>(*l_it);
+			CWeaponAmmo *l_pAmmo = dynamic_cast<CWeaponAmmo*>(*l_it);
 			if(l_pAmmo && !xr_strcmp(l_pAmmo->cNameSect(), l_ammoType)) 
 			{
 				iAmmoCurrent = iAmmoCurrent + l_pAmmo->m_boxCurr;
@@ -828,7 +828,7 @@ BOOL CWeapon::CheckForMisfire	()
 		bMisfire = true;
 		SwitchState(eMisfire);
 		
-		if(smart_cast<CActor*>(this->H_Parent()))
+		if(dynamic_cast<CActor*>(this->H_Parent()))
 			HUD().outMessage(0xffffffff,this->cName(), "gun jammed");
 		
 		return TRUE;
@@ -894,9 +894,9 @@ bool CWeapon::SilencerAttachable()
 
 void CWeapon::UpdateAddonsVisibility()
 {
-	CKinematics* pHudVisual = smart_cast<CKinematics*>(m_pHUD->Visual());// R_ASSERT(pHudVisual);
+	CKinematics* pHudVisual = dynamic_cast<CKinematics*>(m_pHUD->Visual());// R_ASSERT(pHudVisual);
 	if (H_Parent() != Level().CurrentEntity()) pHudVisual = NULL;
-	CKinematics* pWeaponVisual = smart_cast<CKinematics*>(Visual()); R_ASSERT(pWeaponVisual);
+	CKinematics* pWeaponVisual = dynamic_cast<CKinematics*>(Visual()); R_ASSERT(pWeaponVisual);
 	
 	if(ScopeAttachable())
 	{
@@ -1126,7 +1126,7 @@ CInventoryItem *CWeapon::can_kill	(CInventory *inventory) const
 	TIItemContainer::iterator I = inventory->m_all.begin();
 	TIItemContainer::iterator E = inventory->m_all.end();
 	for ( ; I != E; ++I) {
-		CInventoryItem	*inventory_item = smart_cast<CInventoryItem*>(*I);
+		CInventoryItem	*inventory_item = dynamic_cast<CInventoryItem*>(*I);
 		if (!inventory_item)
 			continue;
 		xr_vector<shared_str>::const_iterator	i = std::find(m_ammoTypes.begin(),m_ammoTypes.end(),inventory_item->object().cNameSect());
@@ -1145,7 +1145,7 @@ const CInventoryItem *CWeapon::can_kill	(const xr_vector<const CGameObject*> &it
 	xr_vector<const CGameObject*>::const_iterator I = items.begin();
 	xr_vector<const CGameObject*>::const_iterator E = items.end();
 	for ( ; I != E; ++I) {
-		const CInventoryItem	*inventory_item = smart_cast<const CInventoryItem*>(*I);
+		const CInventoryItem	*inventory_item = dynamic_cast<const CInventoryItem*>(*I);
 		if (!inventory_item)
 			continue;
 		xr_vector<shared_str>::const_iterator	i = std::find(m_ammoTypes.begin(),m_ammoTypes.end(),inventory_item->object().cNameSect());
@@ -1168,7 +1168,7 @@ bool CWeapon::ready_to_kill	() const
 
 void CWeapon::UpdateHudAdditonal		(Fmatrix& trans)
 {
-	CActor* pActor = smart_cast<CActor*>(H_Parent());
+	CActor* pActor = dynamic_cast<CActor*>(H_Parent());
 	if(!pActor) return;
 
 	if(		(pActor->IsZoomAimingMode() && m_fZoomRotationFactor<=1.f) ||

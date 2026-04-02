@@ -258,7 +258,7 @@ void CActor::Load	(LPCSTR section )
 	CInventoryOwner::Load	(section);
 
 	//////////////////////////////////////////////////////////////////////////
-	ISpatial*		self			=	smart_cast<ISpatial*> (this);
+	ISpatial*		self			=	dynamic_cast<ISpatial*> (this);
 	if (self)	{
 		self->spatial.type	|=	STYPE_VISIBLEFORAI;
 		self->spatial.type	&= ~STYPE_REACTTOSOUND;
@@ -467,7 +467,7 @@ void CActor::Hit		(float iLost, Fvector &dir, CObject* who, s16 element,Fvector 
 				Level().MapManager().RemoveMapLocation(ENEMY_HIT_SPOT, who->ID());
 			}
 			if (who && who != this){
-				CEntityAlive* pEntityAlive = smart_cast<CEntityAlive*>(who);
+				CEntityAlive* pEntityAlive = dynamic_cast<CEntityAlive*>(who);
 				if (pEntityAlive)
 					Level().MapManager().AddMapLocation(ENEMY_HIT_SPOT, who->ID());
 			}
@@ -590,7 +590,7 @@ void CActor::HitSignal(float perc, Fvector& vLocalDir, CObject* who, s16 element
 
 		float	yaw, pitch;
 		D.getHP(yaw,pitch);
-		CSkeletonAnimated *tpKinematics = smart_cast<CSkeletonAnimated*>(Visual());
+		CSkeletonAnimated *tpKinematics = dynamic_cast<CSkeletonAnimated*>(Visual());
 		VERIFY(tpKinematics);
 #pragma todo("Dima to Dima : forward-back bone impulse direction has been determined incorrectly!")
 		MotionID motion_ID = m_anims->m_normal.m_damage[iFloor(tpKinematics->LL_GetBoneInstance(element).get_param(1) + (angle_difference(r_model_yaw + r_model_yaw_delta,yaw) <= PI_DIV_2 ? 0 : 1))];
@@ -615,7 +615,7 @@ void CActor::Die	(CObject* who)
 		}
 		else
 		{
-			CCustomOutfit *pOutfit = smart_cast<CCustomOutfit *> ((*I).m_pIItem);
+			CCustomOutfit *pOutfit = dynamic_cast<CCustomOutfit *> ((*I).m_pIItem);
 			if (pOutfit) continue;
 
 			if((*I).m_pIItem) inventory().Ruck((*I).m_pIItem);
@@ -650,7 +650,7 @@ void CActor::Die	(CObject* who)
 				continue;
 			};
 
-			CCustomOutfit *pOutfit = smart_cast<CCustomOutfit *> (*l_it);
+			CCustomOutfit *pOutfit = dynamic_cast<CCustomOutfit *> (*l_it);
 			if (pOutfit) continue;
 
 			//пока у нас нельзя обыскивать трупы, удаляем все объекты из инвентаря
@@ -772,8 +772,8 @@ void CActor::UpdateCL	()
 			// red for enemy
 			if (GameID() == GAME_DEATHMATCH)								_C = color_xrgb(255,127,127);	// red
 			else	{
-				CEntity*	_me			= smart_cast<CEntity*> (this);
-				CEntity*	_viewer		= smart_cast<CEntity*> (Level().CurrentEntity());
+				CEntity*	_me			= dynamic_cast<CEntity*> (this);
+				CEntity*	_viewer		= dynamic_cast<CEntity*> (Level().CurrentEntity());
 				if (_me && _viewer && _me->g_Team()!=_viewer->g_Team())		_C = color_xrgb(255,127,127);	// red
 			};
 		}
@@ -810,7 +810,7 @@ void CActor::UpdateCL	()
 	PickupModeUpdate_COD();
 	//-------------------------------------------------------------------
 //*
-	CWeapon* pWeapon = smart_cast<CWeapon*>(inventory().ActiveItem());	
+	CWeapon* pWeapon = dynamic_cast<CWeapon*>(inventory().ActiveItem());	
 	m_bZoomAimingMode = false;
 
 	//обновить положение камеры и FOV 
@@ -830,7 +830,7 @@ void CActor::UpdateCL	()
 		{
 			float full_fire_disp = pWeapon->GetFireDispersion(false);
 
-			CEffectorZoomInertion* S = smart_cast<CEffectorZoomInertion*>	(EffectorManager().GetEffector(eCEZoom));
+			CEffectorZoomInertion* S = dynamic_cast<CEffectorZoomInertion*>	(EffectorManager().GetEffector(eCEZoom));
 			if(S) S->SetParams(full_fire_disp);
 
 			//помнить, что если m_bZoomAimingMode = true
@@ -840,7 +840,7 @@ void CActor::UpdateCL	()
 		}
 
 		//if(eacFirstEye == cam_active)
-//		if(this == smart_cast<CActor*>(Level().CurrentEntity()))
+//		if(this == dynamic_cast<CActor*>(Level().CurrentEntity()))
 		if(Level().CurrentEntity() && this->ID()==Level().CurrentEntity()->ID() )
 		{
 			float fire_disp = pWeapon->GetFireDispersion(false);
@@ -850,7 +850,7 @@ void CActor::UpdateCL	()
 	}
 	else
 	{
-//		if(this == smart_cast<CActor*>(Level().CurrentEntity()))
+//		if(this == dynamic_cast<CActor*>(Level().CurrentEntity()))
 		if(Level().CurrentEntity() && this->ID()==Level().CurrentEntity()->ID() )
 		{
 			HUD().SetCrosshairDisp(0.f);
@@ -993,7 +993,7 @@ void CActor::shedule_Update	(u32 DT)
 										setVisible				(!HUDview	());
 
 	//установить режим показа HUD для текущего активного слота
-	CHudItem* pHudItem = smart_cast<CHudItem*>(inventory().ActiveItem());	
+	CHudItem* pHudItem = dynamic_cast<CHudItem*>(inventory().ActiveItem());	
 	if(pHudItem && !pHudItem->object().getDestroy()) 
 		pHudItem->SetHUDmode(HUDview());
 
@@ -1002,16 +1002,16 @@ void CActor::shedule_Update	(u32 DT)
 	//что актер видит перед собой
 	collide::rq_result& RQ = HUD().GetCurrentRayQuery();
 	
-	m_pObjectWeLookingAt = smart_cast<CGameObject*>(RQ.O);
+	m_pObjectWeLookingAt = dynamic_cast<CGameObject*>(RQ.O);
 
 	if(RQ.O &&  RQ.range<inventory().GetTakeDist()) 
 	{
-		CGameObject						*game_object = smart_cast<CGameObject*>(RQ.O);
-		m_pUsableObject					= smart_cast<CUsableScriptObject*>(game_object);
-		inventory().m_pTarget			= smart_cast<PIItem>(game_object);
-		m_pPersonWeLookingAt			= smart_cast<CInventoryOwner*>(game_object);
-		m_pVehicleWeLookingAt			= smart_cast<CHolderCustom*>(game_object);
-		CEntityAlive* pEntityAlive		= smart_cast<CEntityAlive*>(game_object);
+		CGameObject						*game_object = dynamic_cast<CGameObject*>(RQ.O);
+		m_pUsableObject					= dynamic_cast<CUsableScriptObject*>(game_object);
+		inventory().m_pTarget			= dynamic_cast<PIItem>(game_object);
+		m_pPersonWeLookingAt			= dynamic_cast<CInventoryOwner*>(game_object);
+		m_pVehicleWeLookingAt			= dynamic_cast<CHolderCustom*>(game_object);
+		CEntityAlive* pEntityAlive		= dynamic_cast<CEntityAlive*>(game_object);
 		
 		if (GameID() == GAME_SINGLE )
 		{
@@ -1102,7 +1102,7 @@ void CActor::OnHUDDraw	(CCustomHUD* /**hud/**/)
 {
 	//CWeapon* W			= Weapons->ActiveWeapon();
 	//if (W)				W->renderable_Render		();
-	//CWeapon *W = smart_cast<CWeapon*>(inventory().ActiveItem()); if(W) W->renderable_Render();
+	//CWeapon *W = dynamic_cast<CWeapon*>(inventory().ActiveItem()); if(W) W->renderable_Render();
 
 	if(inventory().ActiveItem()&&!m_holder) {
 		inventory().ActiveItem()->renderable_Render();
@@ -1148,9 +1148,9 @@ void CActor::RenderIndicator			(Fvector dpos, float r1, float r2, ref_shader Ind
 	FVF::LIT* pv					= pv_start;
 	// base rect
 
-	CBoneInstance& BI = smart_cast<CKinematics*>(Visual())->LL_GetBoneInstance(u16(m_head));
+	CBoneInstance& BI = dynamic_cast<CKinematics*>(Visual())->LL_GetBoneInstance(u16(m_head));
 	Fmatrix M;
-	smart_cast<CKinematics*>(Visual())->CalculateBones	();
+	dynamic_cast<CKinematics*>(Visual())->CalculateBones	();
 	M.mul						(XFORM(),BI.mTransform);
 
 	Fvector pos = M.c; pos.add(dpos);
@@ -1203,7 +1203,7 @@ ENGINE_API extern float		psHUD_FOV;
 float CActor::Radius()const
 { 
 	float R		= inherited::Radius();
-	CWeapon* W	= smart_cast<CWeapon*>(inventory().ActiveItem());
+	CWeapon* W	= dynamic_cast<CWeapon*>(inventory().ActiveItem());
 	if (W) R	+= W->Radius();
 	//	if (HUDview()) R *= 1.f/psHUD_FOV;
 	return R;
@@ -1253,7 +1253,7 @@ void CActor::OnItemDrop			(CInventoryItem *inventory_item)
 	CInventoryOwner::OnItemDrop(inventory_item);
 	if (OnClient()) return;
 
-	CArtefact* artefact = smart_cast<CArtefact*>(inventory_item);
+	CArtefact* artefact = dynamic_cast<CArtefact*>(inventory_item);
 	if(artefact && artefact->m_eItemPlace == eItemPlaceBelt)
 		MoveArtefactBelt(artefact, false);
 /*
@@ -1290,7 +1290,7 @@ void CActor::OnItemRuck		(CInventoryItem *inventory_item, EItemPlace previous_pl
 {
 	CInventoryOwner::OnItemRuck(inventory_item, previous_place);
 
-	CArtefact* artefact = smart_cast<CArtefact*>(inventory_item);
+	CArtefact* artefact = dynamic_cast<CArtefact*>(inventory_item);
 	if(artefact && previous_place == eItemPlaceBelt)
 		MoveArtefactBelt(artefact, false);
 }
@@ -1298,7 +1298,7 @@ void CActor::OnItemBelt		(CInventoryItem *inventory_item, EItemPlace previous_pl
 {
 	CInventoryOwner::OnItemBelt(inventory_item, previous_place);
 
-	CArtefact* artefact = smart_cast<CArtefact*>(inventory_item);
+	CArtefact* artefact = dynamic_cast<CArtefact*>(inventory_item);
 	if(artefact)
 		MoveArtefactBelt(artefact, true);
 }
@@ -1346,7 +1346,7 @@ void CActor::UpdateArtefactsOnBelt()
 	for(TIItemContainer::iterator it = inventory().m_belt.begin(); 
 		inventory().m_belt.end() != it; ++it) 
 	{
-		CArtefact*	artefact = smart_cast<CArtefact*>(*it);
+		CArtefact*	artefact = dynamic_cast<CArtefact*>(*it);
 		if(artefact && artefact->m_bActorPropertiesEnabled)
 		{
 			conditions().ChangeBleeding			(artefact->m_fBleedingRestoreSpeed*f_update_time);
@@ -1363,7 +1363,7 @@ float	CActor::HitArtefactsOnBelt		(float hit_power, ALife::EHitType hit_type)
 	for(TIItemContainer::iterator it = inventory().m_belt.begin(); 
 		inventory().m_belt.end() != it; ++it) 
 	{
-		CArtefact*	artefact = smart_cast<CArtefact*>(*it);
+		CArtefact*	artefact = dynamic_cast<CArtefact*>(*it);
 		if(artefact && artefact->m_bActorPropertiesEnabled)
 			hit_power *= artefact->m_ArtefactHitImmunities.AffectHit(hit_power, hit_type);
 	}
@@ -1378,10 +1378,10 @@ void	CActor::SpawnAmmoForWeapon	(CInventoryItem *pIItem)
 {
 	if (!pIItem) return;
 
-	CWeaponMagazined* pWM = smart_cast<CWeaponMagazined*> (pIItem);
+	CWeaponMagazined* pWM = dynamic_cast<CWeaponMagazined*> (pIItem);
 	if (!pWM || !pWM->AutoSpawnAmmo()) return;
 
-	CWeaponAmmo* pAmmo = smart_cast<CWeaponAmmo*>(inventory().GetAny( *(pWM->m_ammoTypes[0]) ));
+	CWeaponAmmo* pAmmo = dynamic_cast<CWeaponAmmo*>(inventory().GetAny( *(pWM->m_ammoTypes[0]) ));
 	if (!pAmmo) 
 		pWM->SpawnAmmo(0xffffffff, NULL, ID());
 };
@@ -1390,10 +1390,10 @@ void	CActor::RemoveAmmoForWeapon	(CInventoryItem *pIItem)
 {
 	if (!pIItem) return;
 
-	CWeaponMagazined* pWM = smart_cast<CWeaponMagazined*> (pIItem);
+	CWeaponMagazined* pWM = dynamic_cast<CWeaponMagazined*> (pIItem);
 	if (!pWM || !pWM->AutoSpawnAmmo()) return;
 
-	CWeaponAmmo* pAmmo = smart_cast<CWeaponAmmo*>(inventory().GetAny(*(pWM->m_ammoTypes[0]) ));
+	CWeaponAmmo* pAmmo = dynamic_cast<CWeaponAmmo*>(inventory().GetAny(*(pWM->m_ammoTypes[0]) ));
 	if (!pAmmo) return;
 	//--- мы нашли патроны к текущему оружию	
 	/*
@@ -1404,7 +1404,7 @@ void	CActor::RemoveAmmoForWeapon	(CInventoryItem *pIItem)
 	for ( ; I != E; ++I)
 	{
 		CInventoryItem* pItem = (*I);//->m_pIItem;
-		CWeaponMagazined* pWM = smart_cast<CWeaponMagazined*> (pItem);
+		CWeaponMagazined* pWM = dynamic_cast<CWeaponMagazined*> (pItem);
 		if (!pWM || !pWM->AutoSpawnAmmo()) continue;
 		if (pWM == pIItem) continue;
 		if (pWM->m_ammoTypes[0] != pAmmo->CInventoryItem::object().cNameSect()) continue;
@@ -1479,7 +1479,7 @@ void CActor::UpdateMotionIcon(u32 mstate_rl)
 
 CPHDestroyable*	CActor::ph_destroyable	()
 {
-	return smart_cast<CPHDestroyable*>(character_physics_support());
+	return dynamic_cast<CPHDestroyable*>(character_physics_support());
 }
 
 CEntityCondition *CActor::create_entity_condition	()

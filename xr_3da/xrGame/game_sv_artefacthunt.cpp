@@ -157,7 +157,7 @@ void	game_sv_ArtefactHunt::OnPlayerReady			(ClientID id)
 			xrClientData* xrCData	=	m_server->ID_to_client(id);
 			if (!xrCData || !xrCData->owner) return;
 			CSE_Abstract* pOwner	= xrCData->owner;
-			CSE_Spectator* pS		= smart_cast<CSE_Spectator*>(pOwner);
+			CSE_Spectator* pS		= dynamic_cast<CSE_Spectator*>(pOwner);
 
 			if (pS && m_iReinforcementTime != 0) 
 			{
@@ -170,7 +170,7 @@ void	game_sv_ArtefactHunt::OnPlayerReady			(ClientID id)
 
 u32		game_sv_ArtefactHunt::RP_2_Use				(CSE_Abstract* E)
 {
-	CSE_ALifeCreatureActor	*pA	=	smart_cast<CSE_ALifeCreatureActor*>(E);
+	CSE_ALifeCreatureActor	*pA	=	dynamic_cast<CSE_ALifeCreatureActor*>(E);
 	if (!pA) return 0;
 
 	return u32(pA->g_team());
@@ -194,16 +194,16 @@ void	game_sv_ArtefactHunt::LoadTeams			()
 bool	game_sv_ArtefactHunt::IsBuyableItem				(CSE_Abstract* pItem)
 {
 	if (!pItem) return false;
-	CSE_ALifeItemWeapon* pWeapon = smart_cast<CSE_ALifeItemWeapon*> (pItem);
+	CSE_ALifeItemWeapon* pWeapon = dynamic_cast<CSE_ALifeItemWeapon*> (pItem);
 	if (pWeapon) return true;
-	CSE_ALifeItemGrenade* pGrenade = smart_cast<CSE_ALifeItemGrenade*> (pItem);
+	CSE_ALifeItemGrenade* pGrenade = dynamic_cast<CSE_ALifeItemGrenade*> (pItem);
 	if (pGrenade) return true;
-	CSE_ALifeItemCustomOutfit* pOutfit = smart_cast<CSE_ALifeItemCustomOutfit*> (pItem);
+	CSE_ALifeItemCustomOutfit* pOutfit = dynamic_cast<CSE_ALifeItemCustomOutfit*> (pItem);
 	if (pOutfit) return true;
-	CSE_ALifeItemTorch* pTorch = smart_cast<CSE_ALifeItemTorch*> (pItem);
+	CSE_ALifeItemTorch* pTorch = dynamic_cast<CSE_ALifeItemTorch*> (pItem);
 	if (pTorch) return true;
 	//-----------------------------------------------------------------------------
-	CSE_ALifeObject*	pAlifeObject = smart_cast<CSE_ALifeObject*> (pItem);
+	CSE_ALifeObject*	pAlifeObject = dynamic_cast<CSE_ALifeObject*> (pItem);
 	if (!pAlifeObject) return false;
 	if (pAlifeObject->m_tClassID == CLSID_OBJECT_A_VOG25) return true;
 	if (pAlifeObject->m_tClassID == CLSID_OBJECT_A_OG7B) return true;
@@ -215,7 +215,7 @@ void	game_sv_ArtefactHunt::RemoveItemFromActor		(CSE_Abstract* pItem)
 {
 	if (!pItem) return;
 	//-------------------------------------------------------------
-	CSE_ALifeItemWeapon* pWeapon = smart_cast<CSE_ALifeItemWeapon*> (pItem);
+	CSE_ALifeItemWeapon* pWeapon = dynamic_cast<CSE_ALifeItemWeapon*> (pItem);
 	if (pWeapon)
 	{
 	};
@@ -237,7 +237,7 @@ void	game_sv_ArtefactHunt::RemoveItemFromActor		(CSE_Abstract* pItem)
 
 BOOL	game_sv_ArtefactHunt::CheckUpgrades			(CSE_Abstract* pItem, u8 IItem)
 {
-	CSE_ALifeItemWeapon* pWeapon = smart_cast<CSE_ALifeItemWeapon*> (pItem);
+	CSE_ALifeItemWeapon* pWeapon = dynamic_cast<CSE_ALifeItemWeapon*> (pItem);
 	if (!pWeapon) return true;
 
 //	u8 Addons = pWeapon->m_addon_flags.get();
@@ -267,7 +267,7 @@ void	game_sv_ArtefactHunt::OnPlayerBuyFinished		(u32 id_who, NET_Packet& P)
 		ItemsDesired.push_back(game_PlayerState::BeltItem(SectID, ItemID));
 	};
 	//-------------------------------------------------------------
-	CSE_ALifeCreatureActor*		e_Actor	= smart_cast<CSE_ALifeCreatureActor*>(Level().Server->game->get_entity_from_eid	(ps->GameID));
+	CSE_ALifeCreatureActor*		e_Actor	= dynamic_cast<CSE_ALifeCreatureActor*>(Level().Server->game->get_entity_from_eid	(ps->GameID));
 	if (!e_Actor)
 	{
 		ps->BeltItems.clear();
@@ -327,10 +327,10 @@ BOOL	game_sv_ArtefactHunt::OnTouch				(u16 eid_who, u16 eid_what)
 	CSE_Abstract*		e_who	= m_server->ID_to_entity(eid_who);		VERIFY(e_who	);
 	CSE_Abstract*		e_what	= m_server->ID_to_entity(eid_what);	VERIFY(e_what	);
 
-	CSE_ALifeCreatureActor*			A		= smart_cast<CSE_ALifeCreatureActor*> (e_who);
+	CSE_ALifeCreatureActor*			A		= dynamic_cast<CSE_ALifeCreatureActor*> (e_who);
 	if (A)
 	{
-		CSE_ALifeItemArtefact* pIArtefact	=	smart_cast<CSE_ALifeItemArtefact*> (e_what);
+		CSE_ALifeItemArtefact* pIArtefact	=	dynamic_cast<CSE_ALifeItemArtefact*> (e_what);
 		if (pIArtefact)
 		{
 			artefactBearerID = eid_who;
@@ -354,7 +354,7 @@ BOOL	game_sv_ArtefactHunt::OnTouch				(u16 eid_who, u16 eid_what)
 		};
 
 		// Actor touches something
-		CSE_ALifeItemWeapon*	W			=	smart_cast<CSE_ALifeItemWeapon*> (e_what);
+		CSE_ALifeItemWeapon*	W			=	dynamic_cast<CSE_ALifeItemWeapon*> (e_what);
 		if (W) 
 		{
 			//---------------------------------------------------------------
@@ -370,10 +370,10 @@ BOOL	game_sv_ArtefactHunt::OnDetach				(u16 eid_who, u16 eid_what)
 	CSE_Abstract*		e_who	= m_server->ID_to_entity(eid_who);		VERIFY(e_who	);
 	CSE_Abstract*		e_what	= m_server->ID_to_entity(eid_what);	VERIFY(e_what	);
 
-	CSE_ALifeCreatureActor*			A		= smart_cast<CSE_ALifeCreatureActor*> (e_who);
+	CSE_ALifeCreatureActor*			A		= dynamic_cast<CSE_ALifeCreatureActor*> (e_who);
 	if (A)
 	{
-		CSE_ALifeItemArtefact* pIArtefact	=	smart_cast<CSE_ALifeItemArtefact*> (e_what);
+		CSE_ALifeItemArtefact* pIArtefact	=	dynamic_cast<CSE_ALifeItemArtefact*> (e_what);
 		if (pIArtefact)
 		{
 			artefactBearerID = 0;
@@ -404,7 +404,7 @@ BOOL	game_sv_ArtefactHunt::OnDetach				(u16 eid_who, u16 eid_what)
 void		game_sv_ArtefactHunt::OnObjectEnterTeamBase	(u16 id, u16 zone_team)
 {
 	CSE_Abstract*		e_who	= m_server->ID_to_entity(id);		VERIFY(e_who	);
-	CSE_ALifeCreatureActor* eActor = smart_cast<CSE_ALifeCreatureActor*> (e_who);
+	CSE_ALifeCreatureActor* eActor = dynamic_cast<CSE_ALifeCreatureActor*> (e_who);
 	if (eActor)
 	{
 		if (eActor->g_team() == zone_team)
@@ -432,8 +432,8 @@ void		game_sv_ArtefactHunt::OnObjectLeaveTeamBase	(u16 id, u16 zone_team)
 
 //	CSE_Abstract*		e_zone	= m_server->ID_to_entity(id_zone);	VERIFY(e_zone	);
 
-	CSE_ALifeCreatureActor* eActor = smart_cast<CSE_ALifeCreatureActor*> (e_who);
-//	CSE_ALifeTeamBaseZone*	eZoneBase = smart_cast<CSE_ALifeTeamBaseZone*> (e_zone);
+	CSE_ALifeCreatureActor* eActor = dynamic_cast<CSE_ALifeCreatureActor*> (e_who);
+//	CSE_ALifeTeamBaseZone*	eZoneBase = dynamic_cast<CSE_ALifeTeamBaseZone*> (e_zone);
 	if (eActor /*&& eZoneBase*/)
 	{
 		if (eActor->g_team() == zone_team)
@@ -503,7 +503,7 @@ void		game_sv_ArtefactHunt::OnArtefactOnBase		(ClientID id_who)
 	P.w_u16				(ps->team);
 	u_EventSend(P);
 	//-----------------------------------------------
-	CActor* pActor = smart_cast<CActor*> (Level().Objects.net_Find(ps->GameID));
+	CActor* pActor = dynamic_cast<CActor*> (Level().Objects.net_Find(ps->GameID));
 	if (pActor)
 	{
 		pActor->SetfHealth(100.0f);
@@ -646,7 +646,7 @@ void	game_sv_ArtefactHunt::OnCreate				(u16 id_who)
 
 	CSE_Abstract	*pEntity	= get_entity_from_eid(id_who);
 	if (!pEntity) return;
-	CSE_ALifeItemArtefact* pIArtefact	=	smart_cast<CSE_ALifeItemArtefact*> (pEntity);
+	CSE_ALifeItemArtefact* pIArtefact	=	dynamic_cast<CSE_ALifeItemArtefact*> (pEntity);
 	if (pIArtefact)
 		m_dwArtefactID = pIArtefact->ID;
 };
@@ -881,7 +881,7 @@ void	game_sv_ArtefactHunt::MoveAllAlivePlayers			()
 		game_PlayerState* ps	= l_pC->ps;
 		if (!l_pC->net_Ready || ps->testFlag(GAME_PLAYER_FLAG_VERY_VERY_DEAD) || ps->Skip)	continue;
 		if (ps->testFlag(GAME_PLAYER_FLAG_ONBASE)) continue;
-		CSE_ALifeCreatureActor	*pA	=	smart_cast<CSE_ALifeCreatureActor*>(l_pC->owner);
+		CSE_ALifeCreatureActor	*pA	=	dynamic_cast<CSE_ALifeCreatureActor*>(l_pC->owner);
 		if (!pA) continue;
 
 		Fvector Pos = pA->o_Position;

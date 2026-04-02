@@ -152,7 +152,7 @@ void CStateBurerAttackTeleAbstract::FindObjects()
 	xr_vector<CObject*> &tpObjects	= Level().ObjectSpace.q_nearest;
 
 	for (u32 i=0;i<tpObjects.size();i++) {
-		CPhysicsShellHolder *obj = smart_cast<CPhysicsShellHolder *>(tpObjects[i]);
+		CPhysicsShellHolder *obj = dynamic_cast<CPhysicsShellHolder *>(tpObjects[i]);
 		if (!obj || !obj->PPhysicsShell() || !obj->PPhysicsShell()->bActive || (obj->m_pPhysicsShell->getMass() < object->m_tele_object_min_mass) || (obj->m_pPhysicsShell->getMass() > object->m_tele_object_max_mass) || (obj == object) || object->CTelekinesis::is_active_object(obj)) continue;
 
 		tele_objects.push_back(obj);
@@ -164,7 +164,7 @@ void CStateBurerAttackTeleAbstract::FindObjects()
 	tpObjects = Level().ObjectSpace.q_nearest;
 
 	for (u32 i=0;i<tpObjects.size();i++) {
-		CPhysicsShellHolder *obj = smart_cast<CPhysicsShellHolder *>(tpObjects[i]);
+		CPhysicsShellHolder *obj = dynamic_cast<CPhysicsShellHolder *>(tpObjects[i]);
 		if (!obj || !obj->PPhysicsShell() || !obj->PPhysicsShell()->bActive || (obj->m_pPhysicsShell->getMass() < object->m_tele_object_min_mass) || (obj->m_pPhysicsShell->getMass() > object->m_tele_object_max_mass) || (obj == object) || object->CTelekinesis::is_active_object(obj)) continue;
 
 		tele_objects.push_back(obj);
@@ -183,7 +183,7 @@ void CStateBurerAttackTeleAbstract::FindObjects()
 	tpObjects = Level().ObjectSpace.q_nearest;
 
 	for (u32 i=0;i<tpObjects.size();i++) {
-		CPhysicsShellHolder *obj = smart_cast<CPhysicsShellHolder *>(tpObjects[i]);
+		CPhysicsShellHolder *obj = dynamic_cast<CPhysicsShellHolder *>(tpObjects[i]);
 		if (!obj || !obj->m_pPhysicsShell || !obj->m_pPhysicsShell->bActive || (obj->m_pPhysicsShell->getMass() < object->m_tele_object_min_mass) || (obj->m_pPhysicsShell->getMass() > object->m_tele_object_max_mass) || (obj == object) || object->CTelekinesis::is_active_object(obj)) continue;
 
 		tele_objects.push_back(obj);

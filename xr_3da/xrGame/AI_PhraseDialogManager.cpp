@@ -37,11 +37,11 @@ void CAI_PhraseDialogManager::ReceivePhrase (DIALOG_SHARED_PTR& phrase_dialog)
 
 void CAI_PhraseDialogManager::AnswerPhrase (DIALOG_SHARED_PTR& phrase_dialog)
 {
-	CInventoryOwner* pInvOwner = smart_cast<CInventoryOwner*>(this);
+	CInventoryOwner* pInvOwner = dynamic_cast<CInventoryOwner*>(this);
 	THROW(pInvOwner);
-	CGameObject* pOthersGO = smart_cast<CGameObject*>(phrase_dialog->OurPartner(this));
+	CGameObject* pOthersGO = dynamic_cast<CGameObject*>(phrase_dialog->OurPartner(this));
 	THROW(pOthersGO);
-	CInventoryOwner* pOthersIO = smart_cast<CInventoryOwner*>(pOthersGO);
+	CInventoryOwner* pOthersIO = dynamic_cast<CInventoryOwner*>(pOthersGO);
 	THROW(pOthersIO);
 
 	if(!phrase_dialog->IsFinished())
@@ -98,7 +98,7 @@ void CAI_PhraseDialogManager::SetStartDialog(PHRASE_DIALOG_ID phrase_dialog)
 	m_sStartDialog = phrase_dialog;
 
 #ifdef _DEBUG
-	//CInventoryOwner* pOwner = smart_cast<CInventoryOwner*>(this);
+	//CInventoryOwner* pOwner = dynamic_cast<CInventoryOwner*>(this);
 	//Msg("[PhraseDialogManager] %s set start dialog %s",pOwner->Name(), *m_sStartDialog);
 #endif
 }
@@ -113,7 +113,7 @@ void CAI_PhraseDialogManager::RestoreDefaultStartDialog()
 	m_sStartDialog = m_sDefaultStartDialog;
 
 #ifdef _DEBUG
-	//CInventoryOwner* pOwner = smart_cast<CInventoryOwner*>(this);
+	//CInventoryOwner* pOwner = dynamic_cast<CInventoryOwner*>(this);
 	//Msg("[PhraseDialogManager] %s restore default start dialog %s",pOwner->Name(), *m_sStartDialog);
 #endif
 

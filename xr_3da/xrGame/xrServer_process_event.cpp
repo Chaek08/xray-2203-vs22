@@ -221,7 +221,7 @@ void xrServer::Process_event	(NET_Packet& P, ClientID sender)
 		CSE_Abstract				*e_dest = game->get_entity_from_eid	(id_dest);	// кто умер
 		VERIFY						(e_dest);
 
-		CSE_ALifeCreatureAbstract	*creature = smart_cast<CSE_ALifeCreatureAbstract*>(e_dest);
+		CSE_ALifeCreatureAbstract	*creature = dynamic_cast<CSE_ALifeCreatureAbstract*>(e_dest);
 		if (creature)
 			creature->m_killer_id	= id_src;
 
@@ -231,7 +231,7 @@ void xrServer::Process_event	(NET_Packet& P, ClientID sender)
 	}
 	case GE_CHANGE_VISUAL:
 		{
-			CSE_Visual* visual		= smart_cast<CSE_Visual*>(receiver); VERIFY(visual);
+			CSE_Visual* visual		= dynamic_cast<CSE_Visual*>(receiver); VERIFY(visual);
 			string256 tmp;
 			P.r_stringZ				(tmp);
 			visual->set_visual		(tmp);
@@ -262,7 +262,7 @@ void xrServer::Process_event	(NET_Packet& P, ClientID sender)
 				Msg				("* [%2d] is [%s:%s]", id_src, *e_src->s_name, e_src->name_replace());
 
 			{
-				CSE_ALifeCreatureAbstract	*creature = smart_cast<CSE_ALifeCreatureAbstract*>(e_dest);
+				CSE_ALifeCreatureAbstract	*creature = dynamic_cast<CSE_ALifeCreatureAbstract*>(e_dest);
 				if (creature) {
 					VERIFY					(creature->m_killer_id == ALife::_OBJECT_ID(-1));
 					creature->m_killer_id	= id_src;
@@ -322,7 +322,7 @@ void xrServer::Process_event	(NET_Packet& P, ClientID sender)
 			CSE_Abstract*		E	= game->get_entity_from_eid	(id);
 			if (E)
 			{
-				CSE_ALifeItemCustomOutfit* pOutfit = smart_cast<CSE_ALifeItemCustomOutfit*>(E);
+				CSE_ALifeItemCustomOutfit* pOutfit = dynamic_cast<CSE_ALifeItemCustomOutfit*>(E);
 				if (pOutfit)
 				{
 					SendBroadcast		(sender,P,MODE);

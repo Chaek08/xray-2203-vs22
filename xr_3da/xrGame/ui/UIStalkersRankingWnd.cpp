@@ -83,7 +83,7 @@ void CUIStalkersRankingWnd::Init()
 
 void CUIStalkersRankingWnd::AddStalkerInfo()
 {
-	CInventoryOwner *m_pInvOwner = smart_cast<CInventoryOwner*>(Level().CurrentEntity());
+	CInventoryOwner *m_pInvOwner = dynamic_cast<CInventoryOwner*>(Level().CurrentEntity());
 	if(!m_pInvOwner) return;
 
 	CPda * m_pPda = m_pInvOwner->GetPDA();

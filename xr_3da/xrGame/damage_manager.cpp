@@ -22,7 +22,7 @@ CDamageManager::~CDamageManager			()
 
 DLL_Pure *CDamageManager::_construct	()
 {
-	m_object				= smart_cast<CObject*>(this);
+	m_object				= dynamic_cast<CObject*>(this);
 	VERIFY					(m_object);
 	return					(m_object);
 }
@@ -39,7 +39,7 @@ void CDamageManager::reload				(LPCSTR section,CInifile* ini)
 }
 void CDamageManager::init_bones()
 {
-	CKinematics				*kinematics = smart_cast<CKinematics*>(m_object->Visual());
+	CKinematics				*kinematics = dynamic_cast<CKinematics*>(m_object->Visual());
 	VERIFY					(kinematics);
 	for(u16 i = 0; i<kinematics->LL_BoneCount(); i++)
 	{
@@ -52,7 +52,7 @@ void CDamageManager::init_bones()
 void CDamageManager::load_section(LPCSTR section,CInifile* ini)
 {
 	string32				buffer;
-	CKinematics				*kinematics = smart_cast<CKinematics*>(m_object->Visual());
+	CKinematics				*kinematics = dynamic_cast<CKinematics*>(m_object->Visual());
 	CInifile::Sect			&damages = ini->r_section(section);
 	for (CInifile::SectIt i=damages.begin(); damages.end() != i; ++i) {
 		if (!xr_strcmp(*(*i).first,"default"))
@@ -88,7 +88,7 @@ void  CDamageManager::HitScale			(const int element, float& hit_scale, float& wo
 		return;
 	}
 
-	CKinematics* V		= smart_cast<CKinematics*>(m_object->Visual());			VERIFY(V);
+	CKinematics* V		= dynamic_cast<CKinematics*>(m_object->Visual());			VERIFY(V);
 	float scale			= /*fis_zero(V->LL_GetBoneInstance(u16(element)).get_param(0))?1.f:*/V->LL_GetBoneInstance(u16(element)).get_param(0);
 	//hit_scale			= m_default_hit_factor*scale;
 	hit_scale			= scale;
