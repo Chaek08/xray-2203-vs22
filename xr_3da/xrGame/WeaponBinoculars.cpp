@@ -23,8 +23,8 @@ void CWeaponBinoculars::Load	(LPCSTR section)
 	inherited::Load(section);
 
 	// Sounds
-	HUD_SOUND::LoadSound(section, "snd_zoomin",  sndZoomIn,		TRUE, SOUND_TYPE_ITEM_USING);
-	HUD_SOUND::LoadSound(section, "snd_zoomout", sndZoomOut,	TRUE, SOUND_TYPE_ITEM_USING);
+	HUD_SOUND::LoadSound(section, "snd_zoomin",  sndZoomIn,		SOUND_TYPE_ITEM_USING);
+	HUD_SOUND::LoadSound(section, "snd_zoomout", sndZoomOut,	SOUND_TYPE_ITEM_USING);
 }
 
 void CWeaponBinoculars::Hide		()

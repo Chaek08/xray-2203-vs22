@@ -179,7 +179,7 @@ void CWeapon::UpdateFireDependencies_internal()
 
 			m_firedeps.m_FireParticlesXForm.identity();
 			m_firedeps.m_FireParticlesXForm.k.set(m_firedeps.vLastFD);
-			Fvector::generate_orthonormal_basis(m_firedeps.m_FireParticlesXForm.k,
+			Fvector::generate_orthonormal_basis_normalized(m_firedeps.m_FireParticlesXForm.k,
 									m_firedeps.m_FireParticlesXForm.j, m_firedeps.m_FireParticlesXForm.i);
 		} else {
 			// 3rd person or no parent

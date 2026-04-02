@@ -8,8 +8,7 @@
 #include "HudSound.h"
 
 void HUD_SOUND::LoadSound(	LPCSTR section, LPCSTR line, 
-							HUD_SOUND& hud_snd, BOOL _3D, 
-							int type)
+							HUD_SOUND& hud_snd, int type)
 {
 	hud_snd.m_activeSnd		= NULL;
 	hud_snd.sounds.clear	();
@@ -21,7 +20,7 @@ void HUD_SOUND::LoadSound(	LPCSTR section, LPCSTR line,
 		hud_snd.sounds.push_back( SSnd() );
 		SSnd& s = hud_snd.sounds.back();
 
-		LoadSound	(section, sound_line, s.snd, _3D, type, &s.volume, &s.delay);
+		LoadSound	(section, sound_line, s.snd, type, &s.volume, &s.delay);
 		sprintf		(sound_line,"%s%d",line,++k);
 	}//while
 
@@ -29,7 +28,7 @@ void HUD_SOUND::LoadSound(	LPCSTR section, LPCSTR line,
 }
 
 void  HUD_SOUND::LoadSound(LPCSTR section, LPCSTR line, 
-						   ref_sound& snd, BOOL _3D, 
+						   ref_sound& snd, 
 						   int type,
 						   float* volume, 
 						   float* delay)
@@ -42,7 +41,7 @@ void  HUD_SOUND::LoadSound(LPCSTR section, LPCSTR line,
 	R_ASSERT(count);
 
 	_GetItem(str, 0, buf_str);
-	snd.create(buf_str, st_Effect, type);
+	snd.create(buf_str, st_Effect,type);
 
 
 	if(volume != NULL)
@@ -81,7 +80,7 @@ void HUD_SOUND::DestroySound	(HUD_SOUND& hud_snd)
 void HUD_SOUND::PlaySound	(	HUD_SOUND&		hud_snd,
 								const Fvector&	position,
 								const CObject*	parent,
-								bool			hud_mode,
+								bool			b_hud_mode,
 								bool			looped)
 {
 	if (hud_snd.sounds.empty())	return;
@@ -89,7 +88,7 @@ void HUD_SOUND::PlaySound	(	HUD_SOUND&		hud_snd,
 	hud_snd.m_activeSnd			= NULL;
 	StopSound					(hud_snd);
 
-	u32 flags = hud_mode?sm_2D:0;
+	u32 flags = b_hud_mode?sm_2D:0;
 	if(looped)
 		flags |= sm_Looped;
 
@@ -97,9 +96,9 @@ void HUD_SOUND::PlaySound	(	HUD_SOUND&		hud_snd,
 	hud_snd.m_activeSnd = &hud_snd.sounds[ Random.randI(hud_snd.sounds.size()) ];
 
 	hud_snd.m_activeSnd->snd.play_at_pos	(const_cast<CObject*>(parent),
-									position,
+									flags&sm_2D?Fvector().set(0,0,0):position,
 									flags,
-									hud_snd.m_activeSnd->delay);
+									0.f/*hud_snd.m_activeSnd->delay*/);
 	hud_snd.m_activeSnd->snd.set_volume		(hud_snd.m_activeSnd->volume);
 }
 
@@ -107,7 +106,7 @@ void HUD_SOUND::StopSound	(HUD_SOUND& hud_snd)
 {
 	xr_vector<SSnd>::iterator it = hud_snd.sounds.begin();
 	for(;it!=hud_snd.sounds.end();++it){
-		VERIFY2					((*it).snd.handle,"Trying to stop non-existant or destroyed sound");
+		VERIFY2					((*it).snd._handle(),"Trying to stop non-existant or destroyed sound");
 		(*it).snd.stop		();
 	}
 	hud_snd.m_activeSnd		= NULL;

@@ -129,8 +129,8 @@ void CHelicopter::Load(LPCSTR section)
 
 	//weapons
 	CShootingObject::Load				(section);
-	HUD_SOUND::LoadSound				(section,"snd_shoot", m_sndShot, TRUE, SOUND_TYPE_WEAPON_SHOOTING);
-	HUD_SOUND::LoadSound				(section,"snd_shoot_rocket", m_sndShotRocket, TRUE, SOUND_TYPE_WEAPON_SHOOTING);
+	HUD_SOUND::LoadSound				(section,"snd_shoot", m_sndShot, SOUND_TYPE_WEAPON_SHOOTING);
+	HUD_SOUND::LoadSound				(section,"snd_shoot_rocket", m_sndShotRocket,SOUND_TYPE_WEAPON_SHOOTING);
 	CRocketLauncher::Load				(section);
 
 	m_sAmmoType							= pSettings->r_string(section, "ammo_class");
