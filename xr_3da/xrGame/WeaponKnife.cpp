@@ -94,7 +94,7 @@ void CWeaponKnife::UpdateCL	()
 	{
 	case eShowing:
 	case eHiding:
-		dynamic_cast<CSkeletonAnimated*>(m_pHUD->Visual())->Update();
+		smart_cast<CSkeletonAnimated*>(m_pHUD->Visual())->Update();
 		break;
 	case eFire:
 		//state_Attacking	(dt);
@@ -160,7 +160,7 @@ void CWeaponKnife::OnAnimationEnd()
 				d.set(get_LastFD());
 
 				if(H_Parent()) 
-					dynamic_cast<CEntity*>(H_Parent())->g_fireParams(this, p1,d);
+					smart_cast<CEntity*>(H_Parent())->g_fireParams(this, p1,d);
 				else break;
 
 				KnifeStrike(p1,d);
@@ -180,7 +180,7 @@ void CWeaponKnife::OnAnimationEnd()
 				d.set(get_LastFD());
 				
 				if(H_Parent()) 
-					dynamic_cast<CEntity*>(H_Parent())->g_fireParams(this, p1,d);
+					smart_cast<CEntity*>(H_Parent())->g_fireParams(this, p1,d);
 				else break;
 			
 				KnifeStrike(p1,d);

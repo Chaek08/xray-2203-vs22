@@ -60,7 +60,7 @@ void CWrapper::setup				(CScriptGameObject *object)
 {
 	VERIFY					(object);
 	inherited::setup		(object);
-	m_object				= dynamic_cast<_object_type*>(&object->object());
+	m_object				= smart_cast<_object_type*>(&object->object());
 	VERIFY					(m_object);
 }
 
@@ -138,7 +138,7 @@ void CWrapper2::setup				(CScriptGameObject *object, CPropertyStorage *storage)
 {
 	VERIFY					(object);
 	inherited::setup		(object,storage);
-	m_object				= dynamic_cast<_object_type*>(&object->object());
+	m_object				= smart_cast<_object_type*>(&object->object());
 	VERIFY					(m_object);
 }
 

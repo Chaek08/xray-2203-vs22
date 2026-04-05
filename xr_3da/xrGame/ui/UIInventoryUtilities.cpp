@@ -69,7 +69,7 @@ void InventoryUtilities::DestroyShaders()
 void InventoryUtilities::AmmoDrawProc(CUIDragDropItem* pItem)
 {
 	CInventoryItem* pIItem = (CInventoryItem*)(pItem->GetData());
-	CWeaponAmmo* pAmmoItem = dynamic_cast<CWeaponAmmo*>(pIItem);
+	CWeaponAmmo* pAmmoItem = smart_cast<CWeaponAmmo*>(pIItem);
 
 	if (pAmmoItem->m_boxCurr > 1)
 	{
@@ -92,7 +92,7 @@ void InventoryUtilities::FoodDrawProc(CUIDragDropItem* pItem)
 {
 	//CEatableItem* pEatableItem = (CEatableItem*)(pItem->GetData());
 	CInventoryItem* pIItem = (CInventoryItem*)(pItem->GetData()); R_ASSERT(pIItem);
-	CEatableItem* pEatableItem = dynamic_cast<CEatableItem*>(pIItem); R_ASSERT(pEatableItem);
+	CEatableItem* pEatableItem = smart_cast<CEatableItem*>(pIItem); R_ASSERT(pEatableItem);
 
 	if (pEatableItem->m_iPortionsNum > 1)
 	{
@@ -356,7 +356,7 @@ const shared_str InventoryUtilities::GetDateAsString(ALife::_TIME_ID date, EDate
 
 void InventoryUtilities::UpdateWeight(CUIStatic &wnd, bool withPrefix)
 {
-	CInventoryOwner *pInvOwner = dynamic_cast<CInventoryOwner*>(Level().CurrentEntity());
+	CInventoryOwner *pInvOwner = smart_cast<CInventoryOwner*>(Level().CurrentEntity());
 	R_ASSERT(pInvOwner);
 	string128 buf;
 	ZeroMemory(buf, 128);
@@ -512,7 +512,7 @@ void InventoryUtilities::SendInfoToActor(LPCSTR info_id)
 {
 	if (GameID() != GAME_SINGLE) return;
 	
-	CActor* actor = dynamic_cast<CActor*>(Level().CurrentEntity());
+	CActor* actor = smart_cast<CActor*>(Level().CurrentEntity());
 	if(actor)
 	{
 		actor->TransferInfo(info_id, true);

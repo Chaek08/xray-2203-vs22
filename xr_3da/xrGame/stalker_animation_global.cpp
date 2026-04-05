@@ -36,7 +36,7 @@ MotionID CStalkerAnimationManager::assign_global_animation	()
 	if ((eBodyActionHello == object().body_action()))
 		return					(m_part_animations.A[eBodyStateStand].m_global.A[3].A[0]);
 
-	CFoodItem					*food_item = dynamic_cast<CFoodItem*>(object().inventory().ActiveItem());
+	CFoodItem					*food_item = smart_cast<CFoodItem*>(object().inventory().ActiveItem());
 	if (!food_item)
 		return					(MotionID());
 

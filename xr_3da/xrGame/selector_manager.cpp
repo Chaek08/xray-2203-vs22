@@ -64,7 +64,7 @@ void CSelectorManager::init_selector	(CAbstractVertexEvaluator &S)
 	}
 
 	S.m_dwCurTime			= Device.dwTimeGlobal;
-	S.m_tMe					= dynamic_cast<CEntity*>(this);
+	S.m_tMe					= smart_cast<CEntity*>(this);
 	S.m_tpMyNode			= m_object->ai_location().level_vertex();
 	S.m_tMyPosition			= m_object->Position();
 	

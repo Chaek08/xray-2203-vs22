@@ -127,7 +127,7 @@ bool CMotionManager::PrepareAnimation()
 	// установить анимацию	
 	{
 		string128			s1,s2;
-		m_tpCurAnim			= dynamic_cast<CSkeletonAnimated*>(pMonster->Visual())->ID_Cycle_Safe(strconcat(s2,*anim_it->second.target_name,itoa(index,s1,10)));
+		m_tpCurAnim			= smart_cast<CSkeletonAnimated*>(pMonster->Visual())->ID_Cycle_Safe(strconcat(s2,*anim_it->second.target_name,itoa(index,s1,10)));
 	}
 
 	// Заполнить текущую анимацию
@@ -339,7 +339,7 @@ void CMotionManager::FX_Play(EHitSide side, float amount)
 		case eSideRight:	p_str = &anim_it->second.fxs.right;	break;
 	}
 	
-	if (p_str && p_str->size()) dynamic_cast<CSkeletonAnimated*>(pMonster->Visual())->PlayFX(*(*p_str), amount);
+	if (p_str && p_str->size()) smart_cast<CSkeletonAnimated*>(pMonster->Visual())->PlayFX(*(*p_str), amount);
 
 	fx_time_last_play = pMonster->m_dwCurrentTime;
 }
@@ -504,7 +504,7 @@ void CMotionManager::UpdateAnimCount()
 		u8 count = 0;
 		
 		for (int i=0; ; ++i) {
-			if (dynamic_cast<CSkeletonAnimated*>(pMonster->Visual())->ID_Cycle_Safe(strconcat(s_temp, *it->second.target_name,itoa(i,s,10))))  count++;
+			if (smart_cast<CSkeletonAnimated*>(pMonster->Visual())->ID_Cycle_Safe(strconcat(s_temp, *it->second.target_name,itoa(i,s,10))))  count++;
 			else break;
 		}
 
@@ -519,7 +519,7 @@ void CMotionManager::UpdateAnimCount()
 CMotionDef *CMotionManager::get_motion_def(ANIM_ITEM_MAP_IT &it, u32 index)
 {
 	string128			s1,s2;
-	CSkeletonAnimated	*skeleton_animated = dynamic_cast<CSkeletonAnimated*>(pMonster->Visual());
+	CSkeletonAnimated	*skeleton_animated = smart_cast<CSkeletonAnimated*>(pMonster->Visual());
 	const MotionID		&motion_id = skeleton_animated->ID_Cycle_Safe(strconcat(s2,*it->second.target_name,itoa(index,s1,10)));
 	return				(skeleton_animated->LL_GetMotionDef(motion_id));
 }
@@ -527,7 +527,7 @@ CMotionDef *CMotionManager::get_motion_def(ANIM_ITEM_MAP_IT &it, u32 index)
 
 void CMotionManager::ActivateJump()
 {
-	pJumping = dynamic_cast<CJumping *>(pMonster);
+	pJumping = smart_cast<CJumping *>(pMonster);
 }
 void CMotionManager::DeactivateJump()
 {

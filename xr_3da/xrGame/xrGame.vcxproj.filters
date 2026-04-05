@@ -5181,7 +5181,7 @@
     <ClInclude Include="shared_data.h">
       <Filter>Core\Common\Shared</Filter>
     </ClInclude>
-    <ClInclude Include="dynamic_cast.h">
+    <ClInclude Include="smart_cast.h">
       <Filter>Core\Common\SmartCast</Filter>
     </ClInclude>
     <ClInclude Include="smart_cast_impl0.h">
@@ -7862,7 +7862,7 @@
     <ClCompile Include="random32.cpp">
       <Filter>Core\Common\Random32</Filter>
     </ClCompile>
-    <ClCompile Include="dynamic_cast.cpp">
+    <ClCompile Include="smart_cast.cpp">
       <Filter>Core\Common\SmartCast</Filter>
     </ClCompile>
     <ClCompile Include="smart_cast_stats.cpp">

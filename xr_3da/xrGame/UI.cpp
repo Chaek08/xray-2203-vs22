@@ -61,7 +61,7 @@ u32 ScaleAlpha(u32 val, float factor)
 
 void CUI::UIOnFrame()
 {
-	CEntity* m_Actor = dynamic_cast<CEntity*>(Level().CurrentEntity());
+	CEntity* m_Actor = smart_cast<CEntity*>(Level().CurrentEntity());
 	if (m_Actor){
 		
 		//update windows
@@ -110,7 +110,7 @@ bool CUI::Render()
 	if (pUIGame) pUIGame->Render	();
 
 	//----------
-	CEntity* m_Actor = dynamic_cast<CEntity*>(Level().CurrentEntity());
+	CEntity* m_Actor = smart_cast<CEntity*>(Level().CurrentEntity());
 	if (m_Actor)
 	{
 		//Draw main window and its children

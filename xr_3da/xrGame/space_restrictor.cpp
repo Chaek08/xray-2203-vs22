@@ -35,7 +35,7 @@ BOOL CSpaceRestrictor::net_Spawn	(CSE_Abstract* data)
 #endif
 
 	CSE_Abstract					*abstract = (CSE_Abstract*)data;
-	CSE_ALifeSpaceRestrictor		*se_shape = dynamic_cast<CSE_ALifeSpaceRestrictor*>(abstract);
+	CSE_ALifeSpaceRestrictor		*se_shape = smart_cast<CSE_ALifeSpaceRestrictor*>(abstract);
 	R_ASSERT						(se_shape);
 
 	CCF_Shape						*shape = xr_new<CCF_Shape>(this);
@@ -180,7 +180,7 @@ void CSpaceRestrictor::OnRender	()
 	xr_vector<CCF_Shape::shape_def>::iterator l_pShape;
 	
 	u32 Color = 0;
-	CCustomZone	*custom_zone = dynamic_cast<CCustomZone*>(this);
+	CCustomZone	*custom_zone = smart_cast<CCustomZone*>(this);
 	if (custom_zone && custom_zone->IsEnabled())
 		Color = D3DCOLOR_XRGB(0,255,255);
 	else

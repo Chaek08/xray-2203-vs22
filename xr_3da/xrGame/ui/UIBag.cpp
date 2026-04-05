@@ -200,7 +200,7 @@ CUIDragDropItemMP* CUIBag::GetItemBySectoin(const char *sectionName){
 		DRAG_DROP_LIST_it it;
 		for (it = list.begin(); it != list.end(); ++it)
 		{
-			CUIDragDropItemMP* pDDItem = dynamic_cast<CUIDragDropItemMP*>(*it);
+			CUIDragDropItemMP* pDDItem = smart_cast<CUIDragDropItemMP*>(*it);
 			if (0 == xr_strcmp(pDDItem->GetSectionName(), sectionName))
 				return pDDItem;
 		}
@@ -215,7 +215,7 @@ CUIDragDropItemMP* CUIBag::GetItemBySectoin(const u8 grpNum, u8 uIndexInSlot){
 		DRAG_DROP_LIST_it it;
 		for (it = list.begin(); it != list.end(); ++it)
 		{
-			CUIDragDropItemMP* pDDItem = dynamic_cast<CUIDragDropItemMP*>(*it);
+			CUIDragDropItemMP* pDDItem = smart_cast<CUIDragDropItemMP*>(*it);
 			if (grpNum == pDDItem->GetSectionGroupID() && uIndexInSlot == pDDItem->GetPosInSectionsGroup())
 				return pDDItem;
 		}
@@ -286,7 +286,7 @@ void CUIBag::OnItemDrop(CUIDragDropItemMP* pItem){
 }
 
 void CUIBag::SendMessage(CUIWindow* pWnd, s16 msg, void* pData){
-	CUIDragDropItemMP* pDDItem = dynamic_cast<CUIDragDropItemMP*>(pWnd);
+	CUIDragDropItemMP* pDDItem = smart_cast<CUIDragDropItemMP*>(pWnd);
 	switch (msg)
 	{
 		// we using our super-puper tab buttons enstead of DragDropItems
@@ -725,7 +725,7 @@ void CUIBag::DeleteCopy(CUIDragDropItemMP* pDDItem){
 
 	for (it = ddList.begin(); it != ddList.end(); ++it)
 	{
-        CUIDragDropItemMP* pItem = dynamic_cast<CUIDragDropItemMP*>(*it);
+        CUIDragDropItemMP* pItem = smart_cast<CUIDragDropItemMP*>(*it);
 		shared_str it_section = pItem->GetSectionName();
 		if (0 == xr_strcmp(section, it_section))
 		{
@@ -738,7 +738,7 @@ void CUIBag::DeleteCopy(CUIDragDropItemMP* pDDItem){
 
 		   	for (it_2 = ddList_2.begin(); it_2 != ddList_2.end(); ++it_2)
 			{
-		        CUIDragDropItemMP* pItem = dynamic_cast<CUIDragDropItemMP*>(*it_2);
+		        CUIDragDropItemMP* pItem = smart_cast<CUIDragDropItemMP*>(*it_2);
 				if (0 == xr_strcmp(section, pItem->GetSectionName()))
 					R_ASSERT2(false, "CUIBag::DeleteCopy - two items with one section");
 			}

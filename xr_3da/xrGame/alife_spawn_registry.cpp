@@ -140,7 +140,7 @@ void CALifeSpawnRegistry::build_spawn_anomalies	()
 	SPAWN_GRAPH::vertex_iterator	I = m_spawns.vertices().begin();
 	SPAWN_GRAPH::vertex_iterator	E = m_spawns.vertices().end();
 	for ( ; I != E; ++I) {
-		CSE_ALifeAnomalousZone				*anomaly = dynamic_cast<CSE_ALifeAnomalousZone*>(&(*I).second->data()->object());
+		CSE_ALifeAnomalousZone				*anomaly = smart_cast<CSE_ALifeAnomalousZone*>(&(*I).second->data()->object());
 		if (anomaly) {
 			ALife::EAnomalousZoneType		type = anomaly->m_tAnomalyType;
 			for (u16 i=0, n = anomaly->m_wItemCount; i<n; ++i) {

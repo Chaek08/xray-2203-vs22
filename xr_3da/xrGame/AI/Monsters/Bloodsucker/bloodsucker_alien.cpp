@@ -220,7 +220,7 @@ void CBloodsuckerAlien::activate()
 
 	Level().SetEntity		(target);
 
-	CActor* pActor = dynamic_cast<CActor*> (source);
+	CActor* pActor = smart_cast<CActor*> (source);
 	if (pActor) {
 		pActor->inventory().Items_SetCurrentEntityHud	(false);
 		pActor->SetControlled							(true);
@@ -260,11 +260,11 @@ void CBloodsuckerAlien::deactivate()
 
 	Level().SetEntity			(target);
 
-	CActor* pActor = dynamic_cast<CActor*> (target);	
+	CActor* pActor = smart_cast<CActor*> (target);	
 	if (pActor) {
 		pActor->inventory().Items_SetCurrentEntityHud(true);
 
-		CHudItem* pHudItem = dynamic_cast<CHudItem*>(pActor->inventory().ActiveItem());
+		CHudItem* pHudItem = smart_cast<CHudItem*>(pActor->inventory().ActiveItem());
 		if (pHudItem) pHudItem->OnStateSwitch(pHudItem->State());
 
 		pActor->SetControlled						(false);

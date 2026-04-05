@@ -119,7 +119,7 @@ void CParticlesPlayer::StartParticles(const shared_str& particles_name, u16 bone
 	VERIFY(object);
 
 	//найти ближайшую допустимую косточку, чтобы повесить партиклы
-	SBoneInfo* pBoneInfo			=  get_nearest_bone_info(dynamic_cast<CKinematics*>(object->Visual()),bone_num);
+	SBoneInfo* pBoneInfo			=  get_nearest_bone_info(smart_cast<CKinematics*>(object->Visual()),bone_num);
 	if(!pBoneInfo) return;
 
 	SParticlesInfo* particles_info	= pBoneInfo->AppendParticles(object,particles_name);
@@ -241,7 +241,7 @@ void CParticlesPlayer::UpdateParticles()
 void CParticlesPlayer::GetBonePos	(CObject* pObject, u16 bone_id, const Fvector& offset, Fvector& result)
 {
 	VERIFY(pObject);
-	CKinematics* pKinematics = dynamic_cast<CKinematics*>(pObject->Visual()); VERIFY(pKinematics);
+	CKinematics* pKinematics = smart_cast<CKinematics*>(pObject->Visual()); VERIFY(pKinematics);
 	CBoneInstance&		l_tBoneInstance = pKinematics->LL_GetBoneInstance(bone_id);
 
 	result = offset;
@@ -274,6 +274,6 @@ u16 CParticlesPlayer::GetNearestBone	(CKinematics* K, u16 bone_id)
 void CParticlesPlayer::net_SpawnParticles	()
 {
 	VERIFY				(!m_self_object);
-	m_self_object		= dynamic_cast<CObject*>(this);
+	m_self_object		= smart_cast<CObject*>(this);
 	VERIFY				(m_self_object);
 }

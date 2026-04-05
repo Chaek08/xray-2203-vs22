@@ -36,10 +36,10 @@ void CWeaponRPG7::Load	(LPCSTR section)
 
 void CWeaponRPG7::UpdateGrenadeVisibility(bool visibility)
 {
-	CKinematics* pHudVisual = dynamic_cast<CKinematics*>(m_pHUD->Visual());
+	CKinematics* pHudVisual = smart_cast<CKinematics*>(m_pHUD->Visual());
 	VERIFY(pHudVisual);
 	if (H_Parent() != Level().CurrentEntity()) pHudVisual = NULL;
-	CKinematics* pWeaponVisual = dynamic_cast<CKinematics*>(Visual()); 
+	CKinematics* pWeaponVisual = smart_cast<CKinematics*>(Visual()); 
 	VERIFY(pWeaponVisual);
 
 	if (pHudVisual) pHudVisual->LL_SetBoneVisible(pHudVisual->LL_BoneID(*m_sHudGrenadeBoneName),visibility,TRUE);
@@ -98,7 +98,7 @@ void CWeaponRPG7::switch2_Fire	()
 		p1.set(get_LastFP()); 
 		d.set(get_LastFD());
 
-		CEntity* E = dynamic_cast<CEntity*>(H_Parent());
+		CEntity* E = smart_cast<CEntity*>(H_Parent());
 		if (E) E->g_fireParams (this, p1,d);
 
 		Fmatrix launch_matrix;
@@ -116,7 +116,7 @@ void CWeaponRPG7::switch2_Fire	()
 		//		angular_vel.mul(1400.f);
 		CRocketLauncher::LaunchRocket(launch_matrix, d, zero_vel);
 
-		CExplosiveRocket* pGrenade = dynamic_cast<CExplosiveRocket*>(getCurrentRocket());
+		CExplosiveRocket* pGrenade = smart_cast<CExplosiveRocket*>(getCurrentRocket());
 		VERIFY(pGrenade);
 		pGrenade->SetInitiator(H_Parent()->ID());
 

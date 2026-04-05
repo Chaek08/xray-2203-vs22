@@ -154,7 +154,7 @@ void CWeaponShotgun::switch2_Fire2	()
 		p1.set	(get_LastFP()); 
 		d.set	(get_LastFD());
 
-		CEntity*					E = dynamic_cast<CEntity*>(H_Parent());
+		CEntity*					E = smart_cast<CEntity*>(H_Parent());
 		if (E) E->g_fireParams		(this, p1,d);
 		
 		OnShotBoth						();
@@ -314,14 +314,14 @@ bool CWeaponShotgun::HaveCartridgeInInventory		(u8 cnt)
 	if(m_pInventory) 
 	{
 		//попытатьс€ найти в инвентаре патроны текущего типа 
-		m_pAmmo = dynamic_cast<CWeaponAmmo*>(m_pInventory->GetAny(*m_ammoTypes[m_ammoType]));
+		m_pAmmo = smart_cast<CWeaponAmmo*>(m_pInventory->GetAny(*m_ammoTypes[m_ammoType]));
 		
 		if(!m_pAmmo )
 		{
 			for(u32 i = 0; i < m_ammoTypes.size(); ++i) 
 			{
 				//проверить патроны всех подход€щих типов
-				m_pAmmo = dynamic_cast<CWeaponAmmo*>(m_pInventory->GetAny(*m_ammoTypes[i]));
+				m_pAmmo = smart_cast<CWeaponAmmo*>(m_pInventory->GetAny(*m_ammoTypes[i]));
 				if(m_pAmmo) 
 				{ 
 					m_ammoType = i; 

@@ -350,7 +350,7 @@ void CUIGlobalMap::SwitchTo(CUIGlobalMap::EState new_state)
 		bool bEnable = (m_State != stMinimized);
 			WINDOW_LIST& wl = GetChildWndList();
 			for( WINDOW_LIST_it it = wl.begin(); it!= wl.end(); ++it ){
-				CUIGlobalMapSpot* msp = dynamic_cast<CUIGlobalMapSpot*>(*it);
+				CUIGlobalMapSpot* msp = smart_cast<CUIGlobalMapSpot*>(*it);
 				if(msp)
 					msp->Show(bEnable);
 			}
@@ -732,7 +732,7 @@ void CUIMapWnd::ShowHint()
 
 CUIGlobalMapSpot::CUIGlobalMapSpot		(CUICustomMap* m)
 {
-	m_owner_map = dynamic_cast<CUILevelMap*>(m);
+	m_owner_map = smart_cast<CUILevelMap*>(m);
 }
 
 CUIGlobalMapSpot::~CUIGlobalMapSpot		()
@@ -978,7 +978,7 @@ void CUIMapWnd::InitLocalMapObjectives()
 	Ivector2 P;
 	Fvector src;
 
-	CActor* pActor = dynamic_cast<CActor*>(Level().CurrentEntity());
+	CActor* pActor = smart_cast<CActor*>(Level().CurrentEntity());
 
 	if (!pActor) return;
 
@@ -1098,7 +1098,7 @@ void CUIMapWnd::InitLocalMapObjectives()
 
 void CUIMapWnd::InitGlobalMapObjectives()
 {
-	CActor* pActor = dynamic_cast<CActor*>(Level().CurrentEntity());
+	CActor* pActor = smart_cast<CActor*>(Level().CurrentEntity());
 
 	if (!pActor) return;
 	LocalMapsPairIt mapIt;
@@ -1180,7 +1180,7 @@ void CUIMapWnd::InitGlobalMapObjectives()
 void CUIMapWnd::AddObjectSpot(CGameObject* pGameObject)
 {	
 	//!!! пока только для CEntity (чтоб было откуда брать иконку)
-	CEntity* pEntity = dynamic_cast<CEntity*>(pGameObject);
+	CEntity* pEntity = smart_cast<CEntity*>(pGameObject);
 	if(!pEntity) return;
 
 
@@ -1233,7 +1233,7 @@ void CUIMapWnd::SendMessage(CUIWindow* pWnd, s16 msg, void* pData)
 				int top = r.top + 2 - r2.top;
 				UIStaticInfo.SetWndPos(left, top);
 			
-				//CInventoryOwner* pInvOwner = dynamic_cast<CInventoryOwner*>(m_pCurrentMap->m_pActiveMapSpot->m_pObject);
+				//CInventoryOwner* pInvOwner = smart_cast<CInventoryOwner*>(m_pCurrentMap->m_pActiveMapSpot->m_pObject);
 
 				if(xr_strlen(m_pCurrentMap->m_pActiveMapSpot->m_sDescText.GetBuf())>1){
 					UICharacterInfo.Show(true);
@@ -1256,7 +1256,7 @@ void CUIMapWnd::SendMessage(CUIWindow* pWnd, s16 msg, void* pData)
 		static CUIMapSpot *prevSpot = NULL;
 		if (MAPSPOT_FOCUS_RECEIVED == msg){
 			if (UIGlobalMapBackground.m_pActiveMapSpot && prevSpot != UIGlobalMapBackground.m_pActiveMapSpot){
-				CUIGlobalMapLocation *pGML = dynamic_cast<CUIGlobalMapLocation*>(UIGlobalMapBackground.m_pActiveMapSpot);
+				CUIGlobalMapLocation *pGML = smart_cast<CUIGlobalMapLocation*>(UIGlobalMapBackground.m_pActiveMapSpot);
 				R_ASSERT(pGML);
 				pGML->SetColor(activeLocalMapColor);
 				UIMapName.SetText(*stbl(pGML->m_strMapName));
@@ -1276,7 +1276,7 @@ void CUIMapWnd::SendMessage(CUIWindow* pWnd, s16 msg, void* pData)
 			UIMapGoals.RemoveAll();
 			prevSpot = NULL;
 			if (UIGlobalMapBackground.m_pActiveMapSpot){
-				CUIGlobalMapLocation *pGML = dynamic_cast<CUIGlobalMapLocation*>(UIGlobalMapBackground.m_pActiveMapSpot);
+				CUIGlobalMapLocation *pGML = smart_cast<CUIGlobalMapLocation*>(UIGlobalMapBackground.m_pActiveMapSpot);
 				R_ASSERT(pGML);
 				if (Level().name() == pGML->m_strMapName)
 					pGML->SetColor(ourLevelMapColor);
@@ -1287,7 +1287,7 @@ void CUIMapWnd::SendMessage(CUIWindow* pWnd, s16 msg, void* pData)
 		}
 
 		if (MAPSPOT_CLICKED == msg){
-			CUIGlobalMapLocation *pGML = dynamic_cast<CUIGlobalMapLocation*>(UIGlobalMapBackground.m_pActiveMapSpot);
+			CUIGlobalMapLocation *pGML = smart_cast<CUIGlobalMapLocation*>(UIGlobalMapBackground.m_pActiveMapSpot);
 			if (pGML){
 				SetLocalMap(pGML->m_strMapName);
 				SwitchMapMode(emmLocal);
@@ -1354,7 +1354,7 @@ void CUIMapWnd::Update()
 
 	Device.vCameraDirection.getHP	(h,p);
 	m_pActorSpot->m_fHeading = h;
-	CActor* pActor = dynamic_cast<CActor*>(Level().CurrentEntity());
+	CActor* pActor = smart_cast<CActor*>(Level().CurrentEntity());
 	m_pActorSpot->m_vWorldPos.set(pActor->Position());
 
 	inherited::Update();

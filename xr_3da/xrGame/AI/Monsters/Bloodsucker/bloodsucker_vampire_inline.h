@@ -104,7 +104,7 @@ bool CStateBloodsuckerVampireAbstract::check_start_conditions()
 	if (!object->EnemyMan.see_enemy_now())			return false;
 	if (object->CControlledActor::is_controlled())	return false;
 
-	const CActor *actor = dynamic_cast<const CActor *>(enemy);
+	const CActor *actor = smart_cast<const CActor *>(enemy);
 	VERIFY(actor);
 	if (actor && actor->IsControlled())				return false;
 

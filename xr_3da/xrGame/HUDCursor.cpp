@@ -139,7 +139,7 @@ void CHUDCursor::Render()
 
 	CObject*	O		= Level().CurrentEntity();
 	if (0==O)	return;
-	CEntity*	E		= dynamic_cast<CEntity*>(O);
+	CEntity*	E		= smart_cast<CEntity*>(O);
 	if (0==E)	return;
 
 	p1					= Device.vCameraPosition;
@@ -166,9 +166,9 @@ void CHUDCursor::Render()
 
 	if (psHUD_Flags.test(HUD_INFO)){ 
 		if (RQ.O){
-			CEntityAlive*	E		= dynamic_cast<CEntityAlive*>	(RQ.O);
-			CEntityAlive*	pCurEnt = dynamic_cast<CEntityAlive*>	(Level().CurrentEntity());
-			PIItem			l_pI	= dynamic_cast<PIItem>		(RQ.O);
+			CEntityAlive*	E		= smart_cast<CEntityAlive*>	(RQ.O);
+			CEntityAlive*	pCurEnt = smart_cast<CEntityAlive*>	(Level().CurrentEntity());
+			PIItem			l_pI	= smart_cast<PIItem>		(RQ.O);
 
 			string256 name_buf;
 			LPCSTR object_name = *RQ.O->cName();
@@ -177,8 +177,8 @@ void CHUDCursor::Render()
 			{
 				if (E && (E->g_Health()>0))
 				{
-					CInventoryOwner* our_inv_owner		= dynamic_cast<CInventoryOwner*>(pCurEnt);
-					CInventoryOwner* others_inv_owner	= dynamic_cast<CInventoryOwner*>(E);
+					CInventoryOwner* our_inv_owner		= smart_cast<CInventoryOwner*>(pCurEnt);
+					CInventoryOwner* others_inv_owner	= smart_cast<CInventoryOwner*>(E);
 
 					if(our_inv_owner && others_inv_owner){
 						CStringTable	strtbl		;

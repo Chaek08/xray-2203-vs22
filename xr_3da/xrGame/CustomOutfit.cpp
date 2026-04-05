@@ -175,7 +175,7 @@ void	CCustomOutfit::OnMoveToSlot		()
 {
 	if (m_pInventory)
 	{
-		CActor* pActor = dynamic_cast<CActor*> (m_pInventory->GetOwner());
+		CActor* pActor = smart_cast<CActor*> (m_pInventory->GetOwner());
 		if (pActor)
 		{
 			if (m_ActorVisual.size())
@@ -200,7 +200,7 @@ void	CCustomOutfit::OnMoveToSlot		()
 
 				pActor->ChangeVisual(NewVisual);
 			}
-			m_boneProtection->reload( cNameSect(), dynamic_cast<CKinematics*>(pActor->Visual()) );
+			m_boneProtection->reload( cNameSect(), smart_cast<CKinematics*>(pActor->Visual()) );
 		}
 	}
 };
@@ -209,7 +209,7 @@ void	CCustomOutfit::OnMoveToRuck		()
 {
 	if (m_pInventory)
 	{
-		CActor* pActor = dynamic_cast<CActor*> (m_pInventory->GetOwner());
+		CActor* pActor = smart_cast<CActor*> (m_pInventory->GetOwner());
 		if (pActor)
 		{
 			if (m_ActorVisual.size())

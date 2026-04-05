@@ -166,7 +166,7 @@ void CHUDManager::Render_First()
 	if (0==pUI)						return;
 	CObject*	O					= g_pGameLevel->CurrentViewEntity();
 	if (0==O)						return;
-	CActor*		A					= dynamic_cast<CActor*> (O);
+	CActor*		A					= smart_cast<CActor*> (O);
 	if (!A)							return;
 	if (A && !A->HUDview())			return;
 
@@ -183,14 +183,14 @@ void CHUDManager::Render_Last()
 	if (0==pUI)						return;
 	CObject*	O					= g_pGameLevel->CurrentViewEntity();
 	if (0==O)						return;
-	CActor*		A					= dynamic_cast<CActor*> (O);
+	CActor*		A					= smart_cast<CActor*> (O);
 	if (A && !A->HUDview())			return;
-//	CCar*		C					= dynamic_cast<CCar*>	(O);
+//	CCar*		C					= smart_cast<CCar*>	(O);
 //	if (C)							return;
 	if(O->CLS_ID == CLSID_CAR)
 		return;
 
-//	CSpectator*	S					= dynamic_cast<CSpectator*>	(O);
+//	CSpectator*	S					= smart_cast<CSpectator*>	(O);
 //	if (S)							return;
 	if(O->CLS_ID == CLSID_SPECTATOR)
 		return;

@@ -137,7 +137,7 @@ void CAI_Bloodsucker::reinit()
 
 	// Load triple vampire animations
 	MotionID			def1, def2, def3;
-	CSkeletonAnimated	*skel_animated = dynamic_cast<CSkeletonAnimated*>(Visual());
+	CSkeletonAnimated	*skel_animated = smart_cast<CSkeletonAnimated*>(Visual());
 	def1				= skel_animated->ID_Cycle_Safe("vampire_0");	VERIFY(def1);
 	def2				= skel_animated->ID_Cycle_Safe("vampire_1");	VERIFY(def2);
 	def3				= skel_animated->ID_Cycle_Safe("vampire_2");	VERIFY(def3);
@@ -189,8 +189,8 @@ void CAI_Bloodsucker::vfAssignBones()
 {
 	// Установка callback на кости
 
-	bone_spine =	&dynamic_cast<CKinematics*>(Visual())->LL_GetBoneInstance(dynamic_cast<CKinematics*>(Visual())->LL_BoneID("bip01_spine"));
-	bone_head =		&dynamic_cast<CKinematics*>(Visual())->LL_GetBoneInstance(dynamic_cast<CKinematics*>(Visual())->LL_BoneID("bip01_head"));
+	bone_spine =	&smart_cast<CKinematics*>(Visual())->LL_GetBoneInstance(smart_cast<CKinematics*>(Visual())->LL_BoneID("bip01_spine"));
+	bone_head =		&smart_cast<CKinematics*>(Visual())->LL_GetBoneInstance(smart_cast<CKinematics*>(Visual())->LL_BoneID("bip01_head"));
 	if(!PPhysicsShell())//нельзя ставить колбеки, если создан физ шел - у него стоят свои колбеки!!!
 	{
 		bone_spine->set_callback(BoneCallback,this);
@@ -250,7 +250,7 @@ void CAI_Bloodsucker::LookPosition(Fvector to_point, float angular_speed)
 
 void CAI_Bloodsucker::ActivateVampireEffector(float max_dist)
 {
-	CActor *pA = dynamic_cast<CActor *>(Level().CurrentEntity());
+	CActor *pA = smart_cast<CActor *>(Level().CurrentEntity());
 	if (pA) {
 		pA->EffectorManager().AddEffector(xr_new<CVampireCameraEffector>(6.0f, 5.f, max_dist));
 		Level().Cameras.AddEffector(xr_new<CVampirePPEffector>(pp_vampire_effector, 6.0f));

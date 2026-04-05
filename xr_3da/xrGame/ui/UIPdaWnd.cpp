@@ -126,26 +126,26 @@ void CUIPdaWnd::SendMessage(CUIWindow* pWnd, s16 msg, void* pData)
 			switch (UITabControl.GetActiveIndex()) 
 			{
 			case eptEvents:
-				m_pActiveDialog = dynamic_cast<CUIWindow*>(&UIDiaryWnd);
+				m_pActiveDialog = smart_cast<CUIWindow*>(&UIDiaryWnd);
 				InventoryUtilities::SendInfoToActor("ui_pda_events");
 				break;
 			case eptComm:
-				m_pActiveDialog = dynamic_cast<CUIWindow*>(&UIPdaCommunication);
+				m_pActiveDialog = smart_cast<CUIWindow*>(&UIPdaCommunication);
 				InventoryUtilities::SendInfoToActor("ui_pda_contacts");
 				break;
 			case eptMap:
-				m_pActiveDialog = dynamic_cast<CUIWindow*>(&UIMapWnd);
+				m_pActiveDialog = smart_cast<CUIWindow*>(&UIMapWnd);
 				break;
 			case eptEncyclopedia:
-				m_pActiveDialog = dynamic_cast<CUIWindow*>(&UIEncyclopediaWnd);
+				m_pActiveDialog = smart_cast<CUIWindow*>(&UIEncyclopediaWnd);
 				InventoryUtilities::SendInfoToActor("ui_pda_encyclopedia");
 				break;
 			case eptActorStatistic:
-				m_pActiveDialog = dynamic_cast<CUIWindow*>(&UIActorInfo);
+				m_pActiveDialog = smart_cast<CUIWindow*>(&UIActorInfo);
 				InventoryUtilities::SendInfoToActor("ui_pda_actor_info");
 				break;
 			case eptRanking:
-				m_pActiveDialog = dynamic_cast<CUIWindow*>(&UIStalkersRanking);
+				m_pActiveDialog = smart_cast<CUIWindow*>(&UIStalkersRanking);
 				InventoryUtilities::SendInfoToActor("ui_pda_ranking");
 				break;
 			default:
@@ -172,7 +172,7 @@ void CUIPdaWnd::SendMessage(CUIWindow* pWnd, s16 msg, void* pData)
 	}
 	else if (PDA_ENCYCLOPEDIA_HAS_ARTICLE == msg)
 	{
-		CUIJobItem *pItem = dynamic_cast<CUIJobItem*>(pWnd);
+		CUIJobItem *pItem = smart_cast<CUIJobItem*>(pWnd);
 		if (pItem)
 		{
 			bool* b = (bool*)pData;
@@ -182,7 +182,7 @@ void CUIPdaWnd::SendMessage(CUIWindow* pWnd, s16 msg, void* pData)
 	}
 	else if (PDA_OPEN_ENCYCLOPEDIA_ARTICLE == msg)
 	{
-		CUIJobItem *pItem = dynamic_cast<CUIJobItem*>(pWnd);
+		CUIJobItem *pItem = smart_cast<CUIJobItem*>(pWnd);
 		if (pItem)
 		{
 			SetActiveSubdialog(epsEncyclopedia, pItem->GetAdditionalMaterialID());
@@ -190,7 +190,7 @@ void CUIPdaWnd::SendMessage(CUIWindow* pWnd, s16 msg, void* pData)
 	}
 	else if (PDA_OPEN_DIARY_ARTICLE == msg)
 	{
-		CUIJobItem *pItem = dynamic_cast<CUIJobItem*>(pWnd);
+		CUIJobItem *pItem = smart_cast<CUIJobItem*>(pWnd);
 		if (pItem)
 		{
 			SetActiveSubdialog(epsDiaryArticle, pItem->GetAdditionalMaterialID());

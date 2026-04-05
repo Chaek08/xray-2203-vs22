@@ -87,7 +87,7 @@ void CUIJobsWnd::AddTask(CGameTask * const task)
 	// ѕробегаемс€ по таскам и заносим их как задани€
 	int tmp = 0;
 
-	CActor* pActor = dynamic_cast<CActor*>(Level().CurrentEntity());
+	CActor* pActor = smart_cast<CActor*>(Level().CurrentEntity());
 
 	for (u32 i = 0; i < task->ObjectivesNum(); ++i)
 	{
@@ -152,7 +152,7 @@ void CUIJobsWnd::ReloadJobs()
 {
 	UIList.RemoveAll();
 
-	CActor *pActor = dynamic_cast<CActor*>(Level().CurrentEntity());
+	CActor *pActor = smart_cast<CActor*>(Level().CurrentEntity());
 
 	if (!pActor || !pActor->game_task_registry->registry().objects_ptr()) return;
 

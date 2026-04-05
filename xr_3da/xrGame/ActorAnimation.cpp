@@ -248,12 +248,12 @@ void SActorVehicleAnims::SOneTypeCollection::Create(CSkeletonAnimated* V,u16 num
 void CActor::steer_Vehicle(float angle)	
 {
 	if(!m_holder)		return;
-	CCar*	car			= dynamic_cast<CCar*>(m_holder);
+	CCar*	car			= smart_cast<CCar*>(m_holder);
 	u16 anim_type       = car->DriverAnimationType();
 	SActorVehicleAnims::SOneTypeCollection& anims=m_vehicle_anims->m_vehicles_type_collections[anim_type];
-	if(angle==0.f) 		dynamic_cast<CSkeletonAnimated*>	(Visual())->PlayCycle(anims.idles[0]);
-	else if(angle>0.f)	dynamic_cast<CSkeletonAnimated*>	(Visual())->PlayCycle(anims.steer_right);
-	else				dynamic_cast<CSkeletonAnimated*>	(Visual())->PlayCycle(anims.steer_left);
+	if(angle==0.f) 		smart_cast<CSkeletonAnimated*>	(Visual())->PlayCycle(anims.idles[0]);
+	else if(angle>0.f)	smart_cast<CSkeletonAnimated*>	(Visual())->PlayCycle(anims.steer_right);
+	else				smart_cast<CSkeletonAnimated*>	(Visual())->PlayCycle(anims.steer_left);
 }
 
 void legs_play_callback		(CBlend *blend)
@@ -266,7 +266,7 @@ void legs_play_callback		(CBlend *blend)
 void CActor::g_SetSprintAnimation( u32 mstate_rl,MotionID &head,MotionID &toroso,MotionID &legs)
 {
 	SActorMotions::SActorSprintState& sprint=m_anims->m_sprint;
-	CHudItem	*H = dynamic_cast<CHudItem*>(inventory().ActiveItem());
+	CHudItem	*H = smart_cast<CHudItem*>(inventory().ActiveItem());
 	if(H)
 		head=toroso=sprint.m_toroso[H->animation_slot()];
 	else
@@ -324,9 +324,9 @@ void CActor::g_SetAnimation( u32 mstate_rl )
 		
 		if(!M_torso)
 		{
-			CHudItem	*H = dynamic_cast<CHudItem*>(inventory().ActiveItem());
-			CWeapon		*W = dynamic_cast<CWeapon*>(inventory().ActiveItem());
-			CMissile	*M = dynamic_cast<CMissile*>(inventory().ActiveItem());
+			CHudItem	*H = smart_cast<CHudItem*>(inventory().ActiveItem());
+			CWeapon		*W = smart_cast<CWeapon*>(inventory().ActiveItem());
+			CMissile	*M = smart_cast<CMissile*>(inventory().ActiveItem());
 						
 			if (H) {
 				SActorMotions::SActorState::STorsoWpn* TW	= &ST->m_torso[H->animation_slot() - 1];
@@ -413,7 +413,7 @@ void CActor::g_SetAnimation( u32 mstate_rl )
 		{
 			if((mstate_rl&mcCrouch)&&!isActorAccelerated(mstate_rl, IsZoomAimingMode()))//!(mstate_rl&mcAccel))
 			{
-				M_legs=dynamic_cast<CSkeletonAnimated*>(Visual())->ID_Cycle("cr_idle_1");
+				M_legs=smart_cast<CSkeletonAnimated*>(Visual())->ID_Cycle("cr_idle_1");
 			}
 			else 
 				M_legs	= ST->legs_idle;
@@ -426,13 +426,13 @@ void CActor::g_SetAnimation( u32 mstate_rl )
 		
 		// есть анимация для всего - запустим / иначе запустим анимацию по частям
 		if (m_current_torso!=M_torso){
-			if (m_bAnimTorsoPlayed)		dynamic_cast<CSkeletonAnimated*>	(Visual())->PlayCycle(M_torso,TRUE,AnimTorsoPlayCallBack,this);
-			else						dynamic_cast<CSkeletonAnimated*>	(Visual())->PlayCycle(M_torso);
+			if (m_bAnimTorsoPlayed)		smart_cast<CSkeletonAnimated*>	(Visual())->PlayCycle(M_torso,TRUE,AnimTorsoPlayCallBack,this);
+			else						smart_cast<CSkeletonAnimated*>	(Visual())->PlayCycle(M_torso);
 			m_current_torso=M_torso;
 		}
 		if(m_current_head!=M_head)
 		{
-			if(M_head)dynamic_cast<CSkeletonAnimated*>(Visual())->PlayCycle(M_head);
+			if(M_head)smart_cast<CSkeletonAnimated*>(Visual())->PlayCycle(M_head);
 			m_current_head=M_head;
 		}
 		if (m_current_legs!=M_legs){
@@ -440,7 +440,7 @@ void CActor::g_SetAnimation( u32 mstate_rl )
 			VERIFY						(!m_current_legs_blend || !fis_zero(m_current_legs_blend->timeTotal));
 			if ((mstate_real&mcAnyMove)&&(mstate_old&mcAnyMove)&&m_current_legs_blend)
 				pos						= fmod(m_current_legs_blend->timeCurrent,m_current_legs_blend->timeTotal)/m_current_legs_blend->timeTotal;
-			m_current_legs_blend		= dynamic_cast<CSkeletonAnimated*>(Visual())->PlayCycle(M_legs,TRUE,legs_play_callback,this);
+			m_current_legs_blend		= smart_cast<CSkeletonAnimated*>(Visual())->PlayCycle(M_legs,TRUE,legs_play_callback,this);
 			if ((!(mstate_old&mcAnyMove))&&(mstate_real&mcAnyMove))
 				pos						= 0.5f*Random.randI(2);
 			if (m_current_legs_blend)
@@ -458,7 +458,7 @@ void CActor::g_SetAnimation( u32 mstate_rl )
 			m_current_legs.invalidate	();
 			m_current_torso.invalidate	();
 
-			dynamic_cast<CSkeletonAnimated*>(Visual())->PlayCycle(m_anims->m_dead_stop);
+			smart_cast<CSkeletonAnimated*>(Visual())->PlayCycle(m_anims->m_dead_stop);
 		}
 	}
 //#ifdef DEBUG

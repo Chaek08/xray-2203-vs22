@@ -53,7 +53,7 @@ bool CStateMonsterHitObjectAbstract::check_start_conditions()
 	xr_vector<CObject*>::iterator E = nearest_objects.end();
 
 	for (xr_vector<CObject*>::iterator I = B; I != E; I++)	 {
-		CPhysicsShellHolder  *obj = dynamic_cast<CPhysicsShellHolder *>(*I);
+		CPhysicsShellHolder  *obj = smart_cast<CPhysicsShellHolder *>(*I);
 		if (!obj || !obj->m_pPhysicsShell) continue;
 
 		// определить дистанцию до врага

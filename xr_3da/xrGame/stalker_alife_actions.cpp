@@ -121,7 +121,7 @@ void CStalkerActionNoALife::initialize	()
 	object().movement().set_body_state			(eBodyStateStand);
 	object().movement().set_movement_type		(eMovementTypeStand);
 	object().movement().set_mental_state		(eMentalStateDanger);
-	object().sight().setup						(CSightAction(dynamic_cast<CGameObject*>(Level().CurrentEntity()),true));
+	object().sight().setup						(CSightAction(smart_cast<CGameObject*>(Level().CurrentEntity()),true));
 #endif
 }
 

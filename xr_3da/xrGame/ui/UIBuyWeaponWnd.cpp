@@ -265,10 +265,10 @@ void CUIBuyWeaponWnd::InitInventory()
 // KNIFE SLOT
 bool CUIBuyWeaponWnd::SlotProc0(CUIDragDropItem* pItem, CUIDragDropList* pList)
 {
-	CUIBuyWeaponWnd* this_inventory = dynamic_cast<CUIBuyWeaponWnd*>(pList->GetParent());
+	CUIBuyWeaponWnd* this_inventory = smart_cast<CUIBuyWeaponWnd*>(pList->GetParent());
 	R_ASSERT2(this_inventory, "wrong parent addressed as inventory wnd");
 
-	CUIDragDropItemMP *pDDItemMP = dynamic_cast<CUIDragDropItemMP*>(pItem);
+	CUIDragDropItemMP *pDDItemMP = smart_cast<CUIDragDropItemMP*>(pItem);
 	R_ASSERT(pDDItemMP);
 
 	if(!this_inventory->CanPutInSlot(pDDItemMP, KNIFE_SLOT)) 
@@ -291,10 +291,10 @@ bool CUIBuyWeaponWnd::SlotProc0(CUIDragDropItem* pItem, CUIDragDropList* pList)
 // PISTOL SLOT
 bool CUIBuyWeaponWnd::SlotProc1(CUIDragDropItem* pItem, CUIDragDropList* pList)
 {
-	CUIBuyWeaponWnd* this_inventory = dynamic_cast<CUIBuyWeaponWnd*>(pList->GetParent());
+	CUIBuyWeaponWnd* this_inventory = smart_cast<CUIBuyWeaponWnd*>(pList->GetParent());
 	R_ASSERT2(this_inventory, "wrong parent addressed as inventory wnd");
 
-	CUIDragDropItemMP *pDDItemMP = dynamic_cast<CUIDragDropItemMP*>(pItem);
+	CUIDragDropItemMP *pDDItemMP = smart_cast<CUIDragDropItemMP*>(pItem);
 	R_ASSERT(pDDItemMP);
 
 	if(!this_inventory->CanPutInSlot(pDDItemMP, PISTOL_SLOT)) return false;
@@ -317,11 +317,11 @@ bool CUIBuyWeaponWnd::SlotProc1(CUIDragDropItem* pItem, CUIDragDropList* pList)
 // RIFLE_SLOT
 bool CUIBuyWeaponWnd::SlotProc2(CUIDragDropItem* pItem, CUIDragDropList* pList)
 {
-	CUIBuyWeaponWnd* this_inventory = dynamic_cast<CUIBuyWeaponWnd*>(pList->GetParent());
+	CUIBuyWeaponWnd* this_inventory = smart_cast<CUIBuyWeaponWnd*>(pList->GetParent());
 	R_ASSERT2(this_inventory, "wrong parent addressed as inventory wnd");
 
 	CUIDragDropItemMP::AddonIDs	addonID;
-	CUIDragDropItemMP *pDDItemMP	= dynamic_cast<CUIDragDropItemMP*>(pItem), 
+	CUIDragDropItemMP *pDDItemMP	= smart_cast<CUIDragDropItemMP*>(pItem), 
 					  *pAddonOwner	= this_inventory->IsItemAnAddon(pDDItemMP, addonID);
 
 	R_ASSERT(pDDItemMP);
@@ -354,10 +354,10 @@ bool CUIBuyWeaponWnd::SlotProc2(CUIDragDropItem* pItem, CUIDragDropList* pList)
 // GRENADE_SLOT
 bool CUIBuyWeaponWnd::SlotProc3(CUIDragDropItem* pItem, CUIDragDropList* pList)
 {
-	CUIBuyWeaponWnd* this_inventory = dynamic_cast<CUIBuyWeaponWnd*>(pList->GetParent());
+	CUIBuyWeaponWnd* this_inventory = smart_cast<CUIBuyWeaponWnd*>(pList->GetParent());
 	R_ASSERT2(this_inventory, "wrong parent addressed as inventory wnd");
 
-	CUIDragDropItemMP *pDDItemMP = dynamic_cast<CUIDragDropItemMP*>(pItem);
+	CUIDragDropItemMP *pDDItemMP = smart_cast<CUIDragDropItemMP*>(pItem);
 	R_ASSERT(pDDItemMP);
 
 	// Если вещь не граната
@@ -382,10 +382,10 @@ bool CUIBuyWeaponWnd::SlotProc3(CUIDragDropItem* pItem, CUIDragDropList* pList)
 //APPARATUS_SLOT
 bool CUIBuyWeaponWnd::SlotProc4(CUIDragDropItem* pItem, CUIDragDropList* pList)
 {
-	CUIBuyWeaponWnd* this_inventory = dynamic_cast<CUIBuyWeaponWnd*>(pList->GetParent());
+	CUIBuyWeaponWnd* this_inventory = smart_cast<CUIBuyWeaponWnd*>(pList->GetParent());
 	R_ASSERT2(this_inventory, "wrong parent addressed as inventory wnd");
 
-	CUIDragDropItemMP *pDDItemMP = dynamic_cast<CUIDragDropItemMP*>(pItem);
+	CUIDragDropItemMP *pDDItemMP = smart_cast<CUIDragDropItemMP*>(pItem);
 	R_ASSERT(pDDItemMP);
 
 	if(!this_inventory->CanPutInSlot(pDDItemMP, APPARATUS_SLOT)) return false;
@@ -408,10 +408,10 @@ bool CUIBuyWeaponWnd::SlotProc4(CUIDragDropItem* pItem, CUIDragDropList* pList)
 //одеть костюм
 bool CUIBuyWeaponWnd::OutfitSlotProc(CUIDragDropItem* pItem, CUIDragDropList* pList)
 {
-	CUIBuyWeaponWnd* this_inventory = dynamic_cast<CUIBuyWeaponWnd*>(pList->GetParent());
+	CUIBuyWeaponWnd* this_inventory = smart_cast<CUIBuyWeaponWnd*>(pList->GetParent());
 	R_ASSERT2(this_inventory, "wrong parent addressed as inventory wnd");
 
-	CUIDragDropItemMP *pDDItemMP = dynamic_cast<CUIDragDropItemMP*>(pItem);
+	CUIDragDropItemMP *pDDItemMP = smart_cast<CUIDragDropItemMP*>(pItem);
 	R_ASSERT(pDDItemMP);
 	
 	if (OUTFIT_SLOT == pDDItemMP->GetSlot())
@@ -451,10 +451,10 @@ bool CUIBuyWeaponWnd::OutfitSlotProc(CUIDragDropItem* pItem, CUIDragDropList* pL
 //на пояс
 bool CUIBuyWeaponWnd::BeltProc(CUIDragDropItem* pItem, CUIDragDropList* pList)
 {
-	CUIBuyWeaponWnd* this_inventory = dynamic_cast<CUIBuyWeaponWnd*>(pList->GetParent());
+	CUIBuyWeaponWnd* this_inventory = smart_cast<CUIBuyWeaponWnd*>(pList->GetParent());
 	R_ASSERT2(this_inventory, "wrong parent addressed as inventory wnd");
 
-	CUIDragDropItemMP *pDDItemMP = dynamic_cast<CUIDragDropItemMP*>(pItem);
+	CUIDragDropItemMP *pDDItemMP = smart_cast<CUIDragDropItemMP*>(pItem);
 	// У нас не может быть обычная вещь в этом диалоге.
 	R_ASSERT(pDDItemMP);
 
@@ -569,7 +569,7 @@ void CUIBuyWeaponWnd::SendMessage(CUIWindow *pWnd, s16 msg, void *pData)
 	// Если костюмчик вернулся в слот, то спрятать его
 	if (OUTFIT_RETURNED_BACK == msg && pWnd->GetParent() == &UITopList[OUTFIT_SLOT])
 	{
-		CUIDragDropItemMP *pDDItemMP = dynamic_cast<CUIDragDropItemMP*>(pWnd);
+		CUIDragDropItemMP *pDDItemMP = smart_cast<CUIDragDropItemMP*>(pWnd);
 		if (pDDItemMP && OUTFIT_SLOT == pDDItemMP->GetSlot())
 		{
 			pDDItemMP->Show(false);
@@ -601,7 +601,7 @@ void CUIBuyWeaponWnd::OnBtnOkClicked(){
         return;
 
 	Game().StartStopMenu(this,true);
-	game_cl_Deathmatch * dm = dynamic_cast<game_cl_Deathmatch *>(&(Game()));
+	game_cl_Deathmatch * dm = smart_cast<game_cl_Deathmatch *>(&(Game()));
 	dm->OnBuyMenu_Ok();
 }
 
@@ -651,7 +651,7 @@ void CUIBuyWeaponWnd::SetCurrentDDItem(CUIWindow* pWnd){
 	if (m_pCurrentDragDropItem) 
 		m_pCurrentDragDropItem->Highlight(false);
 
-	m_pCurrentDragDropItem = dynamic_cast<CUIDragDropItemMP*>(pWnd);
+	m_pCurrentDragDropItem = smart_cast<CUIDragDropItemMP*>(pWnd);
 
 #ifdef DEBUG
 	R_ASSERT2(m_pCurrentDragDropItem, "CUIBuyWeaponWnd::SetCurrentDDItem - invalid item");
@@ -775,12 +775,12 @@ void CUIBuyWeaponWnd::Update()
 
 void CUIBuyWeaponWnd::DropItem()
 {
-	CActor *pActor = dynamic_cast<CActor*>(Level().CurrentEntity());
+	CActor *pActor = smart_cast<CActor*>(Level().CurrentEntity());
 	if(!pActor) return;
 
 	m_pCurrentItem->Drop();
 
-	(dynamic_cast<CUIDragDropList*>(m_pCurrentDragDropItem->GetParent()))->
+	(smart_cast<CUIDragDropList*>(m_pCurrentDragDropItem->GetParent()))->
 		DetachChild(m_pCurrentDragDropItem);
 	m_pCurrentDragDropItem = NULL;
 }
@@ -792,7 +792,7 @@ void CUIBuyWeaponWnd::Show()
 
 	if (GameID() != GAME_SINGLE)
 	{
-		CActor *pActor = dynamic_cast<CActor*>(Level().CurrentEntity());
+		CActor *pActor = smart_cast<CActor*>(Level().CurrentEntity());
 		if(!pActor) return;
 		pActor->HideCurrentWeapon(GEG_PLAYER_BUYMENU_OPEN);//, false);
 	}
@@ -812,7 +812,7 @@ void CUIBuyWeaponWnd::Hide()
 
 	if (GameID() != GAME_SINGLE)
 	{
-		CActor *pActor = dynamic_cast<CActor*>(Level().CurrentEntity());
+		CActor *pActor = smart_cast<CActor*>(Level().CurrentEntity());
 		if(!pActor) return;
 
 		pActor->RestoreHidedWeapon(GEG_PLAYER_BUYMENU_CLOSE);
@@ -981,7 +981,7 @@ bool CUIBuyWeaponWnd::SlotToSection(const u32 SlotNum)
 	// Выкидываем вещь из слота если есть.
 	if (!UITopList[SlotNum].GetDragDropItemsList().empty())
 	{
-		CUIDragDropItemMP *pDDItemMP = dynamic_cast<CUIDragDropItemMP*>(*UITopList[SlotNum].GetDragDropItemsList().begin());
+		CUIDragDropItemMP *pDDItemMP = smart_cast<CUIDragDropItemMP*>(*UITopList[SlotNum].GetDragDropItemsList().begin());
 		pDDItemMP->MoveOnNextDrop();
 		pDDItemMP->AttachDetachAllAddons(false);
 		UIBagWnd.SendMessage(pDDItemMP, DRAG_DROP_ITEM_DROP, NULL);
@@ -1030,7 +1030,7 @@ CUIDragDropItemMP * CUIBuyWeaponWnd::GetWeapon(u32 slotNum, u32 idx)
 
 	DRAG_DROP_LIST_it it = UITopList[slotNum].GetDragDropItemsList().begin(); 
 	std::advance(it, idx);
-	return dynamic_cast<CUIDragDropItemMP*>(*it);
+	return smart_cast<CUIDragDropItemMP*>(*it);
 }
 
 const u8 CUIBuyWeaponWnd::GetWeaponAddonInfoByIndex(u8 idx)
@@ -1122,7 +1122,7 @@ bool CUIBuyWeaponWnd::CheckBuyAvailabilityInSlots()
 
 			for (DRAG_DROP_LIST_it it = pList.begin(); it != pList.end(); ++it)
 			{
-				CUIDragDropItemMP *pDDItemMP = dynamic_cast<CUIDragDropItemMP*>(*it);
+				CUIDragDropItemMP *pDDItemMP = smart_cast<CUIDragDropItemMP*>(*it);
 				R_ASSERT(pDDItemMP);
 
 				// И если на нее хватает денег, то отнимаем ее цену от количества денег
@@ -1162,7 +1162,7 @@ bool CUIBuyWeaponWnd::CheckBuyAvailabilityInSlots()
 		 it != UITopList[BELT_SLOT].GetDragDropItemsList().end();
 		 ++it)
 	{
-		CUIDragDropItemMP *pDDItemMP = dynamic_cast<CUIDragDropItemMP*>(*it);
+		CUIDragDropItemMP *pDDItemMP = smart_cast<CUIDragDropItemMP*>(*it);
 		R_ASSERT(pDDItemMP);
 
 		if (!pDDItemMP->m_bHasRealRepresentation)
@@ -1247,7 +1247,7 @@ int CUIBuyWeaponWnd::GetPriceOfItemInSlot(int slot){
 
 	if (!UITopList[slot].GetDragDropItemsList().empty())
 	{
-		CUIDragDropItemMP *pDDItemMP = dynamic_cast<CUIDragDropItemMP*>(*UITopList[slot].GetDragDropItemsList().begin());
+		CUIDragDropItemMP *pDDItemMP = smart_cast<CUIDragDropItemMP*>(*UITopList[slot].GetDragDropItemsList().begin());
 		if (!pDDItemMP->m_bAlreadyPaid)
 			return 0;
         return GetItemPrice(pDDItemMP);	
@@ -1346,7 +1346,7 @@ CUIDragDropItemMP * CUIBuyWeaponWnd::IsItemAnAddon(CUIDragDropItemMP *pPossibleA
 	// проверяем не аддон ли pPossibleAddon вещи в слот(е/ах)
 	if (!UITopList[RIFLE_SLOT].GetDragDropItemsList().empty())
 	{
-		CUIDragDropItemMP * pDDItemMP = dynamic_cast<CUIDragDropItemMP*>(UITopList[RIFLE_SLOT].GetDragDropItemsList().front());
+		CUIDragDropItemMP * pDDItemMP = smart_cast<CUIDragDropItemMP*>(UITopList[RIFLE_SLOT].GetDragDropItemsList().front());
 
 		if (pDDItemMP && pDDItemMP->bAddonsAvailable)
 		{
@@ -1412,10 +1412,10 @@ void CUIBuyWeaponWnd::FillItemInfo(CUIDragDropItemMP *pDDItemMP)
 
 bool CUIBuyWeaponWnd::BagProc(CUIDragDropItem* pItem, CUIDragDropList* pList)
 {
-	CUIBuyWeaponWnd* this_inventory = dynamic_cast<CUIBuyWeaponWnd*>(pList->GetTop());
+	CUIBuyWeaponWnd* this_inventory = smart_cast<CUIBuyWeaponWnd*>(pList->GetTop());
 	R_ASSERT2(this_inventory, "wrong parent addressed");
 
-	CUIDragDropItemMP* pDDItemMP = dynamic_cast<CUIDragDropItemMP*>(pItem);
+	CUIDragDropItemMP* pDDItemMP = smart_cast<CUIDragDropItemMP*>(pItem);
 	R_ASSERT(pDDItemMP);
 	
 	pDDItemMP->AttachDetachAllAddons(false);

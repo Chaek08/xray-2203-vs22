@@ -106,7 +106,7 @@ CUIGameCustom* game_cl_TeamDeathmatch::createGameUI()
 {
 	game_cl_mp::createGameUI();
 	CLASS_ID clsid			= CLSID_GAME_UI_TEAMDEATHMATCH;
-	m_game_ui	= dynamic_cast<CUIGameTDM*> ( NEW_INSTANCE ( clsid ) );
+	m_game_ui	= smart_cast<CUIGameTDM*> ( NEW_INSTANCE ( clsid ) );
 	R_ASSERT(m_game_ui);
 	m_game_ui->SetClGame(this);
 	m_game_ui->Init();
@@ -156,7 +156,7 @@ void game_cl_TeamDeathmatch::OnTeamSelect(int Team)
 	{
 		CObject *l_pObj = Level().CurrentEntity();
 
-		CGameObject *l_pPlayer = dynamic_cast<CGameObject*>(l_pObj);
+		CGameObject *l_pPlayer = smart_cast<CGameObject*>(l_pObj);
 		if(!l_pPlayer) return;
 
 		NET_Packet		P;
@@ -243,7 +243,7 @@ char*	game_cl_TeamDeathmatch::getTeamSection(int Team)
 
 void game_cl_TeamDeathmatch::shedule_Update			(u32 dt)
 {
-	if(!m_game_ui && HUD().GetUI() ) m_game_ui = dynamic_cast<CUIGameTDM*>( HUD().GetUI()->UIGame() );
+	if(!m_game_ui && HUD().GetUI() ) m_game_ui = smart_cast<CUIGameTDM*>( HUD().GetUI()->UIGame() );
 	//---------------------------------------------------------
 	if (pUITeamSelectWnd && pUITeamSelectWnd->IsShown() && !CanCallTeamSelectMenu())
 		StartStopMenu(pUITeamSelectWnd,true);
@@ -304,7 +304,7 @@ void	game_cl_TeamDeathmatch::OnRender				()
 			if (ps == local_player) continue;
 
 			VERIFY(pObject);
-			CActor* pActor = dynamic_cast<CActor*>(pObject);
+			CActor* pActor = smart_cast<CActor*>(pObject);
 			VERIFY(pActor);
 			pActor->RenderIndicator(pTS->IndicatorPos, pTS->Indicator_r1, pTS->Indicator_r2, pTS->IndicatorShader);
 		}

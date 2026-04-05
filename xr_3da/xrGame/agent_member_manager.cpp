@@ -20,7 +20,7 @@ CAgentMemberManager::~CAgentMemberManager		()
 
 void CAgentMemberManager::add					(CEntity *member)
 {
-	CAI_Stalker					*stalker = dynamic_cast<CAI_Stalker*>(member);
+	CAI_Stalker					*stalker = smart_cast<CAI_Stalker*>(member);
 	if (!stalker || !stalker->g_Alive())
 		return;
 
@@ -37,7 +37,7 @@ void CAgentMemberManager::add					(CEntity *member)
 
 void CAgentMemberManager::remove				(CEntity *member)
 {
-	CAI_Stalker					*stalker = dynamic_cast<CAI_Stalker*>(member);
+	CAI_Stalker					*stalker = smart_cast<CAI_Stalker*>(member);
 	if (!stalker)
 		return;
 

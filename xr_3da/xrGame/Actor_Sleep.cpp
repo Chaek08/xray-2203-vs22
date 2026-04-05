@@ -23,7 +23,7 @@ void CActor::UpdateSleep()
 	if(!conditions().IsSleeping()) return;
 
 
-	VERIFY(this == dynamic_cast<CActor*>(Level().CurrentEntity()));
+	VERIFY(this == smart_cast<CActor*>(Level().CurrentEntity()));
 	VERIFY(m_pSleepEffectorPP);
 
 //	u32 y,m,d,h,mi,s,ms;

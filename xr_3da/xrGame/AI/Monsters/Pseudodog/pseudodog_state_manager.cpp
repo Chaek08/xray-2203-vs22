@@ -49,8 +49,8 @@ void CStateManagerPseudodog::execute()
 
 	//
 	//const CEntityAlive	*enemy		= m_object->EnemyMan.get_enemy();
-	//const CAI_Stalker	*pStalker	= dynamic_cast<const CAI_Stalker *>(enemy);
-	//const CActor		*pActor		= dynamic_cast<const CActor *>(enemy);
+	//const CAI_Stalker	*pStalker	= smart_cast<const CAI_Stalker *>(enemy);
+	//const CActor		*pActor		= smart_cast<const CActor *>(enemy);
 
 	//TTime last_hit_time = 0;
 	//if (m_object->HitMemory.is_hit()) last_hit_time = m_object->HitMemory.get_last_hit_time();

@@ -105,7 +105,7 @@ void CCat::reinit()
 	inherited::reinit();
 
 	MotionID			def1, def2, def3;
-	CSkeletonAnimated	*pSkel = dynamic_cast<CSkeletonAnimated*>(Visual());
+	CSkeletonAnimated	*pSkel = smart_cast<CSkeletonAnimated*>(Visual());
 
 	def1 = pSkel->ID_Cycle_Safe("jump_attack_0");	VERIFY(def1);
 	def2 = pSkel->ID_Cycle_Safe("jump_attack_1");	VERIFY(def2);

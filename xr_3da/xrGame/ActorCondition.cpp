@@ -163,7 +163,7 @@ EActorSleep CActorCondition::GoSleep(ALife::_TIME_ID sleep_time, bool without_ch
 	//поставить будильник
 	object().m_dwWakeUpTime = Level().GetGameTime() + sleep_time;
 
-	VERIFY	(m_object == dynamic_cast<CActor*>(Level().CurrentEntity()));
+	VERIFY	(m_object == smart_cast<CActor*>(Level().CurrentEntity()));
 
 	Level().Cameras.RemoveEffector(EEffectorPPType(SLEEP_EFFECTOR_TYPE_ID));
 	object().m_pSleepEffectorPP = xr_new<CSleepEffectorPP>(object().m_pSleepEffector->ppi,
@@ -196,7 +196,7 @@ void CActorCondition::Awoke()
 	}
 
 
-	VERIFY(m_object == dynamic_cast<CActor*>(Level().CurrentEntity()));
+	VERIFY(m_object == smart_cast<CActor*>(Level().CurrentEntity()));
 	VERIFY(object().m_pSleepEffectorPP);
 
 	if(object().m_pSleepEffectorPP)
@@ -252,7 +252,7 @@ EActorSleep CActorCondition::CanSleepHere()
 									NearestList.end() != it;
 									it++)
 	{
-		CEntityAlive* entity = dynamic_cast<CEntityAlive*>(*it);
+		CEntityAlive* entity = smart_cast<CEntityAlive*>(*it);
 		if(entity && entity->g_Alive() && entity->is_relation_enemy(m_object))
 			return easEnemies;
 	}

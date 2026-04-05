@@ -113,7 +113,7 @@ struct pred_remove_nonactual_sounds {
 
 		// удалить звуки от неживых объектов
 		if (x.who) {
-			const CEntityAlive *pE = dynamic_cast<const CEntityAlive*> (x.who);
+			const CEntityAlive *pE = smart_cast<const CEntityAlive*> (x.who);
 			if (pE && !pE->g_Alive()) return true;
 		}
 
@@ -133,7 +133,7 @@ void CMonsterSoundMemory::UpdateHearing()
 	for (I=Sounds.begin(); I!=Sounds.end(); I++) I->CalcValue(monster->m_current_update, monster->Position());
 
 	//#ifdef DEBUG
-	//	CBaseMonster *pB = dynamic_cast<CBaseMonster*>(this);
+	//	CBaseMonster *pB = smart_cast<CBaseMonster*>(this);
 	//
 	//	pB->HDebug->HT_Clear();
 	//	pB->HDebug->L_Clear();

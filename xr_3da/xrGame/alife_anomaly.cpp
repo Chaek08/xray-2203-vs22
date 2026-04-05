@@ -61,7 +61,7 @@ CSE_ALifeItemWeapon	*CSE_ALifeSmartZone::tpfGetBestWeapon	(ALife::EHitType		&tHi
 
 ALife::EMeetActionType CSE_ALifeSmartZone::tfGetActionType	(CSE_ALifeSchedulable	*tpALifeSchedulable,int			iGroupIndex, bool bMutualDetection)
 {
-	CSE_ALifeObject				*object = dynamic_cast<CSE_ALifeObject*>(tpALifeSchedulable->base());
+	CSE_ALifeObject				*object = smart_cast<CSE_ALifeObject*>(tpALifeSchedulable->base());
 	VERIFY						(object);
 	return						((object->m_tGraphID == m_tGraphID) ? ALife::eMeetActionSmartTerrain : ALife::eMeetActionTypeIgnore);
 }
@@ -87,7 +87,7 @@ void CSE_ALifeCreatureAbstract::on_spawn	()
 	m_dynamic_out_restrictions.clear	();
 	m_dynamic_in_restrictions.clear		();
 
-	if (dynamic_cast<CSE_ALifeGroupAbstract*>(this))
+	if (smart_cast<CSE_ALifeGroupAbstract*>(this))
 		return;
 
 	MONSTER_COMMUNITY monster_community;
@@ -115,7 +115,7 @@ void CSE_ALifeAnomalousZone::on_spawn						()
 		if (p < m_wItemCount) {
 			CSE_Abstract	*l_tpSE_Abstract = alife().spawn_item(m_cppArtefactSections[p],position(),m_tNodeID,m_tGraphID,0xffff);
 			R_ASSERT3		(l_tpSE_Abstract,"Can't spawn artefact ",m_cppArtefactSections[p]);
-			CSE_ALifeDynamicObject	*i = dynamic_cast<CSE_ALifeDynamicObject*>(l_tpSE_Abstract);
+			CSE_ALifeDynamicObject	*i = smart_cast<CSE_ALifeDynamicObject*>(l_tpSE_Abstract);
 			R_ASSERT2		(i,"Non-ALife object in the 'game.spawn'");
 
 			i->m_tSpawnID		= m_tSpawnID;
@@ -130,7 +130,7 @@ void CSE_ALifeAnomalousZone::on_spawn						()
 			i->m_tNodeID		= p;
 			i->m_fDistance		= q;
 
-			CSE_ALifeItemArtefact *l_tpALifeItemArtefact = dynamic_cast<CSE_ALifeItemArtefact*>(i);
+			CSE_ALifeItemArtefact *l_tpALifeItemArtefact = smart_cast<CSE_ALifeItemArtefact*>(i);
 			R_ASSERT2		(l_tpALifeItemArtefact,"Anomalous zone can't generate non-artefact objects since they don't have an 'anomaly property'!");
 
 			l_tpALifeItemArtefact->m_fAnomalyValue = m_maxPower*(1.f - i->o_Position.distance_to(o_Position)/m_fRadius);

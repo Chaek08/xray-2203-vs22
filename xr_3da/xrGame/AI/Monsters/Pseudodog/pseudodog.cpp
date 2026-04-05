@@ -167,8 +167,8 @@ void CAI_PseudoDog::reload(LPCSTR section)
 	
 	
 	SVelocityParam &velocity_run = movement().get_velocity(MonsterMovement::eVelocityParameterRunNormal);
-	CJumping::AddState	(dynamic_cast<CSkeletonAnimated*>(Visual())->ID_Cycle_Safe("jump_prepare_0"),	JT_CUSTOM,	true,	0.f, velocity_run.velocity.angular_real);
-	CJumping::AddState	(dynamic_cast<CSkeletonAnimated*>(Visual())->ID_Cycle_Safe("jump_glide_0"),	JT_GLIDE,	false,	0.f, velocity_run.velocity.angular_real);
+	CJumping::AddState	(smart_cast<CSkeletonAnimated*>(Visual())->ID_Cycle_Safe("jump_prepare_0"),	JT_CUSTOM,	true,	0.f, velocity_run.velocity.angular_real);
+	CJumping::AddState	(smart_cast<CSkeletonAnimated*>(Visual())->ID_Cycle_Safe("jump_glide_0"),	JT_GLIDE,	false,	0.f, velocity_run.velocity.angular_real);
 }
 
 void CAI_PseudoDog::UpdateCL()
@@ -183,7 +183,7 @@ void CAI_PseudoDog::UpdateCL()
 
 		if (strike_in_jump) return;
 
-		const CEntity *pE = dynamic_cast<const CEntity *>(CJumping::GetEnemy());
+		const CEntity *pE = smart_cast<const CEntity *>(CJumping::GetEnemy());
 		if (!pE) return;
 
 		Fvector trace_from;
@@ -216,7 +216,7 @@ void CAI_PseudoDog::CheckSpecParams(u32 spec_params)
 		MotionMan.Seq_Add(eAnimAttackPsi);
 		MotionMan.Seq_Switch();
 
-		CActor *pA = dynamic_cast<CActor *>(Level().CurrentEntity());
+		CActor *pA = smart_cast<CActor *>(Level().CurrentEntity());
 		if (pA) {
 			pA->EffectorManager().AddEffector(xr_new<CMonsterEffectorHit>(m_psi_effector.ce_time,m_psi_effector.ce_amplitude,m_psi_effector.ce_period_number,m_psi_effector.ce_power));
 			Level().Cameras.AddEffector(xr_new<CMonsterEffector>(m_psi_effector.ppi, m_psi_effector.time, m_psi_effector.time_attack, m_psi_effector.time_release));
@@ -237,7 +237,7 @@ void CAI_PseudoDog::CheckSpecParams(u32 spec_params)
 
 //void CAI_PseudoDog::play_effect_sound()
 //{
-//	CActor *pA = dynamic_cast<CActor*>(Level().CurrentEntity());
+//	CActor *pA = smart_cast<CActor*>(Level().CurrentEntity());
 //	if (!pA) return;
 //	
 //	Fvector pos = pA->Position();

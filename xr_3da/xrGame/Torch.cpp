@@ -103,7 +103,7 @@ void CTorch::SwitchNightVision(bool vision_on)
 
 	if(m_bNightVisionOn)
 	{
-		CActor *pA = dynamic_cast<CActor *>(H_Parent());
+		CActor *pA = smart_cast<CActor *>(H_Parent());
 		if (pA) 
 		{
 			bool result = m_NightVisionEffector.Start();
@@ -116,7 +116,7 @@ void CTorch::SwitchNightVision(bool vision_on)
 	}
 	else
 	{
-		CActor *pA = dynamic_cast<CActor *>(H_Parent());
+		CActor *pA = smart_cast<CActor *>(H_Parent());
 		if(pA)
 		{
 			bool result = m_NightVisionEffector.Stop();
@@ -173,7 +173,7 @@ void CTorch::Switch	(bool light_on)
 
 	if(*light_trace_bone)
 	{
-		CKinematics* pVisual = dynamic_cast<CKinematics*>(Visual()); VERIFY(pVisual);
+		CKinematics* pVisual = smart_cast<CKinematics*>(Visual()); VERIFY(pVisual);
 		pVisual->LL_SetBoneVisible(pVisual->LL_BoneID(light_trace_bone),light_on,TRUE);
 		pVisual->CalculateBones_Invalidate();
 		pVisual->CalculateBones();
@@ -183,18 +183,18 @@ void CTorch::Switch	(bool light_on)
 BOOL CTorch::net_Spawn(CSE_Abstract* DC) 
 {
 	CSE_Abstract			*e	= (CSE_Abstract*)(DC);
-	CSE_ALifeItemTorch		*torch	= dynamic_cast<CSE_ALifeItemTorch*>(e);
+	CSE_ALifeItemTorch		*torch	= smart_cast<CSE_ALifeItemTorch*>(e);
 	R_ASSERT				(torch);
 	cNameVisual_set			(torch->get_visual());
 
 	R_ASSERT				(!CFORM());
-	R_ASSERT				(dynamic_cast<CKinematics*>(Visual()));
+	R_ASSERT				(smart_cast<CKinematics*>(Visual()));
 	collidable.model		= xr_new<CCF_Skeleton>	(this);
 
 	if (!inherited::net_Spawn(DC))
 		return				(FALSE);
 	
-	CKinematics* K			= dynamic_cast<CKinematics*>(Visual());
+	CKinematics* K			= smart_cast<CKinematics*>(Visual());
 	CInifile* pUserData		= K->LL_UserData(); 
 	R_ASSERT3				(pUserData,"Empty Torch user data!",torch->get_visual());
 	lanim					= LALib.FindItem(pUserData->r_string("torch_definition","color_animator"));
@@ -262,17 +262,17 @@ void CTorch::UpdateCL			()
 	UpdateSwitchNightVision		();
 
 	if (light_render->get_active()){
-		CBoneInstance& BI = dynamic_cast<CKinematics*>(Visual())->LL_GetBoneInstance(guid_bone);
+		CBoneInstance& BI = smart_cast<CKinematics*>(Visual())->LL_GetBoneInstance(guid_bone);
 		Fmatrix M;
 
 		if (H_Parent()) {
-			CActor* actor	= dynamic_cast<CActor*>(H_Parent());
-			if (actor)		dynamic_cast<CKinematics*>(H_Parent()->Visual())->CalculateBones_Invalidate	();
+			CActor* actor	= smart_cast<CActor*>(H_Parent());
+			if (actor)		smart_cast<CKinematics*>(H_Parent()->Visual())->CalculateBones_Invalidate	();
 
 			if (H_Parent()->XFORM().c.distance_to_sqr(Device.vCameraPosition)<_sqr(m_range))
 			{
 				// near camera
-				dynamic_cast<CKinematics*>(H_Parent()->Visual())->CalculateBones	();
+				smart_cast<CKinematics*>(H_Parent()->Visual())->CalculateBones	();
 				M.mul_43				(XFORM(),BI.mTransform);
 			} else {
 				// approximately the same
@@ -388,7 +388,7 @@ bool  CTorch::can_be_attached		() const
 {
 	if( !inherited::can_be_attached() ) return false;
 
-	const CActor *pA = dynamic_cast<const CActor *>(H_Parent());
+	const CActor *pA = smart_cast<const CActor *>(H_Parent());
 	if (pA) 
 	{
 		if(pA->inventory().Get(ID(), false))

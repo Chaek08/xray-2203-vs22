@@ -17,7 +17,7 @@ float CMeleeChecker::distance_to_enemy(const CEntity *enemy)
 	Fmatrix					global_transform;
 	global_transform.set	(m_object->XFORM());
 
-	CKinematics *p_visual	= dynamic_cast<CKinematics*>(m_object->Visual());
+	CKinematics *p_visual	= smart_cast<CKinematics*>(m_object->Visual());
 
 	global_transform.mulB	(p_visual->LL_GetBoneInstance(p_visual->LL_BoneID("bip01_head")).mTransform);
 

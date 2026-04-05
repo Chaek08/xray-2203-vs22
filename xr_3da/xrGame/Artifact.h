@@ -32,7 +32,7 @@ public:
 	virtual BOOL					renderable_ShadowReceive		()		{ return TRUE;	}
 	virtual void					create_physic_shell();
 
-	//for dynamic_cast
+	//for smart_cast
 	virtual CArtefact*				cast_artefact						()		{return this;}
 
 protected:

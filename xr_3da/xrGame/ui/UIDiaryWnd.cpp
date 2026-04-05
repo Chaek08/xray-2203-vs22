@@ -271,7 +271,7 @@ void CUIDiaryWnd::SetContractTrader()
 {
 	CSE_Abstract* E = Level().Server->game->get_entity_from_eid(m_TraderID);
 	CSE_ALifeTrader* pTrader = NULL;
-	if(E) pTrader = dynamic_cast<CSE_ALifeTrader*>(E);
+	if(E) pTrader = smart_cast<CSE_ALifeTrader*>(E);
 
 	if(pTrader)
 	{
@@ -399,7 +399,7 @@ void CUIDiaryWnd::Show(bool status)
 
 void CUIDiaryWnd::InitDiary()
 {
-	CActor* pActor = dynamic_cast<CActor*>(Level().CurrentEntity());
+	CActor* pActor = smart_cast<CActor*>(Level().CurrentEntity());
 	if(!pActor) return;
 
 	m_pContractsTreeItem->Close();
@@ -413,7 +413,7 @@ void CUIDiaryWnd::InitDiary()
 		{
 			CSE_Abstract* E = Level().Server->game->get_entity_from_eid((*it).id);
 			CSE_ALifeTrader* pTrader = NULL;
-			if(E) pTrader = dynamic_cast<CSE_ALifeTrader*>(E);
+			if(E) pTrader = smart_cast<CSE_ALifeTrader*>(E);
 
 			if(pTrader)
 			{
@@ -438,7 +438,7 @@ void CUIDiaryWnd::InitDiary()
 //////////////////////////////////////////////////////////////////////////
 void  CUIDiaryWnd::ReloadArticles()
 {
-	CActor* pActor = dynamic_cast<CActor*>(Level().CurrentEntity());
+	CActor* pActor = smart_cast<CActor*>(Level().CurrentEntity());
 	if(!pActor) return;
 
 	// “ут добавл€ютс€ записи в дневник игрока

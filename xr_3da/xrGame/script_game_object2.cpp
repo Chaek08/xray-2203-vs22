@@ -37,7 +37,7 @@
 
 void CScriptGameObject::explode	(u32 level_time)
 {
-	CExplosive			*explosive = dynamic_cast<CExplosive*>(&object());
+	CExplosive			*explosive = smart_cast<CExplosive*>(&object());
 	if (object().H_Parent())
 	{
 		ai().script_engine().script_log			(ScriptStorage::eLuaMessageTypeError,"CExplosive : cannot explode object wiht parent!");
@@ -56,7 +56,7 @@ void CScriptGameObject::explode	(u32 level_time)
 
 bool CScriptGameObject::active_zone_contact		(u16 id)
 {
-	CScriptZone		*script_zone = dynamic_cast<CScriptZone*>(&object());
+	CScriptZone		*script_zone = smart_cast<CScriptZone*>(&object());
 	if (!script_zone) {
 		ai().script_engine().script_log	(ScriptStorage::eLuaMessageTypeError,"CScriptZone : cannot access class member active_zone_contact!");
 		return		(false);
@@ -66,7 +66,7 @@ bool CScriptGameObject::active_zone_contact		(u16 id)
 
 CScriptGameObject *CScriptGameObject::best_weapon()
 {
-	CObjectHandler	*object_handler = dynamic_cast<CAI_Stalker*>(&object());
+	CObjectHandler	*object_handler = smart_cast<CAI_Stalker*>(&object());
 	if (!object_handler) {
 		ai().script_engine().script_log			(ScriptStorage::eLuaMessageTypeError,"CScriptEntity : cannot access class member best_weapon!");
 		return			(0);
@@ -79,7 +79,7 @@ CScriptGameObject *CScriptGameObject::best_weapon()
 
 void CScriptGameObject::set_item		(MonsterSpace::EObjectAction object_action)
 {
-	CObjectHandler			*object_handler = dynamic_cast<CAI_Stalker*>(&object());
+	CObjectHandler			*object_handler = smart_cast<CAI_Stalker*>(&object());
 	if (!object_handler)
 		ai().script_engine().script_log					(ScriptStorage::eLuaMessageTypeError,"CObjectHandler : cannot access class member set_item!");
 	else
@@ -88,7 +88,7 @@ void CScriptGameObject::set_item		(MonsterSpace::EObjectAction object_action)
 
 void CScriptGameObject::set_item		(MonsterSpace::EObjectAction object_action, CScriptGameObject *lua_game_object)
 {
-	CObjectHandler			*object_handler = dynamic_cast<CAI_Stalker*>(&object());
+	CObjectHandler			*object_handler = smart_cast<CAI_Stalker*>(&object());
 	if (!object_handler)
 		ai().script_engine().script_log					(ScriptStorage::eLuaMessageTypeError,"CObjectHandler : cannot access class member set_item!");
 	else
@@ -97,7 +97,7 @@ void CScriptGameObject::set_item		(MonsterSpace::EObjectAction object_action, CS
 
 void CScriptGameObject::set_item(MonsterSpace::EObjectAction object_action, CScriptGameObject *lua_game_object, u32 queue_size)
 {
-	CObjectHandler			*object_handler = dynamic_cast<CAI_Stalker*>(&object());
+	CObjectHandler			*object_handler = smart_cast<CAI_Stalker*>(&object());
 	if (!object_handler)
 		ai().script_engine().script_log					(ScriptStorage::eLuaMessageTypeError,"CObjectHandler : cannot access class member set_item!");
 	else
@@ -106,7 +106,7 @@ void CScriptGameObject::set_item(MonsterSpace::EObjectAction object_action, CScr
 
 void CScriptGameObject::set_item(MonsterSpace::EObjectAction object_action, CScriptGameObject *lua_game_object, u32 queue_size, u32 queue_interval)
 {
-	CObjectHandler			*object_handler = dynamic_cast<CAI_Stalker*>(&object());
+	CObjectHandler			*object_handler = smart_cast<CAI_Stalker*>(&object());
 	if (!object_handler)
 		ai().script_engine().script_log					(ScriptStorage::eLuaMessageTypeError,"CObjectHandler : cannot access class member set_item!");
 	else
@@ -115,7 +115,7 @@ void CScriptGameObject::set_item(MonsterSpace::EObjectAction object_action, CScr
 
 void CScriptGameObject::play_cycle(LPCSTR anim)
 {
-	CSkeletonAnimated* sa=dynamic_cast<CSkeletonAnimated*>(object().Visual());
+	CSkeletonAnimated* sa=smart_cast<CSkeletonAnimated*>(object().Visual());
 	if(sa){
 		MotionID m	= sa->ID_Cycle(anim);
 		if (m) sa->PlayCycle(m);
@@ -139,7 +139,7 @@ void CScriptGameObject::Hit(CScriptHit *tpLuaHit)
 	P.w_u16			(0);
 	P.w_dir			(tLuaHit.m_tDirection);
 	P.w_float		(tLuaHit.m_fPower);
-	CKinematics		*V = dynamic_cast<CKinematics*>(object().Visual());
+	CKinematics		*V = smart_cast<CKinematics*>(object().Visual());
 	VERIFY			(V);
 	if (xr_strlen	(tLuaHit.m_caBoneName))
 		P.w_s16		(V->LL_BoneID(tLuaHit.m_caBoneName));
@@ -161,33 +161,33 @@ CScriptGameObject::operator CObject*()
 
 void		CScriptGameObject::set_character_pda_info	(LPCSTR info_id)
 {
-	CInventoryOwner	 *pInventoryOwner = dynamic_cast<CInventoryOwner*>(&object()); VERIFY(pInventoryOwner);
+	CInventoryOwner	 *pInventoryOwner = smart_cast<CInventoryOwner*>(&object()); VERIFY(pInventoryOwner);
 	CPda* pda = pInventoryOwner->GetPDA(); VERIFY(pda);
 	pda->SetInfoPortion(info_id);
 }
 
 LPCSTR		CScriptGameObject::get_character_pda_info	()
 {
-	CInventoryOwner	 *pInventoryOwner = dynamic_cast<CInventoryOwner*>(&object()); VERIFY(pInventoryOwner);
+	CInventoryOwner	 *pInventoryOwner = smart_cast<CInventoryOwner*>(&object()); VERIFY(pInventoryOwner);
 	CPda* pda = pInventoryOwner->GetPDA(); VERIFY(pda);
 	return *(pda->GetInfoPortion());
 }
 
 void		CScriptGameObject::set_pda_info				(LPCSTR info_id)
 {
-	CPda* pda = dynamic_cast<CPda*>(&object()); VERIFY(pda);
+	CPda* pda = smart_cast<CPda*>(&object()); VERIFY(pda);
 	pda->SetInfoPortion(info_id);
 }
 
 LPCSTR		CScriptGameObject::get_pda_info				()
 {
-	CPda* pda = dynamic_cast<CPda*>(&object()); VERIFY(pda);
+	CPda* pda = smart_cast<CPda*>(&object()); VERIFY(pda);
 	return *(pda->GetInfoPortion());
 }
 
 const MemorySpace::CHitObject *CScriptGameObject::GetBestHit	() const
 {
-	const CCustomMonster	*monster = dynamic_cast<const CCustomMonster*>(&object());
+	const CCustomMonster	*monster = smart_cast<const CCustomMonster*>(&object());
 	if (!monster)
 		return				(0);
 	return					(monster->memory().hit().hit());
@@ -195,7 +195,7 @@ const MemorySpace::CHitObject *CScriptGameObject::GetBestHit	() const
 
 const MemorySpace::CSoundObject *CScriptGameObject::GetBestSound	() const
 {
-	const CCustomMonster	*monster = dynamic_cast<const CCustomMonster*>(&object());
+	const CCustomMonster	*monster = smart_cast<const CCustomMonster*>(&object());
 	if (!monster)
 		return				(0);
 	return					(monster->memory().sound().sound());
@@ -203,7 +203,7 @@ const MemorySpace::CSoundObject *CScriptGameObject::GetBestSound	() const
 
 CScriptGameObject *CScriptGameObject::GetBestEnemy()
 {
-	const CCustomMonster	*monster = dynamic_cast<const CCustomMonster*>(&object());
+	const CCustomMonster	*monster = smart_cast<const CCustomMonster*>(&object());
 	if (!monster)
 		return				(0);
 
@@ -214,7 +214,7 @@ CScriptGameObject *CScriptGameObject::GetBestEnemy()
 
 CScriptGameObject *CScriptGameObject::GetBestItem()
 {
-	const CCustomMonster	*monster = dynamic_cast<const CCustomMonster*>(&object());
+	const CCustomMonster	*monster = smart_cast<const CCustomMonster*>(&object());
 	if (!monster)
 		return				(0);
 
@@ -225,7 +225,7 @@ CScriptGameObject *CScriptGameObject::GetBestItem()
 
 u32 CScriptGameObject::memory_time(const CScriptGameObject &lua_game_object)
 {
-	CCustomMonster			*monster = dynamic_cast<CCustomMonster*>(&object());
+	CCustomMonster			*monster = smart_cast<CCustomMonster*>(&object());
 	if (!monster) {
 		ai().script_engine().script_log			(ScriptStorage::eLuaMessageTypeError,"CScriptEntity : cannot access class member memory!");
 		return				(0);
@@ -236,7 +236,7 @@ u32 CScriptGameObject::memory_time(const CScriptGameObject &lua_game_object)
 
 void CScriptGameObject::enable_memory_object	(CScriptGameObject *game_object, bool enable)
 {
-	CCustomMonster			*monster = dynamic_cast<CCustomMonster*>(&object());
+	CCustomMonster			*monster = smart_cast<CCustomMonster*>(&object());
 	if (!monster)
 		ai().script_engine().script_log		(ScriptStorage::eLuaMessageTypeError,"CGameObject : cannot access class member enable_memory_object!");
 	else
@@ -245,7 +245,7 @@ void CScriptGameObject::enable_memory_object	(CScriptGameObject *game_object, bo
 
 const xr_vector<CNotYetVisibleObject> &CScriptGameObject::not_yet_visible_objects() const
 {
-	CCustomMonster			*monster = dynamic_cast<CCustomMonster*>(&object());
+	CCustomMonster			*monster = smart_cast<CCustomMonster*>(&object());
 	if (!monster) {
 		ai().script_engine().script_log		(ScriptStorage::eLuaMessageTypeError,"CGameObject : cannot access class member not_yet_visible_objects!");
 		NODEFAULT;
@@ -255,7 +255,7 @@ const xr_vector<CNotYetVisibleObject> &CScriptGameObject::not_yet_visible_object
 
 float CScriptGameObject::visibility_threshold	() const
 {
-	CCustomMonster			*monster = dynamic_cast<CCustomMonster*>(&object());
+	CCustomMonster			*monster = smart_cast<CCustomMonster*>(&object());
 	if (!monster) {
 		ai().script_engine().script_log		(ScriptStorage::eLuaMessageTypeError,"CGameObject : cannot access class member visibility_threshold!");
 		NODEFAULT;
@@ -265,7 +265,7 @@ float CScriptGameObject::visibility_threshold	() const
 
 void CScriptGameObject::enable_vision			(bool value)
 {
-	CCustomMonster			*monster = dynamic_cast<CCustomMonster*>(&object());
+	CCustomMonster			*monster = smart_cast<CCustomMonster*>(&object());
 	if (!monster) {
 		ai().script_engine().script_log		(ScriptStorage::eLuaMessageTypeError,"CVisualMemoryManager : cannot access class member enable_vision!");
 		return;
@@ -275,7 +275,7 @@ void CScriptGameObject::enable_vision			(bool value)
 
 bool CScriptGameObject::vision_enabled			() const
 {
-	CCustomMonster			*monster = dynamic_cast<CCustomMonster*>(&object());
+	CCustomMonster			*monster = smart_cast<CCustomMonster*>(&object());
 	if (!monster) {
 		ai().script_engine().script_log		(ScriptStorage::eLuaMessageTypeError,"CVisualMemoryManager : cannot access class member vision_enabled!");
 		return								(false);
@@ -285,7 +285,7 @@ bool CScriptGameObject::vision_enabled			() const
 
 void CScriptGameObject::set_sound_threshold		(float value)
 {
-	CCustomMonster			*monster = dynamic_cast<CCustomMonster*>(&object());
+	CCustomMonster			*monster = smart_cast<CCustomMonster*>(&object());
 	if (!monster) {
 		ai().script_engine().script_log		(ScriptStorage::eLuaMessageTypeError,"CSoundMemoryManager : cannot access class member set_sound_threshold!");
 		return;
@@ -295,7 +295,7 @@ void CScriptGameObject::set_sound_threshold		(float value)
 
 void CScriptGameObject::restore_sound_threshold	()
 {
-	CCustomMonster			*monster = dynamic_cast<CCustomMonster*>(&object());
+	CCustomMonster			*monster = smart_cast<CCustomMonster*>(&object());
 	if (!monster) {
 		ai().script_engine().script_log		(ScriptStorage::eLuaMessageTypeError,"CSoundMemoryManager : cannot access class member restore_sound_threshold!");
 		return;
@@ -305,27 +305,27 @@ void CScriptGameObject::restore_sound_threshold	()
 
 void CScriptGameObject::SetStartDialog(LPCSTR dialog_id)
 {
-	CAI_PhraseDialogManager* pDialogManager = dynamic_cast<CAI_PhraseDialogManager*>(&object());
+	CAI_PhraseDialogManager* pDialogManager = smart_cast<CAI_PhraseDialogManager*>(&object());
 	if(!pDialogManager) return;
 	pDialogManager->SetStartDialog(dialog_id);
 }
 
 void CScriptGameObject::GetStartDialog		()
 {
-	CAI_PhraseDialogManager* pDialogManager = dynamic_cast<CAI_PhraseDialogManager*>(&object());
+	CAI_PhraseDialogManager* pDialogManager = smart_cast<CAI_PhraseDialogManager*>(&object());
 	if(!pDialogManager) return;
 	pDialogManager->GetStartDialog();
 }
 void CScriptGameObject::RestoreDefaultStartDialog()
 {
-	CAI_PhraseDialogManager* pDialogManager = dynamic_cast<CAI_PhraseDialogManager*>(&object());
+	CAI_PhraseDialogManager* pDialogManager = smart_cast<CAI_PhraseDialogManager*>(&object());
 	if(!pDialogManager) return;
 	pDialogManager->RestoreDefaultStartDialog();
 }
 
 void CScriptGameObject::SetActorPosition			(Fvector pos)
 {
-	CActor* actor = dynamic_cast<CActor*>(&object());
+	CActor* actor = smart_cast<CActor*>(&object());
 	if(actor){
 		Fmatrix F = actor->XFORM();
 		F.c = pos;
@@ -338,7 +338,7 @@ void CScriptGameObject::SetActorPosition			(Fvector pos)
 
 void CScriptGameObject::SetActorDirection		(float dir)
 {
-	CActor* actor = dynamic_cast<CActor*>(&object());
+	CActor* actor = smart_cast<CActor*>(&object());
 	if(actor){
 		actor->cam_Active()->Set(dir,0,0);
 //		actor->XFORM().setXYZ(0,dir,0);
@@ -348,7 +348,7 @@ void CScriptGameObject::SetActorDirection		(float dir)
 
 CHolderCustom* CScriptGameObject::get_current_holder()
 {
-	CActor* actor = dynamic_cast<CActor*>(&object());
+	CActor* actor = smart_cast<CActor*>(&object());
 
 	if(actor)
 		return actor->Holder();

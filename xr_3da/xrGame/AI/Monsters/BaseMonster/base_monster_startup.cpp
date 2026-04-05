@@ -66,7 +66,7 @@ void CBaseMonster::reinit()
 	m_bRunTurnRight					= false;
 
 	state_invisible					= false;
-	m_default_bone_part				= dynamic_cast<CSkeletonAnimated*>(Visual())->LL_PartID("default");
+	m_default_bone_part				= smart_cast<CSkeletonAnimated*>(Visual())->LL_PartID("default");
 
 	m_force_real_speed				= false;
 	m_script_processing_active		= false;
@@ -103,9 +103,9 @@ void CBaseMonster::Load(LPCSTR section)
 	fEntityHealth					= (float)pSettings->r_u32		(section,"Health");
 
 	if (ability_can_jump())
-		m_jumping					= dynamic_cast<CJumping *>(this);
+		m_jumping					= smart_cast<CJumping *>(this);
 
-	m_controlled					= dynamic_cast<CControlledEntityBase*>(this);
+	m_controlled					= smart_cast<CControlledEntityBase*>(this);
 
 
 	settings_load					(section);

@@ -28,7 +28,7 @@ IC	bool CGreetingManager::COldGreeting::operator==(const CAI_Stalker *stalker) c
 CGreetingManager::CGreetingManager	(CCustomMonster *object)
 {
 	VERIFY						(object);
-	m_object					= dynamic_cast<CAI_Stalker*>(object);
+	m_object					= smart_cast<CAI_Stalker*>(object);
 }
 
 void CGreetingManager::reload		(LPCSTR section)

@@ -106,7 +106,7 @@ bool CPhraseScript::Precondition	(const CGameObject* pSpeakerGO, LPCSTR dialog_i
 {
 	bool predicate_result = true;
 
-	if(!CheckInfo(dynamic_cast<const CInventoryOwner*>(pSpeakerGO))){
+	if(!CheckInfo(smart_cast<const CInventoryOwner*>(pSpeakerGO))){
 		#ifdef DEBUG
 			if (psAI_Flags.test(aiDialogs))
 				Msg("dialog [%s] phrase[%d] rejected by CheckInfo",dialog_id,phrase_num);
@@ -134,7 +134,7 @@ bool CPhraseScript::Precondition	(const CGameObject* pSpeakerGO, LPCSTR dialog_i
 
 void CPhraseScript::Action			(const CGameObject* pSpeakerGO, LPCSTR dialog_id, int phrase_num) const 
 {
-	TransferInfo(dynamic_cast<const CInventoryOwner*>(pSpeakerGO));
+	TransferInfo(smart_cast<const CInventoryOwner*>(pSpeakerGO));
 
 	for(u32 i = 0; i<Actions().size(); i++)
 	{
@@ -150,7 +150,7 @@ bool CPhraseScript::Precondition	(const CGameObject* pSpeakerGO1, const CGameObj
 {
 	bool predicate_result = true;
 
-	if(!CheckInfo(dynamic_cast<const CInventoryOwner*>(pSpeakerGO1))){
+	if(!CheckInfo(smart_cast<const CInventoryOwner*>(pSpeakerGO1))){
 		#ifdef DEBUG
 		if (psAI_Flags.test(aiDialogs))
 			Msg("dialog [%s] phrase[%d] rejected by CheckInfo",dialog_id,phrase_num);
@@ -177,7 +177,7 @@ bool CPhraseScript::Precondition	(const CGameObject* pSpeakerGO1, const CGameObj
 
 void CPhraseScript::Action			(const CGameObject* pSpeakerGO1, const CGameObject* pSpeakerGO2, LPCSTR dialog_id, int phrase_num) const 
 {
-	TransferInfo(dynamic_cast<const CInventoryOwner*>(pSpeakerGO1));
+	TransferInfo(smart_cast<const CInventoryOwner*>(pSpeakerGO1));
 
 	for(u32 i = 0; i<Actions().size(); i++)
 	{

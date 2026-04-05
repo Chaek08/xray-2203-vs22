@@ -40,7 +40,7 @@ void CAttachableItem::reload		(LPCSTR section)
 void CAttachableItem::OnH_A_Chield	() 
 {
 	inherited::OnH_A_Chield			();
-	const CInventoryOwner			*inventory_owner = dynamic_cast<const CInventoryOwner*>(H_Parent());
+	const CInventoryOwner			*inventory_owner = smart_cast<const CInventoryOwner*>(H_Parent());
 	VERIFY							(inventory_owner);
 	if (inventory_owner->attached(this))
 		setVisible					(true);
@@ -65,16 +65,16 @@ void CAttachableItem::enable		(bool value)
 	}
 
 	if (value && !enabled() && H_Parent()) {
-		CGameObject			*game_object = dynamic_cast<CGameObject*>(H_Parent());
-		CAttachmentOwner	*owner = dynamic_cast<CAttachmentOwner*>(game_object);
+		CGameObject			*game_object = smart_cast<CGameObject*>(H_Parent());
+		CAttachmentOwner	*owner = smart_cast<CAttachmentOwner*>(game_object);
 		VERIFY				(owner);
 		m_enabled			= value;
 		owner->attach		(this);
 		setVisible			(true);
 	}
 	if (!value && enabled() && H_Parent()) {
-		CGameObject			*game_object = dynamic_cast<CGameObject*>(H_Parent());
-		CAttachmentOwner	*owner = dynamic_cast<CAttachmentOwner*>(game_object);
+		CGameObject			*game_object = smart_cast<CGameObject*>(H_Parent());
+		CAttachmentOwner	*owner = smart_cast<CAttachmentOwner*>(game_object);
 		VERIFY				(owner);
 		m_enabled			= value;
 		owner->detach		(this);

@@ -129,7 +129,7 @@ void CMainUI::Activate	(bool bActivate)
 			m_Flags.set				(flActive|flNeedChangeCapture,FALSE);
 			return;
 		}
-		m_startDialog = dynamic_cast<CUIDialogWnd*>(dlg);
+		m_startDialog = smart_cast<CUIDialogWnd*>(dlg);
 		VERIFY(m_startDialog);
 
 		m_Flags.set					(flRestoreConsole,Console->bVisible);

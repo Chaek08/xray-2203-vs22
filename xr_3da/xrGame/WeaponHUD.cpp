@@ -27,10 +27,10 @@ SHARED_HUD_INFO::SHARED_HUD_INFO(LPCSTR section, CHudItem* pHudItem)
 	//	R_ASSERT					(pVisual->Type==MT_SKELETON_ANIM);
 
 	// fire bone	
-	if(dynamic_cast<CWeapon*>(pHudItem)){
+	if(smart_cast<CWeapon*>(pHudItem)){
 		LPCSTR fire_bone		= pSettings->r_string					(section,"fire_bone");
-		iFireBone				= dynamic_cast<CKinematics*>(pVisual)->LL_BoneID	(fire_bone);
-		if (iFireBone>=dynamic_cast<CKinematics*>(pVisual)->LL_BoneCount())	
+		iFireBone				= smart_cast<CKinematics*>(pVisual)->LL_BoneID	(fire_bone);
+		if (iFireBone>=smart_cast<CKinematics*>(pVisual)->LL_BoneCount())	
 			Debug.fatal	("There is no '%s' bone for weapon '%s'.",fire_bone, section);
 
 		vFirePoint				= pSettings->r_fvector3					(section,"fire_point");
@@ -118,14 +118,14 @@ void CWeaponHUD::UpdatePosition(const Fmatrix& trans)
 
 MotionID CWeaponHUD::animGet		(LPCSTR name)
 {
-	return dynamic_cast<CSkeletonAnimated*>(Visual())->ID_Cycle_Safe(name);
+	return smart_cast<CSkeletonAnimated*>(Visual())->ID_Cycle_Safe(name);
 }
 
 void CWeaponHUD::animDisplay		(MotionID M,	BOOL bMixIn)
 {
 	if(m_bCurrentEntityIsParent)
 	{
-		CSkeletonAnimated* pSkeletonAnimated			= dynamic_cast<CSkeletonAnimated*>(Visual());
+		CSkeletonAnimated* pSkeletonAnimated			= smart_cast<CSkeletonAnimated*>(Visual());
 		VERIFY(pSkeletonAnimated);
 		//pSkeletonAnimated->Update						();
 		pSkeletonAnimated->PlayCycle					(M,bMixIn);
@@ -138,7 +138,7 @@ void CWeaponHUD::animPlay			(MotionID M,	BOOL bMixIn, CInventoryItem* W)
 
 	animDisplay			(M, bMixIn);
 
-	CSkeletonAnimated	*skeleton_animated = dynamic_cast<CSkeletonAnimated*>(Visual());
+	CSkeletonAnimated	*skeleton_animated = smart_cast<CSkeletonAnimated*>(Visual());
 	VERIFY				(skeleton_animated);
 	CMotionDef			*motion_def = skeleton_animated->LL_GetMotionDef(M);
 	VERIFY				(motion_def);
@@ -147,8 +147,8 @@ void CWeaponHUD::animPlay			(MotionID M,	BOOL bMixIn, CInventoryItem* W)
 		//если предыдущая анимация еще не доигралась, то остановить ее
 		m_bStopAtEndAnimIsRunning = true;
 
-		CBoneData			&bone_data = dynamic_cast<CKinematics*>(Visual())->LL_GetData(dynamic_cast<CKinematics*>(Visual())->LL_GetBoneRoot());
-		CBoneDataAnimated	*bone_anim = dynamic_cast<CBoneDataAnimated *>(&bone_data);
+		CBoneData			&bone_data = smart_cast<CKinematics*>(Visual())->LL_GetData(smart_cast<CKinematics*>(Visual())->LL_GetBoneRoot());
+		CBoneDataAnimated	*bone_anim = smart_cast<CBoneDataAnimated *>(&bone_data);
 		CMotion				&motion = bone_anim->Motions[M.slot]->at(M.idx);
 		u32					anim_time = iFloor(0.5f + 1000.f*motion.GetLength()/ motion_def->Dequantize(motion_def->speed));
 		m_pCallbackItem		= W;
@@ -166,7 +166,7 @@ void CWeaponHUD::UpdateHud		()
 	}
 
 	if(m_bCurrentEntityIsParent)
-		dynamic_cast<CSkeletonAnimated*>(Visual())->Update	();
+		smart_cast<CSkeletonAnimated*>(Visual())->Update	();
 }
 
 void CWeaponHUD::StopCurrentAnim	()

@@ -54,7 +54,7 @@ void CTrade::SellItem(int id)
 
 				// выбросить у себя 
 				NET_Packet				P;
-				CGameObject				*O = dynamic_cast<CGameObject *>(pThis.inv_owner);
+				CGameObject				*O = smart_cast<CGameObject *>(pThis.inv_owner);
 				O->u_EventGen			(P,GE_TRADE_SELL,O->ID());
 				P.w_u16					(u16(l_pIItem->object().ID()));
 				O->u_EventSend			(P);
@@ -63,7 +63,7 @@ void CTrade::SellItem(int id)
 				pThis.inv_owner->m_dwMoney += dwTransferMoney;
 
 				// взять у партнера
-				O						= dynamic_cast<CGameObject *>(pPartner.inv_owner);
+				O						= smart_cast<CGameObject *>(pPartner.inv_owner);
 				O->u_EventGen			(P,GE_TRADE_BUY,O->ID());
 				P.w_u16					(u16(l_pIItem->object().ID()));
 				O->u_EventSend			(P);
@@ -75,9 +75,9 @@ void CTrade::SellItem(int id)
 #endif
 				// On Trade Action callback
 				if (pThis.type == TT_TRADER) {
-					dynamic_cast<CAI_Trader*>(pThis.base)->callback(GameObject::eTradeSellBuyItem)(l_pIItem->object().lua_game_object(), true, dwTransferMoney);
+					smart_cast<CAI_Trader*>(pThis.base)->callback(GameObject::eTradeSellBuyItem)(l_pIItem->object().lua_game_object(), true, dwTransferMoney);
 				} else if (pPartner.type == TT_TRADER) {
-					dynamic_cast<CAI_Trader*>(pPartner.base)->callback(GameObject::eTradeSellBuyItem)(l_pIItem->object().lua_game_object(), false, dwTransferMoney);
+					smart_cast<CAI_Trader*>(pPartner.base)->callback(GameObject::eTradeSellBuyItem)(l_pIItem->object().lua_game_object(), false, dwTransferMoney);
 				}
 			}
 			break;
@@ -99,7 +99,7 @@ void CTrade::SellItem(CInventoryItem* pItem)
 
 	// выбросить у себя 
 	NET_Packet				P;
-	CGameObject				*O = dynamic_cast<CGameObject *>(pThis.inv_owner);
+	CGameObject				*O = smart_cast<CGameObject *>(pThis.inv_owner);
 	O->u_EventGen			(P,GE_TRADE_SELL,O->ID());
 	P.w_u16					(pItem->object().ID());
 	O->u_EventSend			(P);
@@ -108,7 +108,7 @@ void CTrade::SellItem(CInventoryItem* pItem)
 	pThis.inv_owner->m_dwMoney += dwTransferMoney;
 
 	// взять у партнера
-	O						= dynamic_cast<CGameObject *>(pPartner.inv_owner);
+	O						= smart_cast<CGameObject *>(pPartner.inv_owner);
 	O->u_EventGen			(P,GE_TRADE_BUY,O->ID());
 	P.w_u16					(pItem->object().ID());
 	O->u_EventSend			(P);
@@ -119,15 +119,15 @@ void CTrade::SellItem(CInventoryItem* pItem)
 	CAI_Trader* pTrader = NULL;
 	if (pThis.type == TT_TRADER) 
 	{
-		pTrader = dynamic_cast<CAI_Trader*>(pThis.base);
+		pTrader = smart_cast<CAI_Trader*>(pThis.base);
 		pTrader->callback(GameObject::eTradeSellBuyItem)(pItem->object().lua_game_object(), true, dwTransferMoney);
 	}
 	else if (pPartner.type == TT_TRADER) 
 	{
-		pTrader = dynamic_cast<CAI_Trader*>(pPartner.base);
+		pTrader = smart_cast<CAI_Trader*>(pPartner.base);
 		pTrader->callback(GameObject::eTradeSellBuyItem)(pItem->object().lua_game_object(), false, dwTransferMoney);
 		
-		CArtefact* pArtefact= dynamic_cast<CArtefact*>(pItem);
+		CArtefact* pArtefact= smart_cast<CArtefact*>(pItem);
 		if(pArtefact)
 			m_bNeedToUpdateArtefactTasks |= pTrader->BuyArtefact(pArtefact);
 
@@ -159,7 +159,7 @@ CInventoryOwner* CTrade::GetPartner()
 
 u32	CTrade::GetItemPrice(PIItem pItem)
 {
-	CArtefact* pArtefact = dynamic_cast<CArtefact*>(pItem);
+	CArtefact* pArtefact = smart_cast<CArtefact*>(pItem);
 
 	// определение коэффициента
 	float factor	= 1.0f;
@@ -175,7 +175,7 @@ u32	CTrade::GetItemPrice(PIItem pItem)
 	{
 		if(pPartner.type == TT_TRADER && pArtefact)
 		{
-			CAI_Trader* pTrader = dynamic_cast<CAI_Trader*>(pPartner.inv_owner); VERIFY(pTrader);
+			CAI_Trader* pTrader = smart_cast<CAI_Trader*>(pPartner.inv_owner); VERIFY(pTrader);
 			if (pTrader)
 				item_cost = pTrader->ArtefactPrice(pArtefact);
 		}
@@ -199,7 +199,7 @@ u32	CTrade::GetItemPrice(PIItem pItem)
 	{
 		if(pThis.type == TT_TRADER && pArtefact)
 		{
-			CAI_Trader* pTrader = dynamic_cast<CAI_Trader*>(pThis.inv_owner); VERIFY(pTrader);
+			CAI_Trader* pTrader = smart_cast<CAI_Trader*>(pThis.inv_owner); VERIFY(pTrader);
 			if (pTrader)
 				item_cost = pTrader->ArtefactPrice(pArtefact);
 		}

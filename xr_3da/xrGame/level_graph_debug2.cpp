@@ -42,7 +42,7 @@
 
 void CLevelGraph::on_render1()
 {
-	CGameObject*	O	= dynamic_cast<CGameObject*> (Level().CurrentEntity());
+	CGameObject*	O	= smart_cast<CGameObject*> (Level().CurrentEntity());
 	Fvector	POSITION	= O->Position();
 	POSITION.y += 0.5f;
 
@@ -350,9 +350,9 @@ void CLevelGraph::set_start_point	()
 	start.position			= v2d(Level().CurrentEntity()->Position());
 	start.vertex_id			= vertex(v3d(start.position));
 //	CObject					*obj = Level().Objects.FindObjectByName("m_stalker_e0000");
-//	CAI_Stalker				*stalker = dynamic_cast<CAI_Stalker*>(obj);
+//	CAI_Stalker				*stalker = smart_cast<CAI_Stalker*>(obj);
 //	obj						= Level().Objects.FindObjectByName("localhost/dima/name=DIMA-AI");
-//	CActor					*actor = dynamic_cast<CActor*>(obj);
+//	CActor					*actor = smart_cast<CActor*>(obj);
 //	if (!stalker || !actor)
 //		return;
 //
@@ -1286,12 +1286,12 @@ void CLevelGraph::on_render5	()
 	u32 E	= Level().Objects.o_count	();
 	for ( ; I < E; ++I) {
 		CObject*		_O				= Level().Objects.o_get_by_iterator(I);
-		CTeamBaseZone	*team_base_zone = dynamic_cast<CTeamBaseZone*>(_O);
+		CTeamBaseZone	*team_base_zone = smart_cast<CTeamBaseZone*>(_O);
 		if (team_base_zone) {
 			team_base_zone->OnRender();
 			continue;
 		}
-		CCustomMonster *tpCustomMonster = dynamic_cast<CCustomMonster*>(_O);
+		CCustomMonster *tpCustomMonster = smart_cast<CCustomMonster*>(_O);
 		if (tpCustomMonster) {
 			tpCustomMonster->OnRender();
 			if (!tpCustomMonster->movement().detail().path().empty()) {
@@ -1299,7 +1299,7 @@ void CLevelGraph::on_render5	()
 				RCache.dbg_DrawAABB(temp,1.f,1.f,1.f,D3DCOLOR_XRGB(0,0,255));
 			}
 		}
-		CAI_Stalker		*stalker = dynamic_cast<CAI_Stalker*>(_O);
+		CAI_Stalker		*stalker = smart_cast<CAI_Stalker*>(_O);
 		if (!stalker || !stalker->memory().enemy().selected())
 			continue;
 
@@ -1356,7 +1356,7 @@ void CLevelGraph::on_render6	()
 	u32 E	= Level().Objects.o_count	();
 	for ( ; I < E; ++I) {
 		CObject*		_O				= Level().Objects.o_get_by_iterator(I);
-		CCustomMonster *tpCustomMonster = dynamic_cast<CCustomMonster*>(_O);
+		CCustomMonster *tpCustomMonster = smart_cast<CCustomMonster*>(_O);
 		if (tpCustomMonster) {
 			tpCustomMonster->OnRender();
 			if (!tpCustomMonster->movement().detail().path().empty()) {

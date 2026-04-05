@@ -109,7 +109,7 @@ void CInventory::Clear()
 
 bool CInventory::Take(CGameObject *pObj, bool bNotActivate, bool strict_placement)
 {
-	CInventoryItem *pIItem = dynamic_cast<CInventoryItem*>(pObj);
+	CInventoryItem *pIItem = smart_cast<CInventoryItem*>(pObj);
 	VERIFY(pIItem);
 
 	if(!CanTakeItem(pIItem)) return false;
@@ -177,7 +177,7 @@ bool CInventory::Take(CGameObject *pObj, bool bNotActivate, bool strict_placemen
 
 bool CInventory::Drop(CGameObject *pObj, bool call_drop) 
 {
-	CInventoryItem *pIItem = dynamic_cast<CInventoryItem*>(pObj);
+	CInventoryItem *pIItem = smart_cast<CInventoryItem*>(pObj);
 	
 	if(pIItem && (std::find(m_all.begin(),m_all.end(),pIItem) != m_all.end())) 
 	{
@@ -193,8 +193,8 @@ bool CInventory::Drop(CGameObject *pObj, bool call_drop)
 			m_all.erase(std::find(m_all.begin(), m_all.end(), pIItem));
 			pIItem->m_pInventory = NULL;
 
-			if (call_drop && dynamic_cast<CInventoryItem*>(pObj))
-				m_pOwner->OnItemDrop	(dynamic_cast<CInventoryItem*>(pObj));
+			if (call_drop && smart_cast<CInventoryItem*>(pObj))
+				m_pOwner->OnItemDrop	(smart_cast<CInventoryItem*>(pObj));
 
 			CalcTotalWeight();
 			m_dwModifyFrame = Device.dwFrame;
@@ -519,7 +519,7 @@ PIItem CInventory::ItemFormSlot(u32 slot) const
 
 void CInventory::SendActionEvent(s32 cmd, u32 flags) 
 {
-	CActor *pActor = dynamic_cast<CActor*>(m_pOwner);
+	CActor *pActor = smart_cast<CActor*>(m_pOwner);
 	if (!pActor) return;
 
 	NET_Packet		P;
@@ -533,7 +533,7 @@ void CInventory::SendActionEvent(s32 cmd, u32 flags)
 
 bool CInventory::Action(s32 cmd, u32 flags) 
 {
-	CActor *pActor = dynamic_cast<CActor*>(m_pOwner);
+	CActor *pActor = smart_cast<CActor*>(m_pOwner);
 	
 	if (pActor)
 	{
@@ -862,10 +862,10 @@ CInventoryItem *CInventory::get_object_by_id(ALife::_OBJECT_ID tObjectID)
 bool CInventory::Eat(PIItem pIItem)
 {
 	//устанаовить съедобна ли вещь
-	CEatableItem* pItemToEat = dynamic_cast<CEatableItem*>(pIItem);
+	CEatableItem* pItemToEat = smart_cast<CEatableItem*>(pIItem);
 	if(!pItemToEat) return false;
 
-	CEntityAlive *entity_alive = dynamic_cast<CEntityAlive*>(m_pOwner);
+	CEntityAlive *entity_alive = smart_cast<CEntityAlive*>(m_pOwner);
 	if(!entity_alive) return false;
 
 	entity_alive->conditions().ChangeHealth(pItemToEat->m_fHealthInfluence);
@@ -978,7 +978,7 @@ CInventoryItem	*CInventory::GetItemFromInventory(LPCSTR caItemName)
 	for(TIItemContainer::iterator l_it = l_list.begin(); l_list.end() != l_it; ++l_it)
 		if (!xr_strcmp((*l_it)->object().cNameSect().c_str(),caItemName))
 			return	(*l_it);
-//	ai().script_engine().script_log	(ScriptStorage::eLuaMessageTypeError,"Object with name %s is not found in the %s inventory!",caItemName,*dynamic_cast<CGameObject*>(m_pOwner)->cName());
+//	ai().script_engine().script_log	(ScriptStorage::eLuaMessageTypeError,"Object with name %s is not found in the %s inventory!",caItemName,*smart_cast<CGameObject*>(m_pOwner)->cName());
 	return	(0);
 }
 
@@ -995,7 +995,7 @@ bool CInventory::CanTakeItem(CInventoryItem *inventory_item) const
 		if((*it)->object().ID() == inventory_item->object().ID()) break;
 	VERIFY2(it == m_all.end(), "item already exists in inventory");
 
-	CActor* pActor = dynamic_cast<CActor*>(m_pOwner);
+	CActor* pActor = smart_cast<CActor*>(m_pOwner);
 	//актер всегда может взять вещь
 	if(!pActor && (TotalWeight() + inventory_item->Weight() > m_pOwner->MaxCarryWeight()))
 		return	false;
@@ -1101,12 +1101,12 @@ void CInventory::Items_SetCurrentEntityHud(bool current_entity)
 	for(it = m_all.begin(); m_all.end() != it; ++it) 
 	{
 		PIItem pIItem = *it;
-		CHudItem* pHudItem = dynamic_cast<CHudItem*> (pIItem);
+		CHudItem* pHudItem = smart_cast<CHudItem*> (pIItem);
 		if (pHudItem) 
 		{
 			pHudItem->GetHUD()->SetCurrentEntityHud(current_entity);
 		};
-		CWeapon* pWeapon = dynamic_cast<CWeapon*>(pIItem);
+		CWeapon* pWeapon = smart_cast<CWeapon*>(pIItem);
 		if (pWeapon)
 		{
 			pWeapon->InitAddons();

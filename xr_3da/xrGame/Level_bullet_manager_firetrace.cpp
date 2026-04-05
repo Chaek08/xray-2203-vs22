@@ -48,7 +48,7 @@ BOOL  CBulletManager::firetrace_callback(collide::rq_result& result, LPVOID para
 		//и стрелял
 		if( !(result.O->ID() == bullet->parent_id &&  bullet->fly_dist<PARENT_IGNORE_DIST) )
 
-			if (0!=(V=dynamic_cast<CKinematics*>(result.O->Visual())))
+			if (0!=(V=smart_cast<CKinematics*>(result.O->Visual())))
 			{
 				CBoneData& B = V->LL_GetData((u16)result.element);
 				hit_material_idx = B.game_mtl_idx;
@@ -96,7 +96,7 @@ void CBulletManager::FireShotmark (const SBullet* bullet, const Fvector& vDir, c
 
 		//вернуть нормаль по которой играли партиклы и ставили валмарки
 
-		CCF_Skeleton* skeletion = dynamic_cast<CCF_Skeleton*>(R.O->CFORM());
+		CCF_Skeleton* skeletion = smart_cast<CCF_Skeleton*>(R.O->CFORM());
 		if(skeletion)
 		{
 			xr_vector<CCF_OBB>::iterator it = std::find_if(skeletion->_GetElements().begin(),
@@ -229,7 +229,7 @@ void CBulletManager::DynamicObjectHit (SBullet* bullet, const Fvector& end_point
 	m_inv.transform_tiny(p_in_object_space, end_point);
 
 	// bone-space
-	CKinematics* V = dynamic_cast<CKinematics*>(R.O->Visual());
+	CKinematics* V = smart_cast<CKinematics*>(R.O->Visual());
 
 	if(V)
 	{

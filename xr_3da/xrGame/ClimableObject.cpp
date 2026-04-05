@@ -73,7 +73,7 @@ void CClimableObject::	Load				( LPCSTR section)
 BOOL CClimableObject::	net_Spawn			( CSE_Abstract* DC)
 {
 	CSE_Abstract				*e = (CSE_Abstract*)(DC);
-	CSE_ALifeObjectClimable	*CLB=dynamic_cast<CSE_ALifeObjectClimable*>(e);
+	CSE_ALifeObjectClimable	*CLB=smart_cast<CSE_ALifeObjectClimable*>(e);
 	Fmatrix& b=CLB->shapes[0].data.box;
 	m_box.m_halfsize.set(b._11,b._22,b._33);
 	//m_box.m_halfsize.set(1.f,1.f,1.f);
@@ -84,7 +84,7 @@ BOOL CClimableObject::	net_Spawn			( CSE_Abstract* DC)
 	BOOL ret	= inherited::net_Spawn(DC);
 	m_box.xform_set(Fidentity);
 	m_pStaticShell=xr_new<CPHLeaderGeomShell>(this);
-	P_BuildStaticGeomShell(dynamic_cast<CPHStaticGeomShell*>(m_pStaticShell),dynamic_cast<CGameObject*>(this),0,m_box);
+	P_BuildStaticGeomShell(smart_cast<CPHStaticGeomShell*>(m_pStaticShell),smart_cast<CGameObject*>(this),0,m_box);
 	m_pStaticShell->SetMaterial("materials\\fake_ladders");
 	
 	SORT(	m_box.m_halfsize.x,m_axis.set(XFORM().i);m_axis.mul(m_box.m_halfsize.x),m_side.set(XFORM().i);m_side.mul(m_box.m_halfsize.x),m_norm.set(XFORM().i);m_norm.mul(m_box.m_halfsize.x),

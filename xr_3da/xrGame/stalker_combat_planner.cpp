@@ -104,14 +104,14 @@ void CStalkerCombatPlanner::react_on_grenades		()
 		return;
 
 //	u32							interval = AFTER_GRENADE_DESTROYED_INTERVAL;
-	const CMissile				*missile = dynamic_cast<const CMissile*>(reaction.m_grenade);
+	const CMissile				*missile = smart_cast<const CMissile*>(reaction.m_grenade);
 //	if (missile && (missile->destroy_time() > Device.dwTimeGlobal))
 //		interval				= missile->destroy_time() - Device.dwTimeGlobal + AFTER_GRENADE_DESTROYED_INTERVAL;
 //	m_object->agent_manager().add_danger_location(reaction.m_game_object->Position(),Device.dwTimeGlobal,interval,GRENADE_RADIUS);
 
 	if (missile && m_object->agent_manager().member().group_behaviour()) {
 //		Msg						("%6d : Stalker %s : grenade reaction",Device.dwTimeGlobal,*m_object->cName());
-		CEntityAlive			*initiator = dynamic_cast<CEntityAlive*>(Level().Objects.net_Find(reaction.m_grenade->CurrentParentID()));
+		CEntityAlive			*initiator = smart_cast<CEntityAlive*>(Level().Objects.net_Find(reaction.m_grenade->CurrentParentID()));
 		if (m_object->is_relation_enemy(initiator))
 			m_object->sound().play	(StalkerSpace::eStalkerSoundGrenadeAlarm);
 		else

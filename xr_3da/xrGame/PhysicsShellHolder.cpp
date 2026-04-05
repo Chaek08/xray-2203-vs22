@@ -45,7 +45,7 @@ void	CPhysicsShellHolder::Hit(float P, Fvector &dir, CObject* who, s16 element,
 
 void CPhysicsShellHolder::create_physic_shell	()
 {
-	IPhysicShellCreator *shell_creator = dynamic_cast<IPhysicShellCreator*>(this);
+	IPhysicShellCreator *shell_creator = smart_cast<IPhysicShellCreator*>(this);
 	if (shell_creator)
 		shell_creator->CreatePhysicsShell();
 }
@@ -70,8 +70,8 @@ void CPhysicsShellHolder::activate_physic_shell()
 	l_p2.c.add					(l_fw);
 
 	m_pPhysicsShell->Activate	(l_p1, 0, l_p2);
-	dynamic_cast<CKinematics*>(Visual())->CalculateBones_Invalidate	();
-	dynamic_cast<CKinematics*>(Visual())->CalculateBones();
+	smart_cast<CKinematics*>(Visual())->CalculateBones_Invalidate	();
+	smart_cast<CKinematics*>(Visual())->CalculateBones();
 //	XFORM().set					(l_p1);
 }
 

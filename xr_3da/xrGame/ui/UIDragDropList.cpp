@@ -65,7 +65,7 @@ void CUIDragDropList::AttachChild(CUIWindow* pChild)
 {
 //	CTimer	T;
 
-	CUIDragDropItem* pDragDropItem = dynamic_cast<CUIDragDropItem*>(pChild);
+	CUIDragDropItem* pDragDropItem = smart_cast<CUIDragDropItem*>(pChild);
 	if(pDragDropItem) 
 	{
 //	T.Start();
@@ -90,7 +90,7 @@ void CUIDragDropList::DetachChild(CUIWindow* pChild)
 	if( IsChild(pChild) )
 	{
 
-		CUIDragDropItem* pDragDropItem = dynamic_cast<CUIDragDropItem*>(pChild);
+		CUIDragDropItem* pDragDropItem = smart_cast<CUIDragDropItem*>(pChild);
 		if(pDragDropItem)
 		{
 			RemoveItemFromGrid(pDragDropItem);
@@ -168,7 +168,7 @@ void CUIDragDropList::SendMessage(CUIWindow *pWnd, s16 msg, void *pData)
 			GetMessageTarget()->SendMessage(this, DRAG_DROP_REFRESH_ACTIVE_ITEM , NULL);
 		}
 	}
-	else if(dynamic_cast<CUIDragDropItem*>(pWnd) && msg == DRAG_DROP_ITEM_DRAG)
+	else if(smart_cast<CUIDragDropItem*>(pWnd) && msg == DRAG_DROP_ITEM_DRAG)
 	{
 		if( IsChild(pWnd) ) 
 		{
@@ -179,11 +179,11 @@ void CUIDragDropList::SendMessage(CUIWindow *pWnd, s16 msg, void *pData)
 
 			//выбросить элемент из сетки
 			RemoveItemFromGrid((CUIDragDropItem*)pWnd);
-			dynamic_cast<CUIDragDropItem*>(pWnd)->Highlight(false);
+			smart_cast<CUIDragDropItem*>(pWnd)->Highlight(false);
 			
 		}
 	}
-	else if(dynamic_cast<CUIDragDropItem*>(pWnd) && msg == DRAG_DROP_ITEM_DROP)
+	else if(smart_cast<CUIDragDropItem*>(pWnd) && msg == DRAG_DROP_ITEM_DROP)
 	{	
 		CUIDragDropItem* pItem = (CUIDragDropItem*)pWnd;
 
@@ -621,7 +621,7 @@ void CUIDragDropList::UpdateList()
 {
 	for(WINDOW_LIST_it it = m_ChildWndList.begin(); m_ChildWndList.end() != it; ++it)
 	{
-		CUIDragDropItem* pDragDropItem = dynamic_cast<CUIDragDropItem*>(*it);
+		CUIDragDropItem* pDragDropItem = smart_cast<CUIDragDropItem*>(*it);
 		if(pDragDropItem)
 		{
 			int y = (pDragDropItem->GetGridRow()-m_iCurrentFirstRow)*GetCellHeight();

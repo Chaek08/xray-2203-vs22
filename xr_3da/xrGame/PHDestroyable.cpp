@@ -25,9 +25,9 @@ void CPHDestroyable::GenSpawnReplace(u16 ref_id,LPCSTR section,shared_str visual
 
 	CSE_Abstract				*D	= F_entity_Create(section);//*cNameSect()
 	VERIFY						(D);
-	CSE_Visual					*V  =dynamic_cast<CSE_Visual*>(D);
+	CSE_Visual					*V  =smart_cast<CSE_Visual*>(D);
 	V->set_visual				(*visual_name);
-	CSE_PHSkeleton				*l_tpPHSkeleton = dynamic_cast<CSE_PHSkeleton*>(D);
+	CSE_PHSkeleton				*l_tpPHSkeleton = smart_cast<CSE_PHSkeleton*>(D);
 	VERIFY						(l_tpPHSkeleton);
 	l_tpPHSkeleton->source_id	= ref_id;
 	//init
@@ -49,7 +49,7 @@ void CPHDestroyable::GenSpawnReplace(u16 ref_id,LPCSTR section,shared_str visual
 void CPHDestroyable::InitServerObject(CSE_Abstract* D)
 {
 	CPhysicsShellHolder	*obj	=PPhysicsShellHolder()		;
-	CSE_ALifeDynamicObjectVisual	*l_tpALifeDynamicObject = dynamic_cast<CSE_ALifeDynamicObjectVisual*>(D);
+	CSE_ALifeDynamicObjectVisual	*l_tpALifeDynamicObject = smart_cast<CSE_ALifeDynamicObjectVisual*>(D);
 	VERIFY							(l_tpALifeDynamicObject);
 	
 
@@ -82,7 +82,7 @@ void CPHDestroyable::Destroy(u16 source_id/*=u16(-1)*/,LPCSTR section/*="ph_skel
 //////////send destroy to self //////////////////////////////////////////////////////////////////
 	CPhysicsShellHolder	*obj	=PPhysicsShellHolder()		;
 
-	CActor				*A		=dynamic_cast<CActor*>(obj)	;
+	CActor				*A		=smart_cast<CActor*>(obj)	;
 	if(A)
 	{
 		A->character_physics_support()->SetRemoved();
@@ -155,7 +155,7 @@ void CPHDestroyable::SheduleUpdate(u32 dt)
 {
 	if(!m_flags.test(fl_destroyed)||!m_flags.test(fl_released)) return;
 	CPhysicsShellHolder *obj=PPhysicsShellHolder();
-	//CActor				*A		=dynamic_cast<CActor*>(obj)	;
+	//CActor				*A		=smart_cast<CActor*>(obj)	;
 	//if(A)
 	//{
 	//	A->character_physics_support()->SetRemoved();

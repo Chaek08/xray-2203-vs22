@@ -159,7 +159,7 @@ void game_cl_ArtefactHunt::TranslateGameMessage	(u32 msg, NET_Packet& P)
 				Color_Artefact);
 			CommonMessageOut(Text);
 						
-			CActor* pActor = dynamic_cast<CActor*> (Level().CurrentEntity());
+			CActor* pActor = smart_cast<CActor*> (Level().CurrentEntity());
 			if (!pActor) break;
 			if (pActor->ID() == PlayerID)
 				pMessageSounds[3].play_at_pos(NULL, Device.vCameraPosition, sm_2D, 0);
@@ -202,7 +202,7 @@ void game_cl_ArtefactHunt::TranslateGameMessage	(u32 msg, NET_Packet& P)
 				Color_Main);
 			CommonMessageOut(Text);
 
-			CActor* pActor = dynamic_cast<CActor*> (Level().CurrentEntity());
+			CActor* pActor = smart_cast<CActor*> (Level().CurrentEntity());
 			if (!pActor) break;
 			if (pActor->ID() == PlayerID)
 				pMessageSounds[1].play_at_pos(NULL, Device.vCameraPosition, sm_2D, 0);
@@ -283,7 +283,7 @@ CUIGameCustom* game_cl_ArtefactHunt::createGameUI()
 	game_cl_mp::createGameUI();
 
 	CLASS_ID clsid			= CLSID_GAME_UI_ARTEFACTHUNT;
-	m_game_ui	= dynamic_cast<CUIGameAHunt*> ( NEW_INSTANCE ( clsid ) );
+	m_game_ui	= smart_cast<CUIGameAHunt*> ( NEW_INSTANCE ( clsid ) );
 	R_ASSERT(m_game_ui);
 	m_game_ui->SetClGame(this);
 	m_game_ui->Init();
@@ -317,7 +317,7 @@ void game_cl_ArtefactHunt::GetMapEntities(xr_vector<SZoneMapEntityData>& dst)
 	if(!pObject)
 		return;
 
-	CArtefact* pArtefact = dynamic_cast<CArtefact*>(pObject);
+	CArtefact* pArtefact = smart_cast<CArtefact*>(pObject);
 	VERIFY(pArtefact);
 
 	CObject* pParent = pArtefact->H_Parent();
@@ -401,7 +401,7 @@ void game_cl_ArtefactHunt::shedule_Update			(u32 dt)
 					 
 					CActor* pActor = NULL;
 					if (Level().CurrentEntity()->CLS_ID == CLSID_OBJECT_ACTOR)
-						pActor = dynamic_cast<CActor*>(Level().CurrentEntity());
+						pActor = smart_cast<CActor*>(Level().CurrentEntity());
 
 					if (Level().CurrentEntity()->CLS_ID == CLSID_SPECTATOR || 
 						(pActor && !pActor->g_Alive()))
@@ -485,7 +485,7 @@ BOOL game_cl_ArtefactHunt::CanCallBuyMenu			()
 		return FALSE;
 	};
 
-	CActor* pCurActor = dynamic_cast<CActor*> (Level().CurrentEntity());
+	CActor* pCurActor = smart_cast<CActor*> (Level().CurrentEntity());
 	if (!pCurActor || !pCurActor->g_Alive()) return FALSE;
 
 	return TRUE;

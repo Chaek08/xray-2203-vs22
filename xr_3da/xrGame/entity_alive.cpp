@@ -285,7 +285,7 @@ void CEntityAlive::Hit(float P, Fvector &dir,CObject* who, s16 element,Fvector p
 	inherited::Hit(P,dir,who,element,position_in_object_space,impulse, hit_type);
 
 	if (g_Alive()) {
-		CEntityAlive* EA = dynamic_cast<CEntityAlive*>(who);
+		CEntityAlive* EA = smart_cast<CEntityAlive*>(who);
 		if(EA && EA->g_Alive() && EA->ID() != ID())
 		{
 			RELATION_REGISTRY().FightRegister(EA->ID(), ID(), this->tfGetRelationType(EA), P);
@@ -296,11 +296,11 @@ void CEntityAlive::Hit(float P, Fvector &dir,CObject* who, s16 element,Fvector p
 
 void CEntityAlive::Die	(CObject* who)
 {
-	RELATION_REGISTRY().Action(dynamic_cast<CEntityAlive*>(who), this, RELATION_REGISTRY::KILL);
+	RELATION_REGISTRY().Action(smart_cast<CEntityAlive*>(who), this, RELATION_REGISTRY::KILL);
 
 	inherited::Die(who);
 	
-	const CGameObject *who_object = dynamic_cast<const CGameObject*>(who);
+	const CGameObject *who_object = smart_cast<const CGameObject*>(who);
 	callback(GameObject::eDeath)(lua_game_object(), who_object ? who_object->lua_game_object() : 0);
 
 	NET_Packet		P;
@@ -309,7 +309,7 @@ void CEntityAlive::Die	(CObject* who)
 	u_EventSend		(P);
 
 	// disable react to sound
-	ISpatial* self	= dynamic_cast<ISpatial*> (this);
+	ISpatial* self	= smart_cast<ISpatial*> (this);
 	if (self)		self->spatial.type &=~STYPE_REACTTOSOUND;
 }
 
@@ -353,7 +353,7 @@ void CEntityAlive::BloodyWallmarks (float P, const Fvector &dir, s16 element,
 		return;
 
 	//вычислить координаты попадания
-	CKinematics* V = dynamic_cast<CKinematics*>(Visual());
+	CKinematics* V = smart_cast<CKinematics*>(Visual());
 		
 	Fvector start_pos = position_in_object_space;
 	if(V)
@@ -432,7 +432,7 @@ void CEntityAlive::StartFireParticles(CWound* pWound)
 			m_ParticleWounds.push_back(pWound);
 		}
 
-		CKinematics* V = dynamic_cast<CKinematics*>(Visual());
+		CKinematics* V = smart_cast<CKinematics*>(Visual());
 
 		u16 particle_bone = CParticlesPlayer::GetNearestBone(V, pWound->GetBoneNum());
 		VERIFY(particle_bone  < 64 || BI_NONE == particle_bone);

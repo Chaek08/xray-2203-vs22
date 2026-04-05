@@ -136,7 +136,7 @@ void CVisualMemoryManager::enable		(const CObject *object, bool enable)
 float CVisualMemoryManager::object_visible_distance(const CGameObject *game_object, float &object_distance) const
 {
 	Fvector								eye_position = Fvector().set(0.f,0.f,0.f), temp, eye_direction;
-	Fmatrix								&eye_matrix = dynamic_cast<CKinematics*>(m_object->Visual())->LL_GetTransform(u16(m_stalker->eye_bone));
+	Fmatrix								&eye_matrix = smart_cast<CKinematics*>(m_object->Visual())->LL_GetTransform(u16(m_stalker->eye_bone));
 
 	eye_matrix.transform_tiny			(temp,eye_position);
 	m_object->XFORM().transform_tiny	(eye_position,temp);
@@ -279,7 +279,7 @@ bool CVisualMemoryManager::visible				(const CGameObject *game_object, float tim
 
 void CVisualMemoryManager::add_visible_object	(const CObject *object, float time_delta)
 {
-	const CGameObject *game_object	= dynamic_cast<const CGameObject*>(object);
+	const CGameObject *game_object	= smart_cast<const CGameObject*>(object);
 	const CGameObject *self			= m_object;
 	if (!game_object || !visible(game_object,time_delta))
 		return;

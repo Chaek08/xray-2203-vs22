@@ -105,7 +105,7 @@ void CAI_Stalker::HitSignal(float amount, Fvector& vLocalDir, CObject* who, s16 
 			agent_manager().location().add	(xr_new<CDangerCoverLocation>(cover,Device.dwTimeGlobal,DANGER_INTERVAL,DANGER_DISTANCE));
 
 		// Play hit-ref_sound
-		CEntityAlive		*entity_alive = dynamic_cast<CEntityAlive*>(who);
+		CEntityAlive		*entity_alive = smart_cast<CEntityAlive*>(who);
 		if (!entity_alive || (tfGetRelationType(entity_alive) != ALife::eRelationTypeFriend))
 			sound().play	(eStalkerSoundInjuring);
 		else
@@ -116,7 +116,7 @@ void CAI_Stalker::HitSignal(float amount, Fvector& vLocalDir, CObject* who, s16 
 #pragma todo("Dima to Dima : forward-back bone impulse direction has been determined incorrectly!")
 		float				power_factor = 3.f*amount/100.f;
 		clamp				(power_factor,0.f,1.f);
-		CSkeletonAnimated	*tpKinematics = dynamic_cast<CSkeletonAnimated*>(Visual());
+		CSkeletonAnimated	*tpKinematics = smart_cast<CSkeletonAnimated*>(Visual());
 		animation().play_fx	(power_factor,iFloor(tpKinematics->LL_GetBoneInstance(element).get_param(1) + (angle_difference(movement().m_body.current.yaw,-yaw) <= PI_DIV_2 ? 0 : 1)));
 	}
 	
@@ -194,7 +194,7 @@ void CAI_Stalker::update_best_item_info	()
 		xr_vector<const CGameObject*>::const_iterator	I = memory().item().objects().begin();
 		xr_vector<const CGameObject*>::const_iterator	E = memory().item().objects().end();
 		for ( ; I != E; ++I) {
-			const CInventoryItem	*inventory_item = dynamic_cast<const CInventoryItem*>(*I);
+			const CInventoryItem	*inventory_item = smart_cast<const CInventoryItem*>(*I);
 			if (!inventory_item || !memory().item().useful(&inventory_item->object()))
 				continue;
 			CInventoryItem			*item			= inventory_item->can_kill(&inventory());
@@ -234,7 +234,7 @@ void CAI_Stalker::update_best_item_info	()
 	xr_vector<const CGameObject*>::const_iterator	I = memory().item().objects().begin();
 	xr_vector<const CGameObject*>::const_iterator	E = memory().item().objects().end();
 	for ( ; I != E; ++I) {
-		const CInventoryItem	*inventory_item = dynamic_cast<const CInventoryItem*>(*I);
+		const CInventoryItem	*inventory_item = smart_cast<const CInventoryItem*>(*I);
 		if (!inventory_item || !memory().item().useful(&inventory_item->object()))
 			continue;
 		const CInventoryItem	*item = inventory_item->can_kill(memory().item().objects());
@@ -322,7 +322,7 @@ bool CAI_Stalker::can_kill_member		(const Fvector &position, const Fvector &dire
 	if (!ray_query_result.O)
 		return				(false);
 	
-	CEntityAlive			*entity_alive = dynamic_cast<CEntityAlive*>(ray_query_result.O);
+	CEntityAlive			*entity_alive = smart_cast<CEntityAlive*>(ray_query_result.O);
 	if (!entity_alive || (entity_alive->ID() == ID()))
 		return				(false);
 
@@ -357,7 +357,7 @@ bool CAI_Stalker::inside_anomaly		()
 	xr_vector<CObject*>::const_iterator	I = feel_touch.begin();
 	xr_vector<CObject*>::const_iterator	E = feel_touch.end();
 	for ( ; I != E; ++I) {
-		CCustomZone			*zone = dynamic_cast<CCustomZone*>(*I);
+		CCustomZone			*zone = smart_cast<CCustomZone*>(*I);
 		if (zone)
 			return			(true);
 	}

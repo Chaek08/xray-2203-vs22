@@ -52,7 +52,7 @@ void CStalkerAnimationManager::reload				(CAI_Stalker *_object)
 	m_object					= _object;
 	m_visual					= object().Visual();
 
-	m_skeleton_animated			= dynamic_cast<CSkeletonAnimated*>(m_visual);
+	m_skeleton_animated			= smart_cast<CSkeletonAnimated*>(m_visual);
 	VERIFY						(m_skeleton_animated);
 
 	m_part_animations.Load		(m_skeleton_animated,"");

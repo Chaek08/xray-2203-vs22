@@ -86,14 +86,14 @@ void CHitMemoryManager::add					(float amount, const Fvector &vLocalDir, const C
 		m_object->lua_game_object(), 
 		amount,
 		vLocalDir,
-		dynamic_cast<const CGameObject*>(who)->lua_game_object(),
+		smart_cast<const CGameObject*>(who)->lua_game_object(),
 		element
 	);
 
 	Fvector						direction;
 	m_object->XFORM().transform_dir	(direction,vLocalDir);
 
-	const CEntityAlive			*entity_alive = dynamic_cast<const CEntityAlive*>(who);
+	const CEntityAlive			*entity_alive = smart_cast<const CEntityAlive*>(who);
 	if (!entity_alive || (m_object->tfGetRelationType(entity_alive) == ALife::eRelationTypeFriend))
 		return;
 

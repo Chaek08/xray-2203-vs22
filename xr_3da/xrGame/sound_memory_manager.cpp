@@ -146,7 +146,7 @@ void CSoundMemoryManager::feel_sound_new(CObject *object, int sound_type, CSound
 	if (sound_power >= m_sound_threshold) {
 		if (is_sound_type(sound_type,SOUND_TYPE_WEAPON_SHOOTING)) {
 			// this is fake!
-			CEntityAlive		*_entity_alive = dynamic_cast<CEntityAlive*>(object);
+			CEntityAlive		*_entity_alive = smart_cast<CEntityAlive*>(object);
 			if (_entity_alive && (self->ID() != _entity_alive->ID()) && (_entity_alive->g_Team() != entity_alive->g_Team()))
 				m_object->memory().hit().add(_entity_alive);
 		}
@@ -173,19 +173,19 @@ void CSoundMemoryManager::add			(const CObject *object, int sound_type, const Fv
 
 #ifndef SAVE_NON_ALIVE_OBJECT_SOUNDS
 	// we do not want to save sounds from the non-alive objects (?!)
-	if (object && !m_object->memory().enemy().selected() && !dynamic_cast<const CEntityAlive*>(object))
+	if (object && !m_object->memory().enemy().selected() && !smart_cast<const CEntityAlive*>(object))
 		return;
 #endif
 
 #ifndef SAVE_FRIEND_ITEM_SOUNDS
 	// we do not want to save sounds from the teammates items
 	CEntityAlive	*me				= m_object;
-	if (object && object->H_Parent() && (me->tfGetRelationType(dynamic_cast<const CEntityAlive*>(object->H_Parent())) == ALife::eRelationTypeFriend))
+	if (object && object->H_Parent() && (me->tfGetRelationType(smart_cast<const CEntityAlive*>(object->H_Parent())) == ALife::eRelationTypeFriend))
 		return;
 #endif
 
 #ifndef SAVE_FRIEND_SOUNDS
-	const CEntityAlive	*entity_alive	= dynamic_cast<const CEntityAlive*>(object);
+	const CEntityAlive	*entity_alive	= smart_cast<const CEntityAlive*>(object);
 	// we do not want to save sounds from the teammates
 	if (entity_alive && me && (me->tfGetRelationType(entity_alive) == ALife::eRelationTypeFriend))
 		return;
@@ -193,14 +193,14 @@ void CSoundMemoryManager::add			(const CObject *object, int sound_type, const Fv
 
 #ifndef SAVE_VISIBLE_OBJECT_SOUNDS
 #	ifdef SAVE_FRIEND_SOUNDS
-		const CEntityAlive	*entity_alive	= dynamic_cast<const CEntityAlive*>(object);
+		const CEntityAlive	*entity_alive	= smart_cast<const CEntityAlive*>(object);
 #	endif
 	// we do not save sounds from the objects we see (?!)
 	if (m_object->memory().visual().visible_now(entity_alive))
 		return;
 #endif
 
-	const CGameObject		*game_object = dynamic_cast<const CGameObject*>(object);
+	const CGameObject		*game_object = smart_cast<const CGameObject*>(object);
 	if (!game_object && object)
 		return;
 

@@ -40,7 +40,7 @@ void CALifeInteractionManager::check_for_interaction(CSE_ALifeSchedulable *tpALi
 	if (!tpALifeSchedulable->bfActive())
 		return;
 
-	CSE_ALifeDynamicObject		*l_tpALifeDynamicObject = dynamic_cast<CSE_ALifeDynamicObject*>(tpALifeSchedulable);
+	CSE_ALifeDynamicObject		*l_tpALifeDynamicObject = smart_cast<CSE_ALifeDynamicObject*>(tpALifeSchedulable);
 	R_ASSERT2					(l_tpALifeDynamicObject,"Unknown schedulable object class");
 	GameGraph::_GRAPH_ID		l_tGraphID = l_tpALifeDynamicObject->m_tGraphID;
 	check_for_interaction		(tpALifeSchedulable,l_tGraphID);
@@ -66,8 +66,8 @@ public:
 		tpALifeSchedulable(tpALifeSchedulable),
 		tGraphID(tGraphID)
 	{
-		l_tpALifeHumanAbstract	= dynamic_cast<CSE_ALifeHumanAbstract*>(tpALifeSchedulable);
-		l_tpALifeMonsterAbstract= dynamic_cast<CSE_ALifeMonsterAbstract*>(tpALifeSchedulable);
+		l_tpALifeHumanAbstract	= smart_cast<CSE_ALifeHumanAbstract*>(tpALifeSchedulable);
+		l_tpALifeMonsterAbstract= smart_cast<CSE_ALifeMonsterAbstract*>(tpALifeSchedulable);
 		manager->vfFillCombatGroup	(tpALifeSchedulable,0);
 	}
 
@@ -87,7 +87,7 @@ public:
 		if ((*I).first == tpALifeSchedulable->base()->ID)
 			return;
 
-		CSE_ALifeSchedulable	*l_tpALifeSchedulable = dynamic_cast<CSE_ALifeSchedulable*>((*I).second);
+		CSE_ALifeSchedulable	*l_tpALifeSchedulable = smart_cast<CSE_ALifeSchedulable*>((*I).second);
 		if (!l_tpALifeSchedulable)
 			return;
 
@@ -96,14 +96,14 @@ public:
 
 		manager->vfFillCombatGroup		(l_tpALifeSchedulable,1);
 
-		CSE_ALifeTraderAbstract	*trader_abstract0 = dynamic_cast<CSE_ALifeTraderAbstract*>(tpALifeSchedulable);
-		CSE_ALifeTraderAbstract	*trader_abstract1 = dynamic_cast<CSE_ALifeTraderAbstract*>(l_tpALifeSchedulable);
+		CSE_ALifeTraderAbstract	*trader_abstract0 = smart_cast<CSE_ALifeTraderAbstract*>(tpALifeSchedulable);
+		CSE_ALifeTraderAbstract	*trader_abstract1 = smart_cast<CSE_ALifeTraderAbstract*>(l_tpALifeSchedulable);
 		bool					add_news = trader_abstract0 || trader_abstract1;
 		CALifeNews				news;
 		switch (manager->m_tpaCombatObjects[l_iGroupIndex]->tfGetActionType(manager->m_tpaCombatObjects[l_iGroupIndex ^ 1],l_iGroupIndex,l_bMutualDetection)) {
 			case eMeetActionTypeAttack : {
 				if (add_news) {
-					CSE_ALifeDynamicObject	*dynamic_object = dynamic_cast<CSE_ALifeDynamicObject*>(tpALifeSchedulable);
+					CSE_ALifeDynamicObject	*dynamic_object = smart_cast<CSE_ALifeDynamicObject*>(tpALifeSchedulable);
 					VERIFY					(dynamic_object);
 					news.m_game_time		= manager->time_manager().game_time();
 					news.m_game_vertex_id	= dynamic_object->m_tGraphID;
@@ -208,7 +208,7 @@ public:
 
 					if (strstr(Core.Params,"-anews")) {
 						//сообщить актеру, о том что пришла новость с симул€ции
-						CActor* pActor = dynamic_cast<CActor*>(Level().CurrentEntity());
+						CActor* pActor = smart_cast<CActor*>(Level().CurrentEntity());
 						if (pActor) {
 							GAME_NEWS_DATA		news_data;
 							news_data.news_id	=  news_id;
@@ -221,7 +221,7 @@ public:
 			}
 			case eMeetActionTypeInteract : {
 				R_ASSERT2				(l_tpALifeHumanAbstract,"Non-human objects сannot communicate with each other");
-				CSE_ALifeHumanAbstract	*l_tpALifeHumanAbstract2 = dynamic_cast<CSE_ALifeHumanAbstract*>(l_tpALifeSchedulable);
+				CSE_ALifeHumanAbstract	*l_tpALifeHumanAbstract2 = smart_cast<CSE_ALifeHumanAbstract*>(l_tpALifeSchedulable);
 				R_ASSERT2				(l_tpALifeHumanAbstract2,"Non-human objects сannot communicate with each other");
 #ifdef DEBUG
 				if (psAI_Flags.test(aiALife)) {
@@ -240,7 +240,7 @@ public:
 				return;
 			}
 			case eMeetActionSmartTerrain : {
-				CSE_ALifeSmartZone		*smart_zone = dynamic_cast<CSE_ALifeSmartZone*>(l_tpALifeSchedulable);
+				CSE_ALifeSmartZone		*smart_zone = smart_cast<CSE_ALifeSmartZone*>(l_tpALifeSchedulable);
 				VERIFY					(smart_zone);
 				VERIFY					(l_tpALifeMonsterAbstract);
 				smart_zone->smart_touch	(l_tpALifeMonsterAbstract);

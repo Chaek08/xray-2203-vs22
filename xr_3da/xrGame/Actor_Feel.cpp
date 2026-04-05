@@ -30,8 +30,8 @@ BOOL CActor::feel_touch_contact(CObject *O)
     if (!O) return FALSE;
     if (O->getDestroy()) return FALSE;
 
-    CInventoryItem* item = dynamic_cast<CInventoryItem*>(O);
-    CInventoryOwner* inventory_owner = dynamic_cast<CInventoryOwner*>(O);
+    CInventoryItem* item = smart_cast<CInventoryItem*>(O);
+    CInventoryOwner* inventory_owner = smart_cast<CInventoryOwner*>(O);
 
     if (item)
     {
@@ -42,7 +42,7 @@ BOOL CActor::feel_touch_contact(CObject *O)
             return TRUE;
     }
 
-    if (inventory_owner && inventory_owner != dynamic_cast<CInventoryOwner*>(this))
+    if (inventory_owner && inventory_owner != smart_cast<CInventoryOwner*>(this))
         return TRUE;
 
     return FALSE;
@@ -50,7 +50,7 @@ BOOL CActor::feel_touch_contact(CObject *O)
 
 BOOL CActor::feel_touch_on_contact	(CObject *O)
 {
-	CCustomZone	*custom_zone = dynamic_cast<CCustomZone*>(O);
+	CCustomZone	*custom_zone = smart_cast<CCustomZone*>(O);
 	if (!custom_zone)
 		return	(TRUE);
 
@@ -167,11 +167,11 @@ void	CActor::PickupModeUpdate_COD	()
 	for (u32 o_it=0; o_it<ISpatialResult.size(); o_it++)
 	{
 		ISpatial*		spatial	= ISpatialResult[o_it];
-		CInventoryItem*	pIItem	= dynamic_cast<CInventoryItem*> (spatial->dcast_CObject        ());
+		CInventoryItem*	pIItem	= smart_cast<CInventoryItem*> (spatial->dcast_CObject        ());
 		if (0 == pIItem) continue;
 		if (pIItem->object().CLS_ID == CLSID_OBJECT_G_RPG7 || pIItem->object().CLS_ID == CLSID_OBJECT_G_FAKE)
 			continue;
-		CGrenade*	pGrenade	= dynamic_cast<CGrenade*> (spatial->dcast_CObject        ());
+		CGrenade*	pGrenade	= smart_cast<CGrenade*> (spatial->dcast_CObject        ());
 		if (pGrenade && !pGrenade->Useful()) continue;
 		
 		Fvector A, B, tmp; 
@@ -207,8 +207,8 @@ void CActor::PickupInfoDraw(CObject* object)
 {
 	LPCSTR draw_str = NULL;
 	
-	CInventoryItem* item = dynamic_cast<CInventoryItem*>(object);
-	CInventoryOwner* inventory_owner = dynamic_cast<CInventoryOwner*>(object);
+	CInventoryItem* item = smart_cast<CInventoryItem*>(object);
+	CInventoryOwner* inventory_owner = smart_cast<CInventoryOwner*>(object);
 	
 	VERIFY(item || inventory_owner);
 

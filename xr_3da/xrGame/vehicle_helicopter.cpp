@@ -52,11 +52,11 @@ BOOL CVehicleHelicopter::net_Spawn			(CSE_Abstract* DC)
 
 	// assigning m_animator here
 	CSE_Abstract		*abstract=(CSE_Abstract*)(DC);
-	CSE_ALifeHelicopter	*heli	= dynamic_cast<CSE_ALifeHelicopter*>(abstract);
+	CSE_ALifeHelicopter	*heli	= smart_cast<CSE_ALifeHelicopter*>(abstract);
 	VERIFY				(heli);
 
-	R_ASSERT			(Visual()&&dynamic_cast<CKinematics*>(Visual()));
-	CSkeletonAnimated	*A= dynamic_cast<CSkeletonAnimated*>(Visual());
+	R_ASSERT			(Visual()&&smart_cast<CKinematics*>(Visual()));
+	CSkeletonAnimated	*A= smart_cast<CSkeletonAnimated*>(Visual());
 	if (A) {
 		A->PlayCycle		(*heli->startup_animation);
 		A->CalculateBones	();

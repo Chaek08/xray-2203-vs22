@@ -17,7 +17,7 @@ static const float VEL_A_MAX	= 10.f;
 //возвращает текуший разброс стрельбы (в радианах)с учетом движения
 float CActor::GetWeaponAccuracy() const
 {
-	CWeapon* W	= dynamic_cast<CWeapon*>(inventory().ActiveItem());
+	CWeapon* W	= smart_cast<CWeapon*>(inventory().ActiveItem());
 
 	if(m_bZoomAimingMode&&W&&!W->IsRotatingToZoom())
 		return 0.f;
@@ -55,7 +55,7 @@ void CActor::g_fireParams	(const CHudItem* pHudItem, Fvector &fire_pos, Fvector 
 	fire_pos = EffectorManager().vPosition;
 	fire_dir = EffectorManager().vDirection;
 
-	const CMissile* pMissile = dynamic_cast <const CMissile*> (pHudItem);
+	const CMissile* pMissile = smart_cast <const CMissile*> (pHudItem);
 	if (pMissile)
 	{
 		Fvector offset;

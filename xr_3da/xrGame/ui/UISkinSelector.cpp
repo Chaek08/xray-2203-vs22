@@ -104,7 +104,7 @@ void CUISkinSelectorWnd::OnBtnCancel(){
 
 void CUISkinSelectorWnd::OnBtnOK(){
 	Game().StartStopMenu(this,true);
-	game_cl_Deathmatch * dm = dynamic_cast<game_cl_Deathmatch *>(&(Game()));
+	game_cl_Deathmatch * dm = smart_cast<game_cl_Deathmatch *>(&(Game()));
 	dm->OnSkinMenu_Ok();
 }
 

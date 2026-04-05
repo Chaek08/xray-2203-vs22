@@ -184,11 +184,11 @@ BOOL CEntity::net_Spawn		(CSE_Abstract* DC)
 
 	// load damage params
 	CSE_Abstract			*e	= (CSE_Abstract*)(DC);
-	CSE_ALifeCreatureAbstract	*E	= dynamic_cast<CSE_ALifeCreatureAbstract*>(e);
+	CSE_ALifeCreatureAbstract	*E	= smart_cast<CSE_ALifeCreatureAbstract*>(e);
 	if (!E) {
 		// Car or trader only!!!!
-		CSE_ALifeCar		*C	= dynamic_cast<CSE_ALifeCar*>(e);
-		CSE_ALifeTrader		*T	= dynamic_cast<CSE_ALifeTrader*>(e);
+		CSE_ALifeCar		*C	= smart_cast<CSE_ALifeCar*>(e);
+		CSE_ALifeTrader		*T	= smart_cast<CSE_ALifeTrader*>(e);
 		R_ASSERT2			(C || T,"Invalid entity (no inheritance from CSE_CreatureAbstract, CSE_ALifeItemCar and CSE_ALifeTrader)!");
 		id_Team				= id_Squad = id_Group = 0;
 	}
@@ -201,8 +201,8 @@ BOOL CEntity::net_Spawn		(CSE_Abstract* DC)
 #ifdef DEBUG
 		if (!ai().get_alife()) {
 			
-			CSE_ALifeMonsterRat		*rat		= dynamic_cast<CSE_ALifeMonsterRat*>(E);
-			CSE_ALifeMonsterBase	*monster	= dynamic_cast<CSE_ALifeMonsterBase*>(E);
+			CSE_ALifeMonsterRat		*rat		= smart_cast<CSE_ALifeMonsterRat*>(E);
+			CSE_ALifeMonsterBase	*monster	= smart_cast<CSE_ALifeMonsterBase*>(E);
 
 			if (monster || rat) {
 				MONSTER_COMMUNITY		monster_community;
@@ -239,7 +239,7 @@ BOOL CEntity::net_Spawn		(CSE_Abstract* DC)
 	//Engine.Sheduler.Unregister	(this);
 	//Engine.Sheduler.Register		(this);
 
-	CKinematics* pKinematics=dynamic_cast<CKinematics*>(Visual());
+	CKinematics* pKinematics=smart_cast<CKinematics*>(Visual());
 	CInifile* ini = NULL;
 
 	if(pKinematics) ini = pKinematics->LL_UserData();
@@ -319,8 +319,8 @@ void CEntity::set_death_time	()
 	m_game_death_time	= Level().GetGameTime();
 }
 
-bool CEntity::IsFocused			()const	{ return (dynamic_cast<const CEntity*>(g_pGameLevel->CurrentEntity())==this);		}
-bool CEntity::IsMyCamera		()const	{ return (dynamic_cast<const CEntity*>(g_pGameLevel->CurrentViewEntity())==this);	}
+bool CEntity::IsFocused			()const	{ return (smart_cast<const CEntity*>(g_pGameLevel->CurrentEntity())==this);		}
+bool CEntity::IsMyCamera		()const	{ return (smart_cast<const CEntity*>(g_pGameLevel->CurrentViewEntity())==this);	}
 
 void CEntity::set_ready_to_save	()
 {

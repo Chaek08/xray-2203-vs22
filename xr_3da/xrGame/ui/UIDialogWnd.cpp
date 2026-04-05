@@ -120,7 +120,7 @@ bool CUIDialogWnd::OnKeyboard(int dik, EUIMessages keyboard_action)
 	if( !StopAnyMove() && g_pGameLevel ){
 		CObject* O = Level().CurrentEntity();
 		if( O ){
-			IInputReceiver*		IR	= dynamic_cast<IInputReceiver*>( dynamic_cast<CGameObject*>(O) );
+			IInputReceiver*		IR	= smart_cast<IInputReceiver*>( smart_cast<CGameObject*>(O) );
 			if (!IR)
 				return			(false);
 

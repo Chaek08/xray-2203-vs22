@@ -94,7 +94,7 @@ void CZombie::reload(LPCSTR section)
 
 	// Load triple death animations
 	MotionID			def1, def2, def3;
-	CSkeletonAnimated	*pSkel = dynamic_cast<CSkeletonAnimated*>(Visual());
+	CSkeletonAnimated	*pSkel = smart_cast<CSkeletonAnimated*>(Visual());
 	
 	def1				= pSkel->ID_Cycle_Safe("fake_death_0_0");	VERIFY(def1);
 	def2				= pSkel->ID_Cycle_Safe("fake_death_0_1");	VERIFY(def2);
@@ -127,8 +127,8 @@ void __stdcall CZombie::BoneCallback(CBoneInstance *B)
 void CZombie::vfAssignBones()
 {
 	// Установка callback на кости
-	bone_spine =	&dynamic_cast<CKinematics*>(Visual())->LL_GetBoneInstance(dynamic_cast<CKinematics*>(Visual())->LL_BoneID("bip01_spine"));
-	bone_head =		&dynamic_cast<CKinematics*>(Visual())->LL_GetBoneInstance(dynamic_cast<CKinematics*>(Visual())->LL_BoneID("bip01_head"));
+	bone_spine =	&smart_cast<CKinematics*>(Visual())->LL_GetBoneInstance(smart_cast<CKinematics*>(Visual())->LL_BoneID("bip01_spine"));
+	bone_head =		&smart_cast<CKinematics*>(Visual())->LL_GetBoneInstance(smart_cast<CKinematics*>(Visual())->LL_BoneID("bip01_head"));
 	//if(!PPhysicsShell())//нельзя ставить колбеки, если создан физ шел - у него стоят свои колбеки!!!
 	//{
 		//bone_spine->set_callback(BoneCallback,this);

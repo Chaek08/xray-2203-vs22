@@ -42,13 +42,13 @@ BOOL CBreakableObject::net_Spawn(CSE_Abstract* DC)
 {
 
 	CSE_Abstract			*e		= (CSE_Abstract*)(DC);
-	CSE_ALifeObjectBreakable *obj	= dynamic_cast<CSE_ALifeObjectBreakable*>(e);
+	CSE_ALifeObjectBreakable *obj	= smart_cast<CSE_ALifeObjectBreakable*>(e);
 	R_ASSERT				(obj);
 	inherited::net_Spawn	(DC);
 	collidable.model = xr_new<CCF_Skeleton>(this);
 	// set bone id
-	R_ASSERT				(Visual()&&dynamic_cast<CKinematics*>(Visual()));
-//	CKinematics* K			= dynamic_cast<CKinematics*>(Visual());
+	R_ASSERT				(Visual()&&smart_cast<CKinematics*>(Visual()));
+//	CKinematics* K			= smart_cast<CKinematics*>(Visual());
 	fHealth					= obj->m_health;
 	processing_deactivate	();
 	setVisible				(TRUE);
@@ -115,7 +115,7 @@ BOOL CBreakableObject::UsedAI_Locations()
 
 void CBreakableObject::CreateUnbroken()
 {
-	m_pUnbrokenObject=P_BuildStaticGeomShell(dynamic_cast<CGameObject*>(this),ObjectContactCallback);
+	m_pUnbrokenObject=P_BuildStaticGeomShell(smart_cast<CGameObject*>(this),ObjectContactCallback);
 }
 void CBreakableObject::DestroyUnbroken()
 {
@@ -127,7 +127,7 @@ void CBreakableObject::DestroyUnbroken()
 //void CBreakableObject::CreateBroken()
 //{
 	//CPhysicsShell* shell=P_create_splited_Shell();
-	//shell->preBuild_FromKinematics(dynamic_cast<CKinematics*>(Visual()));
+	//shell->preBuild_FromKinematics(smart_cast<CKinematics*>(Visual()));
 	//shell->mXFORM.set(XFORM());
 	//shell->set_PhysicsRefObject(this);
 	////m_Shell->Build();
@@ -153,7 +153,7 @@ void CBreakableObject::CreateBroken()
 {
 	processing_activate();
 	m_Shell=P_create_splited_Shell();
-	m_Shell->preBuild_FromKinematics(dynamic_cast<CKinematics*>(Visual()));
+	m_Shell->preBuild_FromKinematics(smart_cast<CKinematics*>(Visual()));
 	m_Shell->mXFORM.set(XFORM());
 	//m_Shell->SetAirResistance(0.002f*skel_airr_lin_factor,
 	//	0.3f*skel_airr_ang_factor);
@@ -172,7 +172,7 @@ void CBreakableObject::CreateBroken()
 void CBreakableObject::ActivateBroken()
 {
 	m_pPhysicsShell=m_Shell;
-	CKinematics* K=dynamic_cast<CKinematics*>(Visual());
+	CKinematics* K=smart_cast<CKinematics*>(Visual());
 	m_pPhysicsShell->set_Kinematics(K);
 	m_pPhysicsShell->RunSimulation();
 	m_pPhysicsShell->SetCallbacks(m_pPhysicsShell->GetStaticObjectBonesCallback());

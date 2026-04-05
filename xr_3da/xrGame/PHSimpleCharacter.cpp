@@ -1027,7 +1027,7 @@ u16 CPHSimpleCharacter::RetriveContactBone()
 	m_collision_damage_info.HitDir(dir);
 	collide::ray_defs Q(m_collision_damage_info.HitPos(), dir, m_radius, CDB::OPT_ONLYNEAREST,collide::rqtBoth);  // CDB::OPT_ONLYFIRST CDB::OPT_ONLYNEAREST
 	u16 contact_bone=0;
-	CObject* object=dynamic_cast<CObject*>(m_phys_ref_object);
+	CObject* object=smart_cast<CObject*>(m_phys_ref_object);
 	if (g_pGameLevel->ObjectSpace.RayQuery(object->collidable.model,Q)){
 
 		collide::rq_result* R = g_pGameLevel->ObjectSpace.r_results.r_begin();
@@ -1049,7 +1049,7 @@ u16 CPHSimpleCharacter::RetriveContactBone()
 	{
 
 
-		CKinematics* K=dynamic_cast<CKinematics*>(object->Visual());
+		CKinematics* K=smart_cast<CKinematics*>(object->Visual());
 		u16 count=K->LL_BoneCount();
 		CBoneInstance* bone_instances=&K->LL_GetBoneInstance(0);
 		Fvector pos_in_object;

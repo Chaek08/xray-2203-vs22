@@ -60,7 +60,7 @@ void CGrenade::OnH_B_Independent()
 	{
 		if (m_fake_missile)
 		{
-			CGrenade					*pGrenade = dynamic_cast<CGrenade*>(m_fake_missile);
+			CGrenade					*pGrenade = smart_cast<CGrenade*>(m_fake_missile);
 			if (pGrenade)
 			{
 				m_constpower = false;
@@ -146,7 +146,7 @@ void CGrenade::Throw()
 	if (!m_fake_missile)
 		return;
 
-	CGrenade					*pGrenade = dynamic_cast<CGrenade*>(m_fake_missile);
+	CGrenade					*pGrenade = smart_cast<CGrenade*>(m_fake_missile);
 	VERIFY						(pGrenade);
 	
 	if (pGrenade) {
@@ -197,12 +197,12 @@ void CGrenade::PutNextToSlot	()
 	else
 		Msg ("! PutNextToSlot : m_pInventory = 0");	
 
-	if(dynamic_cast<CActor*>(H_Parent()) && m_pInventory)
+	if(smart_cast<CActor*>(H_Parent()) && m_pInventory)
 	{
 		//найти такую же гранату и положить в рюкзак
-		CGrenade *pNext = dynamic_cast<CGrenade*>(m_pInventory->Same(this,false));
+		CGrenade *pNext = smart_cast<CGrenade*>(m_pInventory->Same(this,false));
 		//или найти любую другую гранату на поясе
-		if(!pNext) pNext = dynamic_cast<CGrenade*>(m_pInventory->SameSlot(m_slot,false));
+		if(!pNext) pNext = smart_cast<CGrenade*>(m_pInventory->SameSlot(m_slot,false));
 
 		VERIFY(pNext != this);
 
@@ -264,7 +264,7 @@ bool CGrenade::Action(s32 cmd, u32 flags)
 					TIItemContainer::iterator it = m_pInventory->m_belt.begin();
 					while(m_pInventory->m_belt.end() != it) 
 					{
-						CGrenade *pGrenade = dynamic_cast<CGrenade*>(*it);
+						CGrenade *pGrenade = smart_cast<CGrenade*>(*it);
 						if(pGrenade && xr_strcmp(pGrenade->cNameSect(), cNameSect())) 
 						{
 							m_pInventory->Ruck(this);

@@ -152,12 +152,12 @@ void CBaseMonster::PHHit(float P,Fvector &dir, CObject *who,s16 element,Fvector 
 
 CPHDestroyable*	CBaseMonster::	ph_destroyable	()
 {
-	return dynamic_cast<CPHDestroyable*>(character_physics_support());
+	return smart_cast<CPHDestroyable*>(character_physics_support());
 }
 
 bool CBaseMonster::useful(const CItemManager *manager, const CGameObject *object) const
 {
-	const CEntityAlive *pCorpse = dynamic_cast<const CEntityAlive *>(object); 
+	const CEntityAlive *pCorpse = smart_cast<const CEntityAlive *>(object); 
 	if (!pCorpse) return false;
 	
 	if (!pCorpse->g_Alive()) return true;
@@ -312,7 +312,7 @@ u32 CBaseMonster::get_attack_rebuild_time()
 
 void CBaseMonster::on_kill_enemy(const CEntity *obj)
 {
-	const CEntityAlive *entity	= dynamic_cast<const CEntityAlive *>(obj);
+	const CEntityAlive *entity	= smart_cast<const CEntityAlive *>(obj);
 	
 	// добавить в список трупов	
 	CorpseMemory.add_corpse		(entity);

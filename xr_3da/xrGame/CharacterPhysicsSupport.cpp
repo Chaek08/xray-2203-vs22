@@ -95,7 +95,7 @@ void CCharacterPhysicsSupport::in_NetSpawn(CSE_Abstract* e)
 	CPHDestroyable::Init();//this zerows colbacks !!;
 	if(!m_EntityAlife.g_Alive())
 	{
-		CSkeletonAnimated*ka= dynamic_cast<CSkeletonAnimated*>(m_EntityAlife.Visual());
+		CSkeletonAnimated*ka= smart_cast<CSkeletonAnimated*>(m_EntityAlife.Visual());
 		ka->PlayCycle("death_init");
 		ka->CalculateBones_Invalidate();
 		ka->CalculateBones();
@@ -234,7 +234,7 @@ void CCharacterPhysicsSupport::in_UpdateCL()
 			{
 				///if(m_eType==etStalker)
 				{
-						dynamic_cast<CSkeletonAnimated*>(m_EntityAlife.Visual())->PlayCycle("death_init");
+						smart_cast<CSkeletonAnimated*>(m_EntityAlife.Visual())->PlayCycle("death_init");
 				}
 	
 				b_death_anim_on=true;
@@ -277,7 +277,7 @@ void CCharacterPhysicsSupport::CreateSkeleton(CPhysicsShell* &pShell)
 	if (!m_EntityAlife.Visual())
 		return;
 	pShell		= P_create_Shell();
-	pShell->preBuild_FromKinematics(dynamic_cast<CKinematics*>(m_EntityAlife.Visual()));
+	pShell->preBuild_FromKinematics(smart_cast<CKinematics*>(m_EntityAlife.Visual()));
 	pShell->mXFORM.set(mXFORM);
 	pShell->SetAirResistance(0.002f*skel_airr_lin_factor,
 		0.3f*skel_airr_ang_factor);
@@ -285,7 +285,7 @@ void CCharacterPhysicsSupport::CreateSkeleton(CPhysicsShell* &pShell)
 	pShell->set_JointResistance(0.f);
 	pShell->set_PhysicsRefObject(&m_EntityAlife);
 	SAllDDOParams disable_params;
-	disable_params.Load(dynamic_cast<CKinematics*>(m_EntityAlife.Visual())->LL_UserData());
+	disable_params.Load(smart_cast<CKinematics*>(m_EntityAlife.Visual())->LL_UserData());
 	pShell->set_DisableParams(disable_params);
 
 	pShell->Build();
@@ -305,20 +305,20 @@ Fvector velocity;
 	if (!m_EntityAlife.Visual())
 		return;
 	m_pPhysicsShell		= P_create_Shell();
-	m_pPhysicsShell->build_FromKinematics(dynamic_cast<CKinematics*>(m_EntityAlife.Visual()));
+	m_pPhysicsShell->build_FromKinematics(smart_cast<CKinematics*>(m_EntityAlife.Visual()));
 	m_pPhysicsShell->mXFORM.set(mXFORM);
 	m_pPhysicsShell->SetAirResistance(0.002f*skel_airr_lin_factor,
 		0.3f*skel_airr_ang_factor);
 	m_pPhysicsShell->SmoothElementsInertia(0.3f);
 	m_pPhysicsShell->set_PhysicsRefObject(&m_EntityAlife);
 	SAllDDOParams disable_params;
-	disable_params.Load(dynamic_cast<CKinematics*>(m_EntityAlife.Visual())->LL_UserData());
+	disable_params.Load(smart_cast<CKinematics*>(m_EntityAlife.Visual())->LL_UserData());
 	m_pPhysicsShell->set_DisableParams(disable_params);
 	m_pPhysicsShell->set_JointResistance(0.f);
 	m_pPhysicsShell->Activate(true);
 	velocity.mul(1.25f*m_after_death_velocity_factor);
 	m_pPhysicsShell->set_LinearVel(velocity);
-	dynamic_cast<CKinematics*>(m_EntityAlife.Visual())->CalculateBones();
+	smart_cast<CKinematics*>(m_EntityAlife.Visual())->CalculateBones();
 	b_death_anim_on=false;
 	m_eState=esDead;
 }
@@ -326,7 +326,7 @@ void CCharacterPhysicsSupport::ActivateShell			(CObject* who)
 {
 	if(m_eType==etActor)
 	{
-		CActor* A=dynamic_cast<CActor*>(&m_EntityAlife);
+		CActor* A=smart_cast<CActor*>(&m_EntityAlife);
 		R_ASSERT2(A,"not an actor has actor type");
 		if(A->Holder()) return;
 		if(m_eState==esRemoved)return;
@@ -341,12 +341,12 @@ void CCharacterPhysicsSupport::ActivateShell			(CObject* who)
 
 	m_pPhysicsShell=m_physics_skeleton;
 	m_physics_skeleton=NULL;
-	CKinematics* K=dynamic_cast<CKinematics*>(m_EntityAlife.Visual());
+	CKinematics* K=smart_cast<CKinematics*>(m_EntityAlife.Visual());
 	m_pPhysicsShell->set_Kinematics(K);
 	m_pPhysicsShell->RunSimulation();
 	m_pPhysicsShell->mXFORM.set(mXFORM);
 	m_pPhysicsShell->SetCallbacks(m_pPhysicsShell->GetBonesCallback());
-	if(!dynamic_cast<CCustomZone*>(who))
+	if(!smart_cast<CCustomZone*>(who))
 	{
 		velocity.mul(1.25f*m_after_death_velocity_factor);
 	}

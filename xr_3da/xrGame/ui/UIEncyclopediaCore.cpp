@@ -112,7 +112,7 @@ shared_str CUIEncyclopediaCore::SetCurrentArtice(CUITreeViewItem *pTVItem)
 		// Пометим как прочитанную
 		if (!pTVItem->IsArticleReaded())
 		{
-			CActor* pActor = dynamic_cast<CActor*>(Level().CurrentEntity());
+			CActor* pActor = smart_cast<CActor*>(Level().CurrentEntity());
 
 			if(pActor && pActor->encyclopedia_registry->registry().objects_ptr())
 			{
@@ -251,7 +251,7 @@ void CUIEncyclopediaCore::OpenTree(ARTICLE_ID value)
 
 	for (int i = 0; i < pIdxList->GetSize(); ++i)
 	{
-		pItem = dynamic_cast<CUITreeViewItem*>(pIdxList->GetItem(i));
+		pItem = smart_cast<CUITreeViewItem*>(pIdxList->GetItem(i));
 		if (pItem)
 		{
 			result = pItem->Find(itemVal);

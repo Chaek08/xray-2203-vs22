@@ -47,7 +47,7 @@ void P_BuildStaticGeomShell(CPHStaticGeomShell* pUnbrokenObject,CGameObject* obj
 	pUnbrokenObject->add_Box	(b);
 	pUnbrokenObject->Activate	(obj->XFORM());
 
-	pUnbrokenObject->set_PhysicsRefObject(dynamic_cast<CPhysicsShellHolder*>(obj));
+	pUnbrokenObject->set_PhysicsRefObject(smart_cast<CPhysicsShellHolder*>(obj));
 	//m_pUnbrokenObject->SetPhObjectInGeomData(m_pUnbrokenObject);
 	pUnbrokenObject->set_ObjectContactCallback(object_contact_callback);
 }
@@ -64,14 +64,14 @@ CPHStaticGeomShell* P_BuildStaticGeomShell(CGameObject* obj,ObjectContactCallbac
 	IRender_Visual* V=obj->Visual();
 	R_ASSERT2(V,"need visual to build");
 
-	dynamic_cast<CKinematics*>(V)->CalculateBones	();		//. bForce - was TRUE
+	smart_cast<CKinematics*>(V)->CalculateBones	();		//. bForce - was TRUE
 	V->vis.box.getradius	(b.m_halfsize);
 
 	b.xform_set					(Fidentity);
 	CPHStaticGeomShell* pUnbrokenObject =P_BuildStaticGeomShell(obj,object_contact_callback,b);
 
 	
-	CKinematics* K=dynamic_cast<CKinematics*>(V); VERIFY(K);
+	CKinematics* K=smart_cast<CKinematics*>(V); VERIFY(K);
 	K->CalculateBones();
 	for (u16 k=0; k<K->LL_BoneCount(); k++){
 		K->LL_GetBoneInstance(k).Callback_overwrite = TRUE;

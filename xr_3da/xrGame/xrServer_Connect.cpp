@@ -28,7 +28,7 @@ BOOL xrServer::Connect(shared_str &session_name)
 	game					= NULL;
 
 	CLASS_ID clsid			= game_GameState::getCLASS_ID(type,true);
-	game					= dynamic_cast<game_sv_GameState*> ( NEW_INSTANCE ( clsid ) );
+	game					= smart_cast<game_sv_GameState*> ( NEW_INSTANCE ( clsid ) );
 
 
 	// Options
