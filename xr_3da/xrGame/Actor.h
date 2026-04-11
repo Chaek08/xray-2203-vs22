@@ -310,10 +310,7 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 public:
 	virtual void			OnHUDDraw			(CCustomHUD* hud);
-	IC		BOOL			HUDview				( )const 
-	{ 
-		return IsFocused()&&(cam_active==eacFirstEye)&&(!m_holder); 
-	}
+			BOOL			HUDview				( )const ;
 
 	//visiblity 
 	virtual	float			ffGetFov			()	const	{ return 90.f;		}	
@@ -328,6 +325,7 @@ public:
 	IC CCameraBase*			cam_Active			()	{return cameras[cam_active];}
 	IC CCameraBase*			cam_FirstEye		()	{return cameras[eacFirstEye];}
 
+	IC EActorCameras		GOTTA_GET_A_ACTIVE_CAM() const { return cam_active; }
 protected:
 	void					cam_Set					(EActorCameras style);
 	void					cam_Update				(float dt, float fFOV);

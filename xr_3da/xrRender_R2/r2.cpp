@@ -268,6 +268,7 @@ void					CRender::rmNormal			()
 //////////////////////////////////////////////////////////////////////
 CRender::CRender()
 {
+	init_sun_cascades();
 }
 
 CRender::~CRender()
