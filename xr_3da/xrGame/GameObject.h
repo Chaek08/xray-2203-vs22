@@ -34,6 +34,8 @@ class CWeapon;
 class CExplosive;
 class CHolderCustom;
 class CAttachmentOwner;
+class CSpaceRestrictor;
+class IInputReceiver;
 
 namespace GameObject {
 	enum ECallbackType;

@@ -145,6 +145,7 @@ public		:
 			tok++;
 		}
 	}
+	virtual xr_token* GetToken(){return tokens;}
 };
 
 class ENGINE_API	CCC_Float : public IConsole_Command

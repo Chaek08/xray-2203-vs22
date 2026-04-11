@@ -28,7 +28,7 @@ class	CAutosaveManager;
 class	CPHCommander;
 class	CLevelDebug;
 
-#define DEFAULT_FOV				90.f
+extern float g_fov;
 
 const int maxRP					= 64;
 const int maxTeams				= 32;
