@@ -71,6 +71,7 @@ CCustomMonster::CCustomMonster()
 	m_memory_manager			= 0;
 	m_movement_manager			= 0;
 	m_sound_player				= 0;
+	m_material_manager			= 0;
 }
 
 CCustomMonster::~CCustomMonster	()
@@ -79,6 +80,7 @@ CCustomMonster::~CCustomMonster	()
 	xr_delete					(m_memory_manager);
 	xr_delete					(m_movement_manager);
 	xr_delete					(m_sound_player);
+	xr_delete					(m_material_manager);
 }
 
 void CCustomMonster::Load		(LPCSTR section)
@@ -1023,6 +1025,7 @@ DLL_Pure *CCustomMonster::_construct()
 	m_memory_manager			= create_memory_manager();
 	m_movement_manager			= create_movement_manager();
 	m_sound_player				= xr_new<CSoundPlayer>(this);
+	m_material_manager			= xr_new<CMaterialManager>(this,m_PhysicMovementControl);
 
 	inherited::_construct		();
 	CScriptEntity::_construct	();

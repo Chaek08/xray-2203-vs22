@@ -25,6 +25,7 @@ class CGreetingManager;
 class CDangerManager;
 class CMovementManager;
 class CSoundPlayer;
+class CMaterialManager;
 class CAI_Stalker;
 class CDangerObject;
 
@@ -42,6 +43,7 @@ private:
 	CMemoryManager		*m_memory_manager;
 	CMovementManager	*m_movement_manager;
 	CSoundPlayer		*m_sound_player;
+	CMaterialManager	*m_material_manager;
 
 protected:
 	
@@ -239,6 +241,7 @@ protected:
 public:
 	IC		CMovementManager		&movement				() const;
 	IC		CSoundPlayer			&sound					() const;
+	IC		CMaterialManager		&material				() const;
 	IC		CSound_UserDataVisitor	*sound_user_data_visitor() const;
 
 protected:

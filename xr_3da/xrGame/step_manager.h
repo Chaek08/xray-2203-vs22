@@ -1,7 +1,7 @@
 #pragma once
 #include "step_manager_defs.h"
 
-class CEntityAlive;
+class CCustomMonster;
 class CBlend;
 
 class CStepManager {
@@ -10,7 +10,7 @@ class CStepManager {
 	STEPS_MAP		m_steps_map;
 	SStepInfo		m_step_info;
 
-	CEntityAlive	*m_object;
+	CCustomMonster	*m_object;
 
 	u16				m_foot_bones[MAX_LEGS_COUNT];
 	CBlend			*m_blend;
