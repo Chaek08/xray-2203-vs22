@@ -11,6 +11,10 @@
 #include "script_space.h"
 #include "ai_space.h"
 #include "script_debugger.h"
+
+#include <ostream>
+#include <luabind/operator.hpp>
+
 using namespace luabind;
 
 void LuaLog(LPCSTR caMessage)
@@ -92,8 +96,110 @@ void prefetch_module(LPCSTR file_name)
 	ai().script_engine().process_file(file_name);
 }
 
+struct profile_timer_script {
+	u64							m_start_time;
+	u64							m_accumulated;
+	int							m_recurse_mark;
+	
+	IC								profile_timer_script	()
+	{
+		m_start_time			= 0;
+		m_accumulated			= 0;
+		m_recurse_mark			= 0;
+	}
+
+	IC								profile_timer_script	(const profile_timer_script &profile_timer)
+	{
+		*this					= profile_timer;
+	}
+
+	IC		profile_timer_script&	operator=				(const profile_timer_script &profile_timer)
+	{
+//		THROW					(!profile_timer.m_start_time);
+//		THROW					(!profile_timer.m_recurse_mark);
+		m_start_time			= profile_timer.m_start_time;
+		m_accumulated			= profile_timer.m_accumulated;
+		m_recurse_mark			= profile_timer.m_recurse_mark;
+		return					(*this);
+	}
+
+	IC		bool					operator<				(const profile_timer_script &profile_timer) const
+	{
+//		THROW					(!profile_timer.m_start_time);
+//		THROW					(!profile_timer.m_recurse_mark);
+//		THROW					(!m_start_time);
+//		THROW					(!m_recurse_mark);
+		return					(m_accumulated < profile_timer.m_accumulated);
+	}
+
+	IC		void					start					()
+	{
+		if (m_recurse_mark) {
+			++m_recurse_mark;
+			return;
+		}
+
+		++m_recurse_mark;
+		THROW					(!m_start_time);
+		m_start_time			= CPU::GetCycleCount();
+	}
+
+	IC		void					stop					()
+	{
+		u64						temp = CPU::GetCycleCount();
+		
+		THROW					(m_recurse_mark);
+		--m_recurse_mark;
+		
+		THROW					(temp > m_start_time);
+		THROW					(m_start_time);
+		
+		if (m_recurse_mark)
+			return;
+		
+		m_accumulated			+= temp - m_start_time - CPU::cycles_overhead;
+		m_start_time			= 0;
+	}
+
+	IC		float					time					() const
+	{
+		return					((float(m_accumulated)*CPU::cycles2microsec));
+	}
+};
+
+IC	profile_timer_script	operator+	(const profile_timer_script &portion0, const profile_timer_script &portion1)
+{
+	profile_timer_script	result;
+	result.m_accumulated	= portion0.m_accumulated + portion1.m_accumulated;
+	return					(result);
+}
+
+IC	std::ostream& operator<<(std::ostream &stream, profile_timer_script &portion)
+{
+	stream					<< (float(portion.m_accumulated)*CPU::cycles2microsec);
+	return					(stream);
+}
+
+#ifdef XRGAME_EXPORTS
+ICF	u32	script_time_global	()	{ return Device.TimerAsync(); }
+#else
+ICF	u32	script_time_global	()	{ return 0; }
+#endif
+
 void CScriptEngine::script_register(lua_State *L)
 {
+	module(L)[
+		class_<profile_timer_script>("profile_timer")
+			.def(constructor<>())
+			.def(constructor<profile_timer_script&>())
+			.def(const_self + profile_timer_script())
+			.def(const_self < profile_timer_script())
+			.def(tostring(self))
+			.def("start",&profile_timer_script::start)
+			.def("stop",&profile_timer_script::stop)
+			.def("time",&profile_timer_script::time)
+	];
+
 	function	(L,	"log",							LuaLog);
 	function	(L,	"error_log",					ErrorLog);
 	function	(L,	"flush",						FlushLogs);
@@ -105,6 +211,7 @@ void CScriptEngine::script_register(lua_State *L)
 	function	(L,	"bit_xor",						bit_xor);
 	function	(L,	"bit_not",						bit_not);
 	function	(L, "user_name",					user_name);
+	function	(L, "time_global",					script_time_global);
 #ifdef XRGAME_EXPORTS
 	function	(L,	"device",						get_device);
 #endif

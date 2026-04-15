@@ -32,7 +32,7 @@ public:
 	adopt_sampler&			_clamp			()						{ if (C) C->i_Address	(stage,D3DTADDRESS_CLAMP);									return *this;	}
 	adopt_sampler&			_wrap			()						{ if (C) C->i_Address	(stage,D3DTADDRESS_WRAP);									return *this;	}
 	adopt_sampler&			_mirror			()						{ if (C) C->i_Address	(stage,D3DTADDRESS_MIRROR);									return *this;	}
-	adopt_sampler&			_f_anisotropic	()						{ if (C) C->i_Filter	(stage,D3DTEXF_LINEAR,D3DTEXF_LINEAR,D3DTEXF_ANISOTROPIC);	return *this;	}
+	adopt_sampler&			_f_anisotropic	()						{ if (C) C->i_Filter	(stage,D3DTEXF_ANISOTROPIC,D3DTEXF_LINEAR,D3DTEXF_LINEAR);	return *this;	}
 	adopt_sampler&			_f_trilinear	()						{ if (C) C->i_Filter	(stage,D3DTEXF_LINEAR,D3DTEXF_LINEAR,D3DTEXF_LINEAR);		return *this;	}
 	adopt_sampler&			_f_bilinear		()						{ if (C) C->i_Filter	(stage,D3DTEXF_LINEAR,D3DTEXF_POINT, D3DTEXF_LINEAR);		return *this;	}
 	adopt_sampler&			_f_linear		()						{ if (C) C->i_Filter	(stage,D3DTEXF_LINEAR,D3DTEXF_NONE,  D3DTEXF_LINEAR);		return *this;	}
@@ -97,6 +97,10 @@ void	CResourceManager::LS_Load			()
 	luaopen_table	(LSVM);
 	luaopen_string	(LSVM);
 	luaopen_math	(LSVM);
+#ifdef USE_JIT
+	luaopen_jit(LSVM);
+	luaJIT_setmode(LSVM, LUAJIT_MODE_ENGINE, LUAJIT_MODE_OFF);
+#endif
 
 	luabind::open						(LSVM);
 #if !XRAY_EXCEPTIONS
@@ -178,6 +182,10 @@ void	CResourceManager::LS_Load			()
 		}
 	}
 	FS.file_list_close			(folder);
+
+#ifdef USE_JIT
+	luaJIT_setmode(LSVM, LUAJIT_MODE_ENGINE, LUAJIT_MODE_ON);
+#endif
 }
 
 void	CResourceManager::LS_Unload			()

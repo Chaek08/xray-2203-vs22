@@ -8,13 +8,11 @@
 
 #include "stdafx.h"
 #include "script_space.h"
-
 extern "C" {
 	#include "lua.h"
 	#include "lstate.h"
 	#include "luajit.h"
 };
-
 #include "script_engine.h"
 #include "script_thread.h"
 #include "ai_space.h"
@@ -123,7 +121,7 @@ bool CScriptThread::update()
 			else {
 #ifdef DEBUG
 #	ifdef USE_DEBUGGER
-				if( !ai().script_engine().debugger() || !ai().script_engine().debugger()->Active() ) 
+				if(false || !ai().script_engine().debugger() || !ai().script_engine().debugger()->Active() ) 
 #	endif
 				{
 					VERIFY		(m_current_stack_level);

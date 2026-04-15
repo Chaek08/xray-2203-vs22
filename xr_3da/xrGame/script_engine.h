@@ -11,7 +11,6 @@
 #include "script_storage.h"
 #include "script_export_space.h"
 #include "script_space_forward.h"
-
 extern "C" {
 	#include <lua.h>
 	#include <luajit.h>
@@ -47,6 +46,13 @@ protected:
 #ifdef USE_DEBUGGER
 	CScriptDebugger				*m_scriptDebugger;
 #endif
+
+private:
+	string128					m_last_no_file;
+	u32							m_last_no_file_length;
+
+			bool				no_file_exists				(LPCSTR file_name, u32 string_length);
+			void				add_no_file					(LPCSTR file_name, u32 string_length);
 
 public:
 								CScriptEngine				();
