@@ -1,0 +1,472 @@
+----------------------------------------------------------------------------------------------------------------------
+--	Схема встречи двух сталкеров
+--	автор: Диденко Руслан (Stohe)
+--	TODO:
+----------------------------------------------------------------------------------------------------------------------
+
+local sounds = {}
+---------------------------------------------------------------------------------------------------------------------
+--Evaluators
+----------------------------------------------------------------------------------------------------------------------
+--' Возвращает есть ли у нас контакт с другим сталкером
+class "evaluator_contact" (property_evaluator)
+function evaluator_contact:__init(name, storage) super (nil, name)
+	self.a = storage
+end
+function evaluator_contact:evaluate()
+	if self.a.enabled == false then return false end
+
+	local overrides = xr_logic.generic_scheme_overrides(self.object)
+	if overrides ~= nil and
+		overrides.meet_enabled ~= true
+	then
+		return false
+	end
+	
+	local actor = db.actor
+
+	if actor then
+		if actor:alive() and 
+		   self.object:see(actor) and
+		   self.object:position():distance_to(actor:position()) < self.a.distance
+		then
+			self.a.actor = actor
+		else
+			self.a.actor = nil
+		end
+	else
+		self.a.actor = nil
+	end	
+
+
+	if self.mgr == nil then
+		self.mgr = self.object:motivation_action_manager()
+	end
+	if self.mgr:initialized() then
+		if self.mgr:evaluator(stalker_ids.property_enemy):evaluate() then
+			return false
+		end
+	end
+	
+	if self.a.actor ~= nil and self.a.over == false then
+		xr_reactions.add_rule(self.object, "ignore")
+		return true
+	else
+		xr_reactions.remove_rule(self.object, "ignore")
+		return false
+	end
+end
+--' имеет ли клиент оружие
+class "evaluator_weapon" (property_evaluator)
+function evaluator_weapon:__init(name, storage) super (nil, name)
+	self.a = storage
+end
+function evaluator_weapon:evaluate()
+	--' Если рядом с нами нейтрал и он вооружен
+	if self.a.actor then
+		if self.a.actor:alive() and
+		   self.object:see(self.a.actor) and
+		   self.object:relation(self.a.actor) == game_object.neutral 
+		then 
+			if self.object:get_current_holder() == nil then
+				return isWeapon(self.a.actor:active_item())
+			else
+				return false
+			end
+		end
+	end
+	return false
+end
+
+----------------------------------------------------------------------------------------------------------------------
+--Actions
+----------------------------------------------------------------------------------------------------------------------
+--' Приглашение к тороговле
+class "action_meet_wait" (action_base)
+function action_meet_wait:__init (npc_name,action_name, storage, char_ini) super (nil, action_name)
+	self.char_ini = char_ini
+	self.a = storage
+end
+function action_meet_wait:initialize()
+	action_base.initialize(self)
+	self.object:set_node_evaluator()
+	self.object:set_path_evaluator()
+	self.object:set_desired_position()
+	self.object:set_desired_direction()
+	
+	self.object:enable_talk()
+	if self.object:limping() then
+		state_mgr.set_state(self.object, "wait_na", nil, nil, {look_object = db.actor})
+	else			
+		state_mgr.set_state(self.object, "wait", nil, nil, {look_object = db.actor})
+		--state_mgr.set_state(self.object, "sit", nil, nil, {look_object = db.actor})
+	end
+	xr_sound.set_sound(self.object, "weather, state, wait")	
+end
+function action_meet_wait:time_callback()
+	state_mgr.set_state(self.object, "hello", { obj = self, func = self.time_callback }, 5000, {look_object = db.actor})
+end
+function action_meet_wait:execute ()
+	action_base.execute(self)
+	
+	local tt = db.storage[self.object:id()]
+	if tt.active_scheme then
+		if db.actor then
+			if xr_logic.try_switch_to_another_section(self.object, tt[tt.active_scheme], db.actor) then
+				return
+			end
+		end
+	end
+end
+function action_meet_wait:finalize ()
+	xr_sound.set_sound(self.object, nil)
+	self.object:disable_talk()
+	action_base.finalize(self)
+end
+
+--' Типа спрячь пушку, чувак
+class "action_weapon" (action_base)
+function action_weapon:__init (npc_name,action_name, storage) super (nil, action_name)
+	self.a = storage
+end
+function action_weapon:initialize()
+	action_base.initialize(self)
+	self.object:set_node_evaluator()
+	self.object:set_path_evaluator()
+	self.object:set_desired_position()
+	self.object:set_desired_direction()
+
+	stop_play_sound(self.object)
+
+	xr_sound.set_sound(self.object, "")
+	state_mgr.set_state(self.object, "backoff", nil, nil, {look_object = db.actor}, {animation = true}, "threat_weap")	
+	--state_mgr.set_state(self.object, "sleep")	
+end
+function action_weapon:execute()
+	action_base.execute (self)
+	
+	xr_meet.attack(self.object, self.a)
+
+	local tt = db.storage[self.object:id()]
+	if tt.active_scheme then
+		if db.actor then
+			if xr_logic.try_switch_to_another_section(self.object, tt[tt.active_scheme], db.actor) then
+				return
+			end
+		end
+	end
+end
+function action_weapon:finalize()
+	xr_sound.set_sound(self.object, nil)
+	action_base.finalize (self)
+end
+
+----------------------------------------------------------------------------------------------------------------------
+-- Functions
+----------------------------------------------------------------------------------------------------------------------
+function attack(npc, st)
+end
+function disable_meet(npc)
+	if npc ~= nil and
+	   is_object_online(npc:id()) == true 
+	then
+		db.storage[npc:id()].meet.enabled = false
+	end
+end
+function enable_meet(npc)
+	if npc ~= nil and
+	   is_object_online(npc:id()) == true 
+	then
+		db.storage[npc:id()].meet.enabled = true
+	end
+end
+
+----------------------------------------------------------------------------------------------------------------------
+-- Talk State Scheme
+----------------------------------------------------------------------------------------------------------------------
+class "evaluator_state_talk" (property_evaluator)
+function evaluator_state_talk:__init(name, storage) super (nil, name)
+	self.a = storage
+end
+function evaluator_state_talk:evaluate()
+	local overrides = xr_logic.generic_scheme_overrides(self.object)
+	if overrides and overrides.meet_state == "nil" then
+		return false
+	end
+	--printf("state talk %s [%s] [%s]", self.object:name(), utils.to_str(self.object:is_talking()), utils.to_str(self.a.state_talkable))
+	return self.object:is_talking() and self.a.state_talkable == true
+end
+
+class "evaluator_need_exit" (property_evaluator)
+function evaluator_need_exit:__init(name, storage) super (nil, name)
+	self.a = storage
+end
+function evaluator_need_exit:evaluate()
+	return false
+end
+
+
+--' Стоим, болтаем
+class "action_state_talk" (action_base)
+function action_state_talk:__init (npc_name,action_name, storage) super (nil, action_name)
+	self.a = storage
+end
+function action_state_talk:initialize()
+	action_base.initialize(self)
+	self.object:set_node_evaluator()
+	self.object:set_path_evaluator()
+	self.object:set_desired_position()
+	self.object:set_desired_direction()
+
+	local overrides = xr_logic.generic_scheme_overrides(self.object)
+	if overrides ~= nil and overrides.meet_state ~= nil then 
+		self.overrides_meet_state = overrides.meet_state
+	else	
+		self.overrides_meet_state = nil
+	end
+
+	if self.overrides_meet_state then
+		state_mgr.set_state(self.object, self.overrides_meet_state, nil, nil, {look_object = db.actor, look_position = db.actor:position()})
+	else
+		state_mgr.set_state(self.object, "wait", nil, nil, {look_object = db.actor, look_position = db.actor:position()})
+	end
+end
+function action_state_talk:execute()
+	action_base.execute(self)
+	local tt = db.storage[self.object:id()]
+	if tt.active_scheme then
+		if db.actor then
+			if xr_logic.try_switch_to_another_section(self.object, tt[tt.active_scheme], db.actor) then
+				return
+			end
+		end
+	end
+
+
+	local overrides = xr_logic.generic_scheme_overrides(self.object)
+	if overrides ~= nil then 
+		if overrides.meet_state ~= self.overrides_meet_state then
+			-- новое значение не равно текущему
+			self.overrides_meet_state = overrides.meet_state
+		end
+		if self.overrides_meet_state ~= nil then
+			state_mgr.set_state(self.object, self.overrides_meet_state, nil, nil, {look_object = db.actor, look_position = db.actor:position()})
+		else
+			if self.object:limping() then
+				state_mgr.set_state(self.object, "wait_na", nil, nil, {look_object = db.actor, look_position = db.actor:position()})
+			else			
+				state_mgr.set_state(self.object, "wait", nil, nil, {look_object = db.actor, look_position = db.actor:position()})
+			end
+		end			
+	else	
+		if self.overrides_meet_state ~= nil then
+			if self.object:limping() then
+				state_mgr.set_state(self.object, "wait_na", nil, nil, {look_object = db.actor, look_position = db.actor:position()})
+			else			
+				state_mgr.set_state(self.object, "wait", nil, nil, {look_object = db.actor, look_position = db.actor:position()})
+			end
+			self.overrides_meet_state = nil
+		end
+	end
+	
+end
+function action_state_talk:finalize()
+	action_base.finalize(self)
+end
+
+--' Принудительный выход из болтовни
+class "action_state_exit" (action_base)
+function action_state_exit:__init (npc_name,action_name, storage) super (nil, action_name)
+	self.a = storage
+end
+function action_state_exit:initialize()
+	action_base.initialize(self)
+	self.object:stop_talk()
+end
+function action_state_exit:execute()
+	action_base.execute(self)
+end
+function action_state_exit:finalize()
+	action_base.finalize(self)
+end
+
+
+
+----------------------------------------------------------------------------------------------------------------------
+-- binder
+----------------------------------------------------------------------------------------------------------------------
+function add_to_binder(object, char_ini)
+	local operators		= {}
+	local properties	= {}
+
+	local manager = object:motivation_action_manager()
+
+	properties["event"] 		= xr_evaluators_id.reaction
+	properties["contact"]		= xr_evaluators_id.stohe_meet_base + 1         
+	properties["weapon"]		= xr_evaluators_id.stohe_meet_base + 2
+	properties["state_talk"]	= xr_evaluators_id.stohe_meet_base + 3
+	properties["need_exit"]		= xr_evaluators_id.stohe_meet_base + 4
+	properties["wound"]         = xr_evaluators_id.sidor_wounded_base + 1
+
+	operators["wait_trade"]			= xr_actions_id.stohe_meet_base + 1
+	operators["weapon"]				= xr_actions_id.stohe_meet_base + 2
+	operators["state_talk"]			= xr_actions_id.stohe_meet_base + 3
+	operators["state_exit"]			= xr_actions_id.stohe_meet_base + 4
+
+	-- Evaluators
+	manager:add_evaluator (properties["contact"], 		evaluator_contact("meet_contact", db.storage[object:id()].meet))
+	manager:add_evaluator (properties["weapon"], 		evaluator_weapon("meet_weapon", db.storage[object:id()].meet))
+	manager:add_evaluator (properties["state_talk"], 	evaluator_state_talk("meet_state_talk", db.storage[object:id()].meet))
+	manager:add_evaluator (properties["need_exit"], 	evaluator_need_exit("meet_need_exit", db.storage[object:id()].meet))
+	
+
+	-- Actions
+	local action = action_meet_wait (object:name(),"action_meet_wait", db.storage[object:id()].meet, char_ini)
+	action:add_precondition		(world_property(stalker_ids.property_alive, true))
+	action:add_precondition		(world_property(stalker_ids.property_enemy,	false))
+	action:add_precondition		(world_property(properties["wound"],		false))
+	action:add_precondition		(world_property(properties["contact"], 		true))
+	action:add_precondition		(world_property(properties["weapon"], 		false))
+	action:add_effect 			(world_property(properties["contact"], 		false))
+	manager:add_action (operators["wait_trade"], action)
+
+	action = action_weapon (object:name(),"action_weapon", db.storage[object:id()].meet)
+	action:add_precondition		(world_property(stalker_ids.property_alive, true))
+	action:add_precondition		(world_property(stalker_ids.property_enemy,	false))
+	action:add_precondition		(world_property(properties["wound"],		false))
+	action:add_precondition		(world_property(properties["contact"], 		true))
+	action:add_precondition		(world_property(properties["weapon"], 		true))
+	action:add_effect 		(world_property(properties["weapon"], 			false))
+	manager:add_action (operators["weapon"], action)
+
+
+
+	action = action_state_talk (object:name(),"meet_state_talk", db.storage[object:id()].meet)
+	action:add_precondition		(world_property(stalker_ids.property_alive, true))
+	action:add_precondition		(world_property(properties["wound"],		false))
+	action:add_precondition		(world_property(properties["need_exit"],	false))
+	action:add_precondition		(world_property(properties["state_talk"], 	true))
+	action:add_effect 		(world_property(properties["state_talk"], 		false))
+	manager:add_action (operators["state_talk"], action)
+
+	action = action_state_exit (object:name(),"meet_state_exit", db.storage[object:id()].meet)
+	action:add_precondition		(world_property(stalker_ids.property_alive, true))
+	action:add_precondition		(world_property(properties["need_exit"],	true))
+	action:add_effect 		(world_property(properties["need_exit"], 		false))
+	manager:add_action (operators["state_exit"], action)
+
+
+
+	action = manager:action (xr_actions_id.alife)	
+	action:add_precondition		(world_property(properties["contact"],		false))
+	action:add_precondition		(world_property(properties["state_talk"],	false))
+end
+
+function override_meet(npc, flag)
+	if flag == true then
+		db.storage[npc:id()].meet.enabled = false
+	else
+		db.storage[npc:id()].meet.enabled = true
+	end
+end
+
+--' ВНИМАНИЕ: Эта функция вызывается и для сталкеров, и для монстров!
+function dialog_manager_reset(npc, stype)
+	printf("*DIALOGS*: dialog_manager_reset: npc:name='%s'", npc:name())
+	if stype == modules.stype_stalker or stype == modules.stype_mobile then
+		--' Смена стартового диалога
+		local overrides = xr_logic.generic_scheme_overrides(npc)
+		if overrides ~= nil then
+			if overrides.meet_talk_enabled then
+				printf("*DIALOGS*: Enable talk")
+				enable_talk(npc)
+			else
+				printf("*DIALOGS*: Disable talk")
+				disable_talk(npc)
+			end
+
+			if overrides.meet_dialog then
+				printf("*DIALOGS*: Set start dialog %s", overrides.meet_dialog)
+				npc:set_start_dialog(overrides.meet_dialog)
+			else
+				printf("*DIALOGS*: Restore start dialog")
+				npc:restore_default_start_dialog()
+			end
+		else
+--			printf("*DIALOGS*: SCHEME HAS NO OVERRIDES: Restore start dialog")
+			npc:restore_default_start_dialog()
+--			printf("*DIALOGS*: SCHEME HAS NO OVERRIDES: Disable talk", overrides.meet_dialog)
+			disable_talk(npc)
+		end
+	end
+end
+
+--' Считывание доступных диалогов игрока.
+function set_actor_dialogs(npc, ini, name, dialog_section)
+	printf("*ACTOR_DIALOGS*")
+	if dialog_section == nil then return end
+	printf("*ACTOR_DIALOGS*: set_actor_dialogs: npc_name='%s' section='%s'", npc:name(), dialog_section)
+	
+	local actor_dialogs_string = utils.cfg_get_string(ini, dialog_section, "id", npc, false, "")
+	if actor_dialogs_string ~= nil then
+		printf("*ACTOR_DIALOGS*: actor_dialogs=%s", actor_dialogs_string)
+		--' Создаем в массиве запись где будут храниться считанные диалоги.
+		db.storage[npc:id()].actor_dialogs = parse_names(actor_dialogs_string)
+	else
+		printf("*ACTOR_DIALOGS*: actor_dialogs=nil")
+	end
+	
+	local actor_disable = utils.cfg_get_string(ini, dialog_section, "disable", npc, false, "")
+	if actor_disable ~= nil then
+		printf("*ACTOR_DIALOGS*: actor_disable=%s", actor_disable)
+		--' Создаем в массиве запись где будут храниться считанные диалоги.
+		db.storage[npc:id()].actor_disable = parse_names(actor_disable)
+	else
+		printf("*ACTOR_DIALOGS*: actor_disable=nil")
+	end
+end
+
+------------
+function set_meet(object, ini, scheme, section)
+	local st = xr_logic.assign_storage_and_bind (object, ini, scheme, section)
+
+    st.Seller = object
+    st.begin_wait_to_see = { time = 300, begin = nil }
+    st.over = false
+    st.noweap = utils.cfg_get_bool(ini, section, "meet_notreat", object, false)
+	st.distance = utils.cfg_get_number(ini, section, "distance", object, false, 15)
+	st.shoot_distance = utils.cfg_get_number(ini, section, "shoot_distance", object, false, 5)
+	st.state_talkable = true
+    st.enabled = true -- added by Zmey
+end
+function disable_scheme(npc, scheme)
+	db.storage[npc:id()].actor_dialogs = nil
+	db.storage[npc:id()].actor_disable = nil
+end
+
+function enable_talk(npc)
+	npc:enable_talk()
+end
+
+function disable_talk(npc)
+	npc:disable_talk()
+end
+
+
+
+
+--- Находится ли чувак в данный момент в состоянии мита
+function is_meet(npc)
+	local manager = npc:motivation_action_manager()
+	if manager and manager:initialized() then
+		local id = manager:current_action_id()
+		if id == xr_actions_id.stohe_meet_base + 1 or
+		   id == xr_actions_id.stohe_meet_base + 2 or
+		   id == xr_actions_id.stohe_meet_base + 3 or
+		   id == xr_actions_id.stohe_meet_base + 4
+		then
+			return true
+		end
+	end
+	return false
+end

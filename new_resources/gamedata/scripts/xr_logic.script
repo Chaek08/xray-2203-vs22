@@ -57,9 +57,10 @@ function parse_condlist(npc, section, field, src)
 	Распарсивает условия вида: {+infop1} section1 %-infop2%, {+infop3 -infop4} section2 ... в таблицу.
 	Параметры section и field используются только в сообщениях об ошибках. Если строка src считана не из файла,
 	а передается в эту функцию гулагом, то нужно задать следующие параметры:
-		section = "[[[gulag_tasks.script]]]"
-		field = "[[[gulag_name=имя_гулага]]]"
-
+--]]
+--		section = "[[[gulag_tasks.script]]]"
+--		field = "[[[gulag_name=имя_гулага]]]"
+--[[
 ----------------------------------------------------------------------------------------------------
 -- ПРИВАТНЫЕ ФУНКЦИИ
 ----------------------------------------------------------------------------------------------------
@@ -448,7 +449,7 @@ function issue_event(npc, st, event_fn, ...)
 	for action_ptr, is_active in pairs(st.actions) do
 		if is_active and action_ptr[event_fn] then
 			--printf("DEBUG: event issued")
-			action_ptr[event_fn](action_ptr, unpack(arg))
+			action_ptr[event_fn](action_ptr, ...)
 		end
 	end
 end
