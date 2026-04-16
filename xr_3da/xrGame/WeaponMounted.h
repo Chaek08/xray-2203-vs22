@@ -93,9 +93,6 @@ public:
 	virtual bool			attach_Actor		(CActor* actor);
 	virtual void			detach_Actor		();
 
-	virtual bool			allowWeapon			()	const		{return false;};
-	virtual bool			HUDView				()  const		{return true;};
-
 	virtual Fvector			ExitPosition		();
 
 	virtual CCameraBase*	Camera				();

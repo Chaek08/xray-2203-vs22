@@ -250,7 +250,9 @@ void CRender::Render		()
 	if (bSUN)	{
 //		Lights_LastFrame.push_back			(Lights.sun_adapted);
 		RImplementation.stats.l_visible		++;
-		render_sun_cascades();
+		render_sun_near						();
+		render_sun							();
+		render_sun_filtered					();
 		Target->accum_direct_blend			();
 	}
 

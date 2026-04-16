@@ -28,13 +28,10 @@ void CActor::IR_OnKeyboardPress(int cmd)
 	if(m_holder && kUSE != cmd)
 	{
 		m_holder->OnKeyboardPress(cmd);
-		if (m_holder->allowWeapon() && inventory().Action(cmd, CMD_START))		return;
 		return;
 	}
-	else
-	{
-		if (inventory().Action(cmd, CMD_START))					return;
-	}
+
+	if(inventory().Action(cmd, CMD_START))						return;
 
 	switch(cmd){
 	case kACCEL:	mstate_wishful |= mcAccel;					break;
@@ -163,15 +160,13 @@ void CActor::IR_OnKeyboardRelease(int cmd)
 		if(m_holder)
 		{
 			m_holder->OnKeyboardRelease(cmd);
-			
-			if(m_holder->allowWeapon() && inventory().Action(cmd, CMD_STOP))		return;
 			return;
 		}
-		else
-		{
-			if (inventory().Action(cmd, CMD_STOP))		return;
-		}
-		
+
+		if(inventory().Action(cmd, CMD_STOP)) return;
+
+
+
 		switch(cmd)
 		{
 		case kACCEL:	mstate_wishful &=~mcAccel;		break;
@@ -357,9 +352,3 @@ void CActor::ActorUse()
 
 }
 //void CActor::IR_OnMousePress(int btn)
-
-BOOL CActor::HUDview()const
-{
-	return IsFocused() && (cam_active == eacFirstEye) &&
-		((!m_holder) || (m_holder && m_holder->allowWeapon() && m_holder->HUDView()));
-}

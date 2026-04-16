@@ -2,7 +2,6 @@
 
 #include "r__dsgraph_structure.h"
 #include "r__occlusion.h"
-#include "r__sun_cascades.h"
 
 #include "PSLibrary.h"
 
@@ -108,7 +107,6 @@ public:
 	float														o_hemi			;
 	float														o_sun			;
 	IDirect3DQuery9*											q_sync_point	;
-	xr_vector<sun::cascade>										m_sun_cascades;
 private:
 	// Loading / Unloading
 	void							LoadBuffers					(IReader	*fs,	BOOL	_alternative);
@@ -130,9 +128,9 @@ public:
 	void							render_smap_direct			(Fmatrix& mCombined);
 	void							render_indirect				(light*			L	);
 	void							render_lights				(light_Package& LP	);
-	void							render_sun_cascade			(u32 cascade_ind);
-	void							init_sun_cascades			();
-	void							render_sun_cascades			();
+	void							render_sun					();
+	void							render_sun_near				();
+	void							render_sun_filtered			();
 public:
 	ShaderElement*					rimp_select_sh_static		(IRender_Visual	*pVisual, float cdist_sq);
 	ShaderElement*					rimp_select_sh_dynamic		(IRender_Visual	*pVisual, float cdist_sq);
@@ -260,9 +258,6 @@ public:
 	virtual void					rmNear						();
 	virtual void					rmFar						();
 	virtual void					rmNormal					();
-
-	// KD: need to know, what R2 phase is active now
-	virtual u32						active_phase				()	{return phase;};
 
 	// Constructor/destructor/loader
 	CRender							();

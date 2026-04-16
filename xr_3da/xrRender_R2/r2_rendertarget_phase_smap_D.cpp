@@ -24,9 +24,12 @@ void	CRenderTarget::phase_smap_direct		(light* L, u32 sub_phase)
 	RCache.set_Stencil					( FALSE );
 
 	// Misc		- draw only front/back-faces
-	RCache.set_CullMode(CULL_CCW);	//near
-	if (RImplementation.o.HW_smap)		RCache.set_ColorWriteEnable(FALSE);
-	else								RCache.set_ColorWriteEnable();
+	if (SE_SUN_NEAR==sub_phase)			RCache.set_CullMode			( CULL_CCW	);	// near
+	else								{
+		if (RImplementation.o.HW_smap)	RCache.set_CullMode			( CULL_CW	);	// far, reversed
+		else							RCache.set_CullMode			( CULL_CCW	);	// far, front-faces
+	}
+	if (RImplementation.o.HW_smap)		RCache.set_ColorWriteEnable	( FALSE		);
 }
 
 void	CRenderTarget::phase_smap_direct_tsh	(light* L, u32 sub_phase)
