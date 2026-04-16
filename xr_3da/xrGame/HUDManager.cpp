@@ -202,6 +202,22 @@ void CHUDManager::Render_Last()
 	::Render->set_HUD				(FALSE);
 }
 
+void CHUDManager::Render_Actor_Shadow()
+{
+	if (!pUI) return;
+
+	CObject* O = g_pGameLevel->CurrentViewEntity();
+	if (!O) return;
+
+	CActor* A = smart_cast<CActor*>(O);
+	if (!A) return;
+
+	if (A->GOTTA_GET_A_ACTIVE_CAM() != eacFirstEye) return;
+
+	::Render->set_Object(O->H_Root());
+	O->renderable_Render();
+}
+
 //отрисовка элементов интерфейса
 void  CHUDManager::RenderUI()
 {
