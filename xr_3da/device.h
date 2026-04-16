@@ -109,6 +109,8 @@ public:
 	};
 	void	Pause							(BOOL bOn);
 	IC BOOL	Pause							(){return g_pauseMngr.Paused();};
+
+	void PauseSound							(BOOL val);
 	// Scene control
 	void PreCache							(u32 frames);
 	BOOL Begin								();

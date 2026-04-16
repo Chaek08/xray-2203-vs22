@@ -147,6 +147,8 @@ void CRenderDevice::Run			()
 
 	seqAppStart.Process			(rp_AppStart);
 
+	CHK_DX(HW.pDevice->Clear(0,0,D3DCLEAR_TARGET,D3DCOLOR_XRGB(0,0,0),1,0));
+
 	while( WM_QUIT != msg.message  )
     {
         bGotMsg = PeekMessage( &msg, NULL, 0U, 0U, PM_REMOVE );
@@ -256,4 +258,9 @@ void CRenderDevice::FrameMove()
 void	CRenderDevice::Pause							(BOOL bOn)
 {
 	if (!g_bBenchmark)	g_pauseMngr.Pause(bOn);
+}
+
+void	CRenderDevice::PauseSound			(BOOL val)
+{
+	::Sound->pause_emitters					(val);
 }
