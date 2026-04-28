@@ -139,9 +139,11 @@ void					CRender::reset_begin			()
 {
 	xr_delete					(Target);
 	HWOCC.occq_destroy			();
+	_RELEASE					(q_sync_point);
 }
 void					CRender::reset_end				()
 {
+	R_CHK						(HW.pDevice->CreateQuery(D3DQUERYTYPE_EVENT,&q_sync_point));
 	HWOCC.occq_create			(occq_size);
 	Target						=	xr_new<CRenderTarget>	();
 	xrRender_apply_tf			();
