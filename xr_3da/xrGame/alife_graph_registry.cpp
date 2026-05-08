@@ -135,8 +135,8 @@ void CALifeGraphRegistry::detach	(CSE_Abstract &object, CSE_ALifeInventoryItem *
 		trader->detach			(item,0,alife_query);
 	else {
 		bool					value = std::find(object.children.begin(),object.children.end(),item->base()->ID) != object.children.end();
-		if (value) {
-			Msg					("! ERROR: can't detach independant object. entity[%s:%d], parent[%s:%d], section[%s]",
+		if (!value) {
+			Msg					("! ERROR: can't detach independant object. entity[%s:%d], parent[%s:%d], section[%s]", 
 				item->base()->name_replace(),item->base()->ID,object.name_replace(),object.ID, *item->base()->s_name);
 		}
 //		R_ASSERT2				(value,"Can't detach an item which is not on my own");
