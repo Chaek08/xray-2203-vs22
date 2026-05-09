@@ -482,6 +482,13 @@ void CSE_ALifeHumanAbstract::vfDetachAll(bool bFictitious)
 			detach					(l_tpALifeInventoryItem,&I);
 		}
 	}
+
+	if (bFictitious)
+	{
+		m_fCumulativeItemMass = 0.f;
+		m_iCumulativeItemVolume = 0;
+	}
+
 	R_ASSERT2						((m_fCumulativeItemMass < EPS_L) && (m_iCumulativeItemVolume < EPS_L),"Invalid cumulative item mass or volume value");
 }
 
