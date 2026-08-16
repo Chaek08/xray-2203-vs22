@@ -42,9 +42,12 @@ void CRenderDevice::Destroy	(void) {
 	seqFrameMT.R.clear			();
 	seqParallel.clear			();
 }
-
+#include "IGame_Level.h"
+#include "CustomHUD.h"
 void CRenderDevice::Reset		()
 {
+	bool b_16_before = (float)dwWidth / (float)dwHeight > (1024.0f / 768.0f + 0.01f);
+
 	ShowCursor	(TRUE);
 	u32 tm_start			= TimerAsync();
 	Resources->reset_begin	();
@@ -60,4 +63,8 @@ void CRenderDevice::Reset		()
 	u32 tm_end				= TimerAsync();
 	Msg						("*** RESET [%d ms]",tm_end-tm_start);
 	ShowCursor	(FALSE);
+
+	bool b_16_after = (float)dwWidth / (float)dwHeight > (1024.0f / 768.0f + 0.01f);
+	if (b_16_after != b_16_before && g_pGameLevel && g_pGameLevel->pHUD)
+		g_pGameLevel->pHUD->OnScreenRatioChanged();
 }

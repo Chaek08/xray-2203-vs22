@@ -13,7 +13,7 @@
 #include "UIInventoryUtilities.h"
 #include "../MainUI.h"
 #include "../HUDManager.h"
-#include "xrXMLParser.h"
+#include "xrUIXmlParser.h"
 #include "UIXmlInit.h"
 
 using namespace InventoryUtilities;

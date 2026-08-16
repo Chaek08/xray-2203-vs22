@@ -9,7 +9,7 @@
 #pragma once
 
 #include "UIStatic.h"
-#include "xrXMLParser.h"
+#include "xrUIXmlParser.h"
 #include "UIDragDropList.h"
 #include "UIDragDropItemMP.h"
 #include "UITabButtonMP.h"

@@ -110,6 +110,9 @@ public:
 	const C2DFrustum& ScreenFrustum					(){return m_2DFrustum;}
 	void			PushScissor						(const Irect& r, bool overlapped=false);
 	void			PopScissor						();
+
+	bool			is_16_9_mode					();
+	shared_str		get_xml_name					(LPCSTR fn);
 };
 
 

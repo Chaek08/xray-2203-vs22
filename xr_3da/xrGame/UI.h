@@ -70,6 +70,7 @@ public:
 	void					UIOnFrame				();
 
 	void					Load					();
+	void					UnLoad					();
 
 	bool					IR_OnKeyboardPress		(int dik);
 	bool					IR_OnKeyboardRelease	(int dik);

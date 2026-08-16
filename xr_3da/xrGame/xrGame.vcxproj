@@ -1561,6 +1561,7 @@
     <ClInclude Include="ui\UIWpnDragDropItem.h" />
     <ClInclude Include="ui\UIXmlInit.h" />
     <ClInclude Include="ui\UI_IB_Static.h" />
+    <ClInclude Include="ui\xrUIXmlParser.h" />
     <ClInclude Include="ui\xrXMLParser.h" />
     <ClInclude Include="UsableScriptObject.h" />
     <ClInclude Include="vehicle_helicopter.h" />
@@ -2648,6 +2649,7 @@
     <ClCompile Include="ui\UIWpnDragDropItem.cpp" />
     <ClCompile Include="ui\UIXmlInit.cpp" />
     <ClCompile Include="ui\UI_IB_Static.cpp" />
+    <ClCompile Include="ui\xrUIXmlParser.cpp" />
     <ClCompile Include="ui_export_script.cpp" />
     <ClCompile Include="UsableScriptObject.cpp" />
     <ClCompile Include="vehicle_helicopter.cpp" />

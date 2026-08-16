@@ -5967,6 +5967,9 @@
     <ClInclude Include="ui\UIPdaKillMessage.h">
       <Filter>UI\Multiplayer\common</Filter>
     </ClInclude>
+    <ClInclude Include="ui\xrUIXmlParser.h">
+      <Filter>UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="damage_manager.cpp">
@@ -8674,6 +8677,9 @@
     </ClCompile>
     <ClCompile Include="ui\UIPdaKillMessage.cpp">
       <Filter>UI\Multiplayer\common</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\xrUIXmlParser.cpp">
+      <Filter>UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

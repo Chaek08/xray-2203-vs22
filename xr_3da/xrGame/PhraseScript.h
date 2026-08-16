@@ -3,7 +3,7 @@
 // классы для связи диалогов со скриптами
 ///////////////////////////////////////////////////////////////
 
-#include "ui/xrXMLParser.h"
+#include "ui/xrUIXmlParser.h"
 
 #include "InfoPortionDefs.h"
 

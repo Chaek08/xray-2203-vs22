@@ -11,7 +11,7 @@
 #include "script_game_object.h"
 #include "script_space.h"
 #include "object_broker.h"
-#include "ui/xrXMLParser.h"
+#include "ui/xrUIXmlParser.h"
 #include "encyclopedia_article.h"
 
 TASK_DATA::TASK_DATA():task_id(NULL),receive_time(0),finish_time(0)
