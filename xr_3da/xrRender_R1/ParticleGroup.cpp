@@ -138,7 +138,7 @@ void CParticleGroup::SItem::StartRelatedChild(LPCSTR eff_name, PAPI::Particle& m
 {
     CParticleEffect*C		= static_cast<CParticleEffect*>(RImplementation.model_CreatePE(eff_name));
     Fmatrix M; 				M.translate(m.pos);
-    Fvector vel; 			vel.sub(m.pos,m.posB); vel.div(fDT_STEP);
+    Fvector vel; 			vel.sub(m.pos,m.posB); vel.div(C->m_RT_Flags.is(CParticleEffect::flRT_LiveUpdate) ? Device.fTimeDelta : fDT_STEP);
     C->Play					();
     C->UpdateParent			(M,vel,FALSE);
     _children_related.push_back(C);
@@ -158,7 +158,7 @@ void CParticleGroup::SItem::StartFreeChild(LPCSTR nm, PAPI::Particle& m)
     if(!C->IsLooped()){
         _children_free.push_back(C);
         Fmatrix M; 				M.translate(m.pos);
-        Fvector vel; 			vel.sub(m.pos,m.posB); vel.div(fDT_STEP);
+        Fvector vel; 			vel.sub(m.pos,m.posB); vel.div(C->m_RT_Flags.is(CParticleEffect::flRT_LiveUpdate) ? Device.fTimeDelta : fDT_STEP);
         C->Play					();
         C->UpdateParent			(M,vel,FALSE);
     }else{
@@ -252,7 +252,7 @@ void CParticleGroup::SItem::OnFrame(u32 u_dt, const CPGDef::SEffect& def, Fbox& 
                         PAPI::Particle &m	= particles[i]; 
                         CParticleEffect* C 	= static_cast<CParticleEffect*>(_children_related[i]);
                         Fmatrix M; 			M.translate(m.pos);
-                        Fvector vel; 		vel.sub(m.pos,m.posB); vel.div(fDT_STEP);
+                        Fvector vel; 		vel.sub(m.pos,m.posB); vel.div(C->m_RT_Flags.is(CParticleEffect::flRT_LiveUpdate) ? Device.fTimeDelta : fDT_STEP);
                         C->UpdateParent		(M,vel,FALSE);
                     }
                 }
@@ -441,5 +441,25 @@ u32 CParticleGroup::ParticlesCount()
     for (SItemVecIt i_it=items.begin(); i_it!=items.end(); i_it++)
         p_count 	+= i_it->ParticlesCount();
 	return p_count;
+}
+
+void CParticleGroup::SetLiveUpdate(BOOL b)
+{
+    for (SItemVecIt i_it = items.begin(); i_it != items.end(); ++i_it)
+    {
+        CParticleEffect* E = static_cast<CParticleEffect*>(i_it->_effect);
+        E->SetLiveUpdate(b);
+    }
+}
+
+BOOL CParticleGroup::GetLiveUpdate()
+{
+    if (items.size())
+    {
+        CParticleEffect* E = static_cast<CParticleEffect*>(items[0]._effect);
+        return E->GetLiveUpdate();
+    }
+    else
+        return FALSE;
 }
 

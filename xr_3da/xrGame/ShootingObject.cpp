@@ -157,6 +157,8 @@ void CShootingObject::StartParticles (CParticlesObject*& pParticles, LPCSTR part
 
 	pParticles = xr_new<CParticlesObject>(particles_name,(IRender_Sector *)0,auto_remove_flag);
 	
+	pParticles->SetLiveUpdate(TRUE);
+
 	UpdateParticles(pParticles, pos, vel);
 	pParticles->Play();
 }
@@ -237,6 +239,8 @@ void CShootingObject::OnShellDrop	(const Fvector& play_pos,
 
 	CParticlesObject* pShellParticles	= xr_new<CParticlesObject>(*m_sShellParticles,0);
 
+	pShellParticles->SetLiveUpdate(TRUE);
+
 	Fmatrix particles_pos; 
 	particles_pos.set		(get_ParticlesXFORM());
 	particles_pos.c.set		(play_pos);
@@ -269,6 +273,9 @@ void CShootingObject::StartFlameParticles	()
 
 	StopFlameParticles();
 	m_pFlameParticles = xr_new<CParticlesObject>(*m_sFlameParticlesCurrent,(IRender_Sector *)0,false);
+
+	m_pFlameParticles->SetLiveUpdate(TRUE);
+
 	UpdateFlameParticles();
 	m_pFlameParticles->Play();
 
